@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TC Academy — Docs</title>
+  <link rel="icon" type="image/png" href="https://www.thecrewacademy.es/cdn/shop/files/Diseno_sin_titulo_27.png?crop=center&height=32&v=1773863841&width=32">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --tc-black: #0A0A0A;
+      --tc-white: #FAFAF8;
+      --tc-gold: #C9A84C;
+      --tc-gold-light: #DFC06A;
+      --tc-gold-dark: #A68B3C;
+      --tc-gold-glow: rgba(201,168,76,.15);
+      --tc-gold-glow-strong: rgba(201,168,76,.35);
+      --tc-gold-border: rgba(201,168,76,.2);
+      --tc-gold-border-hover: rgba(201,168,76,.45);
+      --tc-gold-bg: rgba(201,168,76,.06);
+      --tc-bg: #080808;
+      --tc-surface-1: #0f0f0f;
+      --tc-surface-2: #151515;
+      --tc-card: rgba(255,255,255,.025);
+      --tc-text-1: rgba(250,250,248,1);
+      --tc-text-2: rgba(250,250,248,.7);
+      --tc-text-3: rgba(250,250,248,.45);
+      --tc-border: rgba(250,250,248,.12);
+      --tc-r-sm: 8px;
+      --tc-r-md: 12px;
+      --tc-r-lg: 20px;
+      --tc-font: "Montserrat", -apple-system, sans-serif;
+      --sidebar-w: 260px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--tc-font);
+      background: var(--tc-bg);
+      color: var(--tc-text-1);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      background: rgba(8,8,8,.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--tc-border);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 16px;
+      z-index: 100;
+    }
+    .topbar__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .topbar__logo img {
+      height: 28px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+    .topbar__divider {
+      width: 1px;
+      height: 20px;
+      background: var(--tc-border);
+    }
+    .topbar__label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--tc-gold);
+    }
+    .topbar__spacer { flex: 1; }
+    .topbar__badge {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--tc-text-3);
+      background: var(--tc-surface-2);
+      border: 1px solid var(--tc-border);
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      padding-top: 56px;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      min-height: calc(100vh - 56px);
+      position: fixed;
+      top: 56px;
+      left: 0;
+      background: var(--tc-surface-1);
+      border-right: 1px solid var(--tc-border);
+      padding: 24px 0;
+      overflow-y: auto;
+    }
+    .sidebar__section-title {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--tc-text-3);
+      padding: 16px 20px 8px;
+    }
+    .sidebar__item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--tc-text-2);
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      text-decoration: none;
+      transition: all .2s;
+    }
+    .sidebar__item:hover {
+      color: var(--tc-text-1);
+      background: var(--tc-card);
+    }
+    .sidebar__item.active {
+      color: var(--tc-gold);
+      border-left-color: var(--tc-gold);
+      background: var(--tc-gold-bg);
+    }
+    .sidebar__icon {
+      font-size: 15px;
+      opacity: .7;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 40px 48px;
+      max-width: 1100px;
+    }
+
+    /* ── DOCUMENT ── */
+    .doc-header {
+      margin-bottom: 36px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--tc-border);
+    }
+    .doc-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--tc-gold);
+      margin-bottom: 12px;
+    }
+    .doc-tag::before {
+      content: "";
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--tc-gold);
+    }
+    .doc-title {
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .doc-title em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--tc-gold), var(--tc-gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .doc-meta {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .doc-meta-item {
+      font-size: 12px;
+      color: var(--tc-text-3);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ── CARDS ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--tc-card);
+      border: 1.5px solid var(--tc-border);
+      border-radius: var(--tc-r-lg);
+      padding: 20px 24px;
+      transition: border-color .2s;
+    }
+    .stat-card:hover { border-color: var(--tc-gold-border); }
+    .stat-card__label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--tc-text-3);
+      margin-bottom: 10px;
+    }
+    .stat-card__value {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: var(--tc-gold);
+      line-height: 1;
+    }
+    .stat-card__value.white { color: var(--tc-text-1); }
+    .stat-card__sub {
+      font-size: 11px;
+      color: var(--tc-text-3);
+      margin-top: 6px;
+    }
+
+    /* ── TABLE ── */
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--tc-text-3);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--tc-border);
+    }
+    .table-wrap {
+      background: var(--tc-surface-1);
+      border: 1.5px solid var(--tc-border);
+      border-radius: var(--tc-r-lg);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--tc-text-3);
+      padding: 12px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--tc-border);
+      background: var(--tc-surface-2);
+    }
+    td {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--tc-text-2);
+      padding: 11px 20px;
+      border-bottom: 1px solid rgba(250,250,248,.05);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--tc-card); color: var(--tc-text-1); }
+    td.amount {
+      font-weight: 700;
+      color: var(--tc-text-1);
+      text-align: right;
+    }
+    td.amount.gold { color: var(--tc-gold); }
+    th.right { text-align: right; }
+    .total-row td {
+      background: var(--tc-gold-bg);
+      border-top: 1px solid var(--tc-gold-border);
+      color: var(--tc-text-1);
+      font-weight: 700;
+    }
+    .total-row td.amount { color: var(--tc-gold); font-size: 15px; }
+
+    /* ── BAR CHART ── */
+    .chart-wrap {
+      background: var(--tc-surface-1);
+      border: 1.5px solid var(--tc-border);
+      border-radius: var(--tc-r-lg);
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 140px;
+      margin-top: 16px;
+    }
+    .bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .bar {
+      width: 100%;
+      background: linear-gradient(180deg, var(--tc-gold) 0%, var(--tc-gold-dark) 100%);
+      border-radius: 4px 4px 0 0;
+      min-height: 2px;
+      opacity: .85;
+      transition: opacity .2s;
+      cursor: default;
+      position: relative;
+    }
+    .bar:hover { opacity: 1; }
+    .bar-label {
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      color: var(--tc-text-3);
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    /* ── NOTES ── */
+    .note {
+      background: var(--tc-gold-bg);
+      border: 1px solid var(--tc-gold-border);
+      border-radius: var(--tc-r-md);
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--tc-text-2);
+      margin-bottom: 32px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .note::before { content: "★"; color: var(--tc-gold); flex-shrink: 0; margin-top: 1px; }
+
+    /* ── FOOTER ── */
+    .doc-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--tc-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .doc-footer__brand {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--tc-gold);
+    }
+    .doc-footer__date {
+      font-size: 11px;
+      color: var(--tc-text-3);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <a href="https://www.thecrewacademy.es" class="topbar__logo" target="_blank">
+    <img src="https://www.thecrewacademy.es/cdn/shop/files/Diseno_sin_titulo_27.png?height=120&v=1773863841" alt="TC Academy">
+  </a>
+  <div class="topbar__divider"></div>
+  <span class="topbar__label">Docs</span>
+  <div class="topbar__spacer"></div>
+  <span class="topbar__badge">The Crew Barbershop</span>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar__section-title">Negocio</div>
+    <a href="billing.html" class="sidebar__item active">
+      <span class="sidebar__icon">◈</span> Facturación
+    </a>
+    <a href="#" class="sidebar__item">
+      <span class="sidebar__icon">◈</span> Citas
+    </a>
+    <a href="#" class="sidebar__item">
+      <span class="sidebar__icon">◈</span> Clientes
+    </a>
+    <a href="#" class="sidebar__item">
+      <span class="sidebar__icon">◈</span> Empleados
+    </a>
+
+    <div class="sidebar__section-title">Academia</div>
+    <a href="#" class="sidebar__item">
+      <span class="sidebar__icon">◈</span> ROOTS Ebook
+    </a>
+    <a href="#" class="sidebar__item">
+      <span class="sidebar__icon">◈</span> Materiales
+    </a>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main" id="doc-content">
+
+    <div class="doc-header">
+      <div class="doc-tag">Facturación mensual</div>
+      <h1 class="doc-title">Abril <em>2026</em></h1>
+      <div class="doc-meta">
+        <span class="doc-meta-item">📅 Generado el 28 abr 2026</span>
+        <span class="doc-meta-item">📍 The Crew Barbershop</span>
+        <span class="doc-meta-item">🔄 Yeasy + Booksy</span>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="cards-grid">
+      <div class="stat-card">
+        <div class="stat-card__label">Total mes</div>
+        <div class="stat-card__value">9.755 €</div>
+        <div class="stat-card__sub">Yeasy + Booksy</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__label">Yeasy (principal)</div>
+        <div class="stat-card__value">8.559 €</div>
+        <div class="stat-card__sub">23 días con actividad</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__label">Booksy (Barrio+Caja)</div>
+        <div class="stat-card__value white">1.196 €</div>
+        <div class="stat-card__sub">21 días — 68 citas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__label">Pendiente (29-30 abr)</div>
+        <div class="stat-card__value white">50 €</div>
+        <div class="stat-card__sub">3 citas reservadas</div>
+      </div>
+    </div>
+
+    <!-- NOTA -->
+    <div class="note">
+      El pico del 22 de abril (1.297 € en Yeasy) corresponde al cobro de varias semanas de clientela fija en un único día — no es la facturación habitual de ese día.
+    </div>
+
+    <!-- GRÁFICO YEASY -->
+    <div class="chart-wrap">
+      <div class="section-title">Distribución Yeasy</div>
+      <div class="chart-bars" id="chart-yeasy"></div>
+    </div>
+
+    <!-- TABLA YEASY -->
+    <div class="section-title">Detalle Yeasy</div>
+    <div class="table-wrap">
+      <table id="table-yeasy">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Día</th>
+            <th class="right">Importe</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-yeasy"></tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td colspan="2"><strong>TOTAL YEASY</strong></td>
+            <td class="amount gold">8.559,00 €</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- TABLA BOOKSY -->
+    <div class="section-title">Detalle Booksy (Barrio + Caja)</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Día</th>
+            <th class="right">Citas</th>
+            <th class="right">Importe</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-booksy"></tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td colspan="3"><strong>TOTAL BOOKSY</strong></td>
+            <td class="amount gold">1.196,00 €</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="doc-footer">
+      <span class="doc-footer__brand">TC Academy · The Crew Barbershop</span>
+      <span class="doc-footer__date">Generado el 28/04/2026</span>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ── DATA ──
+const DAYS_ES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+
+const yeasyData = [
+  ['2026-04-01', 568],['2026-04-02', 504],['2026-04-03', 156],
+  ['2026-04-07', 271],['2026-04-08', 434],['2026-04-09', 683],
+  ['2026-04-10', 537],['2026-04-11', 216],['2026-04-12', 31],
+  ['2026-04-13', 102],['2026-04-14', 334],['2026-04-15', 338],
+  ['2026-04-16', 355],['2026-04-17', 365],['2026-04-18', 387],
+  ['2026-04-20', 166],['2026-04-21', 251],['2026-04-22', 1297],
+  ['2026-04-23', 437],['2026-04-24', 424],['2026-04-25', 211],
+  ['2026-04-27', 178],['2026-04-28', 314],
+];
+
+const booksyData = [
+  ['2026-04-01', 9, 160],['2026-04-02', 3, 51],['2026-04-07', 3, 58],
+  ['2026-04-08', 4, 67],['2026-04-09', 2, 41],['2026-04-10', 5, 80],
+  ['2026-04-11', 3, 58],['2026-04-13', 3, 48],['2026-04-14', 2, 34],
+  ['2026-04-15', 2, 33],['2026-04-16', 3, 55],['2026-04-17', 7, 121],
+  ['2026-04-18', 3, 51],['2026-04-20', 3, 53],['2026-04-21', 1, 24],
+  ['2026-04-22', 1, 17],['2026-04-23', 4, 65],['2026-04-24', 5, 89],
+  ['2026-04-25', 2, 36],['2026-04-27', 1, 17],['2026-04-28', 2, 38],
+];
+
+function dayName(dateStr) {
+  return DAYS_ES[new Date(dateStr + 'T12:00:00').getDay()];
+}
+function fmt(n) {
+  return n.toLocaleString('es-ES', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €';
+}
+
+// ── TABLA YEASY ──
+const tbY = document.getElementById('tbody-yeasy');
+yeasyData.forEach(([d, amt]) => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${d.slice(5).replace('-','/')}</td><td>${dayName(d)}</td><td class="amount">${fmt(amt)}</td>`;
+  tbY.appendChild(tr);
+});
+
+// ── TABLA BOOKSY ──
+const tbB = document.getElementById('tbody-booksy');
+booksyData.forEach(([d, cnt, amt]) => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${d.slice(5).replace('-','/')}</td><td>${dayName(d)}</td><td class="amount">${cnt}</td><td class="amount">${fmt(amt)}</td>`;
+  tbB.appendChild(tr);
+});
+
+// ── CHART ──
+const maxVal = Math.max(...yeasyData.map(r => r[1]));
+const chart = document.getElementById('chart-yeasy');
+yeasyData.forEach(([d, amt]) => {
+  const pct = (amt / maxVal) * 100;
+  const col = document.createElement('div');
+  col.className = 'bar-col';
+  col.innerHTML = `
+    <div class="bar" style="height:${pct}%" title="${d}: ${fmt(amt)}"></div>
+    <div class="bar-label">${d.slice(8)}</div>
+  `;
+  chart.appendChild(col);
+});
+</script>
+</body>
+</html>
