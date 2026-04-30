@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gastos & P&L 2026 — TCB</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --tc-bg:       #080808;
+  --tc-bg-2:     #111111;
+  --tc-bg-3:     #181818;
+  --tc-gold:     #C9A84C;
+  --tc-gold-dim: #9a7c34;
+  --tc-gold-bg:  rgba(201,168,76,.07);
+  --tc-gold-border: rgba(201,168,76,.18);
+  --tc-text-1:   #f0ede6;
+  --tc-text-2:   #9a9690;
+  --tc-text-3:   #5a5652;
+  --tc-green:    #4ade80;
+  --tc-red:      #f87171;
+  --tc-blue:     #60a5fa;
+  --tc-warn:     #fbbf24;
+  --r:           8px;
+}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--tc-bg); color:var(--tc-text-1); font-family:'Montserrat',sans-serif; font-size:13px; min-height:100vh; }
+
+/* ── LAYOUT ── */
+.layout { display:flex; min-height:100vh; }
+.sidebar { width:220px; min-width:220px; background:var(--tc-bg-2); border-right:1px solid rgba(255,255,255,.05); display:flex; flex-direction:column; padding:28px 0 20px; position:sticky; top:0; height:100vh; overflow-y:auto; }
+.sidebar__logo { padding:0 20px 28px; border-bottom:1px solid rgba(255,255,255,.06); }
+.sidebar__logo-title { font-size:11px; font-weight:700; letter-spacing:.18em; color:var(--tc-gold); text-transform:uppercase; }
+.sidebar__logo-sub { font-size:10px; color:var(--tc-text-3); margin-top:3px; letter-spacing:.06em; }
+.sidebar__nav { padding:16px 0; flex:1; }
+.sidebar__item { display:block; padding:9px 20px; font-size:11px; font-weight:600; letter-spacing:.06em; color:var(--tc-text-2); text-decoration:none; cursor:pointer; transition:color .15s, background .15s; }
+.sidebar__item:hover { color:var(--tc-text-1); background:rgba(255,255,255,.03); }
+.sidebar__item.active { color:var(--tc-gold); background:var(--tc-gold-bg); border-left:2px solid var(--tc-gold); }
+.sidebar__sep { height:1px; background:rgba(255,255,255,.05); margin:8px 20px; }
+.sidebar__section { padding:12px 20px 4px; font-size:9px; font-weight:700; letter-spacing:.14em; color:var(--tc-text-3); text-transform:uppercase; }
+.content { flex:1; padding:36px 40px 60px; max-width:1100px; }
+
+/* ── HEADER ── */
+.doc-tag { display:inline-block; font-size:9px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--tc-gold); background:var(--tc-gold-bg); border:1px solid var(--tc-gold-border); border-radius:20px; padding:3px 10px; margin-bottom:12px; }
+.doc-title { font-size:28px; font-weight:800; letter-spacing:-.02em; line-height:1.15; margin-bottom:6px; }
+.doc-title em { color:var(--tc-gold); font-style:normal; }
+.doc-meta { display:flex; gap:18px; margin-bottom:28px; flex-wrap:wrap; }
+.doc-meta-item { font-size:10px; color:var(--tc-text-2); letter-spacing:.04em; }
+.doc-meta-item span { color:var(--tc-text-1); font-weight:600; }
+
+/* ── STAT CARDS ── */
+.stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:32px; }
+.stat-card { background:var(--tc-bg-2); border:1px solid rgba(255,255,255,.06); border-radius:var(--r); padding:18px 20px; }
+.stat-card__label { font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--tc-text-3); margin-bottom:8px; }
+.stat-card__value { font-size:22px; font-weight:800; color:var(--tc-gold); letter-spacing:-.02em; }
+.stat-card__value.white { color:var(--tc-text-1); }
+.stat-card__value.green { color:var(--tc-green); }
+.stat-card__value.red { color:var(--tc-red); }
+.stat-card__sub { font-size:10px; color:var(--tc-text-2); margin-top:4px; }
+
+/* ── SECTION ── */
+.section { margin-bottom:36px; }
+.section-title { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--tc-gold); margin-bottom:14px; padding-bottom:8px; border-bottom:1px solid var(--tc-gold-border); }
+
+/* ── TABLE ── */
+.table-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; }
+th { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--tc-text-3); padding:8px 12px; text-align:left; border-bottom:1px solid rgba(255,255,255,.06); }
+th.right { text-align:right; }
+td { padding:9px 12px; border-bottom:1px solid rgba(255,255,255,.04); font-size:12px; color:var(--tc-text-1); vertical-align:middle; }
+td.amount { text-align:right; font-variant-numeric:tabular-nums; color:var(--tc-text-2); }
+td.amount.gold { color:var(--tc-gold); font-weight:700; }
+td.amount.green { color:var(--tc-green); font-weight:700; }
+td.amount.red { color:var(--tc-red); font-weight:600; }
+td.amount.dim { color:var(--tc-text-3); font-style:italic; }
+td.pct { text-align:right; font-size:11px; font-weight:700; }
+tr.total-row td { background:var(--tc-gold-bg); border-top:1px solid var(--tc-gold-border); font-weight:700; color:var(--tc-text-1); }
+tr.total-row td.amount { color:var(--tc-gold); font-size:13px; }
+tr.grand-total-row td { background:rgba(201,168,76,.12); border-top:2px solid var(--tc-gold); font-weight:800; font-size:13px; }
+tr.grand-total-row td.amount { color:var(--tc-gold); font-size:15px; }
+tr.section-row td { background:var(--tc-bg-3); font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--tc-text-3); padding:5px 12px; }
+tr.sub-row td { padding-left:24px; }
+tr:hover td { background:rgba(255,255,255,.015); }
+tr.total-row:hover td, tr.grand-total-row:hover td, tr.section-row:hover td { background:unset; }
+
+/* ── TABS ── */
+.tabs { display:flex; gap:4px; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,.06); padding-bottom:0; }
+.tab { font-size:11px; font-weight:600; letter-spacing:.04em; color:var(--tc-text-2); padding:9px 14px; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; transition:color .15s, border-color .15s; }
+.tab:hover { color:var(--tc-text-1); }
+.tab.active { color:var(--tc-gold); border-bottom-color:var(--tc-gold); }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+
+/* ── NOTICE / WARN ── */
+.notice { border-radius:var(--r); padding:12px 16px; font-size:11px; line-height:1.6; margin-bottom:14px; }
+.notice.warn { background:rgba(251,191,36,.07); border:1px solid rgba(251,191,36,.2); color:var(--tc-warn); }
+.notice.info { background:rgba(96,165,250,.07); border:1px solid rgba(96,165,250,.2); color:var(--tc-blue); }
+.notice.ok   { background:rgba(74,222,128,.06); border:1px solid rgba(74,222,128,.18); color:var(--tc-green); }
+.notice b { font-weight:700; }
+
+/* ── BADGE ── */
+.badge { display:inline-block; font-size:8px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; border-radius:3px; padding:2px 5px; margin-left:4px; vertical-align:middle; }
+.badge.est { background:rgba(251,191,36,.15); color:var(--tc-warn); }
+.badge.pend { background:rgba(248,113,113,.12); color:var(--tc-red); }
+.badge.conf { background:rgba(74,222,128,.1); color:var(--tc-green); }
+
+/* ── PROGRESS BAR ── */
+.margin-bar-wrap { display:flex; align-items:center; gap:10px; }
+.margin-bar { height:6px; border-radius:3px; flex:1; background:rgba(255,255,255,.06); overflow:hidden; }
+.margin-bar-fill { height:100%; border-radius:3px; background:var(--tc-gold); }
+.margin-bar-fill.good { background:var(--tc-green); }
+.margin-bar-fill.ok   { background:var(--tc-gold); }
+.margin-bar-fill.low  { background:var(--tc-red); }
+
+/* ── CHART ── */
+.chart-wrap { display:flex; gap:2px; align-items:flex-end; height:160px; padding:0 0 0 0; margin-bottom:6px; }
+.chart-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; height:100%; justify-content:flex-end; }
+.chart-col-inner { width:100%; display:flex; flex-direction:column; justify-content:flex-end; gap:1px; }
+.bar-ing  { border-radius:3px 3px 0 0; background:var(--tc-gold); opacity:.85; width:100%; }
+.bar-gas  { border-radius:3px 3px 0 0; background:#60a5fa; opacity:.7; width:100%; }
+.chart-label { font-size:9px; color:var(--tc-text-3); font-weight:600; margin-top:4px; }
+.chart-legend { display:flex; gap:16px; margin-bottom:24px; }
+.legend-item { display:flex; align-items:center; gap:6px; font-size:10px; color:var(--tc-text-2); }
+.legend-dot { width:8px; height:8px; border-radius:2px; }
+
+/* ── MONTH DETAIL GRID ── */
+.month-detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media (max-width:700px) { .month-detail-grid { grid-template-columns:1fr; } }
+
+/* ── FOOTER ── */
+.footer { margin-top:48px; padding-top:20px; border-top:1px solid rgba(255,255,255,.05); font-size:10px; color:var(--tc-text-3); display:flex; gap:24px; justify-content:space-between; flex-wrap:wrap; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar__logo">
+    <div class="sidebar__logo-title">TCB Docs</div>
+    <div class="sidebar__logo-sub">The Crew Barbershop</div>
+  </div>
+  <div class="sidebar__nav">
+    <div class="sidebar__section">Finanzas</div>
+    <a href="index.html" class="sidebar__item">◈ &nbsp;Facturación</a>
+    <a href="#" class="sidebar__item active">◈ &nbsp;Gastos & P&L</a>
+    <div class="sidebar__sep"></div>
+    <div class="sidebar__section">2026</div>
+    <a href="#resumen" class="sidebar__item" onclick="scrollTo('#resumen')">Resumen anual</a>
+    <a href="#mensual" class="sidebar__item" onclick="scrollTo('#mensual')">Detalle mensual</a>
+    <a href="#categorias" class="sidebar__item" onclick="scrollTo('#categorias')">Por categoría</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="content">
+
+  <div class="doc-tag">Gastos & P&amp;L</div>
+  <h1 class="doc-title"><em>2026</em> — Enero a Abril</h1>
+  <div class="doc-meta">
+    <div class="doc-meta-item">📅 Actualizado: <span>29 abr 2026</span></div>
+    <div class="doc-meta-item">📊 Fuente: <span>Gmail / Facturas PDF</span></div>
+    <div class="doc-meta-item">⚠️ <span>Nóminas trabajadores abril pendientes</span></div>
+  </div>
+
+  <!-- NOTICES -->
+  <div class="notice warn">
+    <b>⚠️ Datos incompletos en Abril:</b> Las facturas de Ivan Contreras, Gerard Caja y Javier Barrionuevo de abril aún no han llegado (vencen a final de mes). Los gastos de abril están subestimados en ~3.900€ estimados.
+  </div>
+  <div class="notice warn">
+    <b>🔍 Seguro del local no encontrado:</b> No se ha localizado ninguna factura de seguro en <em>thecrewbarber.co@gmail.com</em> ni en <em>info@thecrewbarbershop.com</em>. Si está domiciliado en el banco, puede no aparecer por email.
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-card__label">Total ingresos</div>
+      <div class="stat-card__value">37.898 €</div>
+      <div class="stat-card__sub">Yeasy + Booksy</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Total gastos</div>
+      <div class="stat-card__value white">~28.405 €</div>
+      <div class="stat-card__sub">Incl. estimaciones</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Margen bruto</div>
+      <div class="stat-card__value green">~9.493 €</div>
+      <div class="stat-card__sub">~25.1% sobre facturación</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Mejor mes</div>
+      <div class="stat-card__value">Marzo</div>
+      <div class="stat-card__sub">11.120€ ingresos · 32% margen</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Coste medio mensual</div>
+      <div class="stat-card__value white">~7.101 €</div>
+      <div class="stat-card__sub">Estimando apr completo</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Workers (Q1)</div>
+      <div class="stat-card__value white">9.750 €</div>
+      <div class="stat-card__sub">Ivan + Caja + Javier · ene-mar</div>
+    </div>
+  </div>
+
+  <!-- P&L RESUMEN -->
+  <div class="section" id="resumen">
+    <div class="section-title">P&amp;L mensual — Enero a Abril</div>
+
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--tc-gold)"></div>Ingresos</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div>Gastos</div>
+    </div>
+    <div class="chart-wrap" id="chart-pl"></div>
+    <div style="display:flex;gap:2px;margin-bottom:28px;" id="chart-labels-pl"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Mes</th>
+            <th class="right">Ingresos</th>
+            <th class="right">Gastos</th>
+            <th class="right">Margen €</th>
+            <th class="right">Margen %</th>
+            <th>Nota</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Enero</td>
+            <td class="amount gold">8.836,00 €</td>
+            <td class="amount">6.700,39 €</td>
+            <td class="amount green">2.135,61 €</td>
+            <td class="pct" style="color:var(--tc-gold)">
+              <div class="margin-bar-wrap">
+                <div class="margin-bar"><div class="margin-bar-fill ok" style="width:24.2%"></div></div>
+                24,2%
+              </div>
+            </td>
+            <td style="color:var(--tc-text-2);font-size:11px">Gastos altos por 2 facturas New Gest + taxa residuos</td>
+          </tr>
+          <tr>
+            <td>Febrero</td>
+            <td class="amount gold">8.187,50 €</td>
+            <td class="amount">6.436,16 €</td>
+            <td class="amount green">1.751,34 €</td>
+            <td class="pct" style="color:var(--tc-gold)">
+              <div class="margin-bar-wrap">
+                <div class="margin-bar"><div class="margin-bar-fill ok" style="width:21.4%"></div></div>
+                21,4%
+              </div>
+            </td>
+            <td style="color:var(--tc-text-2);font-size:11px">Mes más flojo en ingresos</td>
+          </tr>
+          <tr>
+            <td>Marzo</td>
+            <td class="amount gold">11.119,50 €</td>
+            <td class="amount">7.537,73 €</td>
+            <td class="amount green">3.581,77 €</td>
+            <td class="pct" style="color:var(--tc-green)">
+              <div class="margin-bar-wrap">
+                <div class="margin-bar"><div class="margin-bar-fill good" style="width:32.2%"></div></div>
+                32,2%
+              </div>
+            </td>
+            <td style="color:var(--tc-text-2);font-size:11px">Mejor mes: máx. ingresos + buen margen</td>
+          </tr>
+          <tr>
+            <td>Abril <span class="badge pend">Parcial</span></td>
+            <td class="amount gold">9.755,00 €</td>
+            <td class="amount dim">~7.730,81 €*</td>
+            <td class="amount" style="color:var(--tc-warn)">~2.024,19 €*</td>
+            <td class="pct" style="color:var(--tc-warn)">
+              <div class="margin-bar-wrap">
+                <div class="margin-bar"><div class="margin-bar-fill ok" style="width:20.8%"></div></div>
+                ~20,8%*
+              </div>
+            </td>
+            <td style="color:var(--tc-text-2);font-size:11px">Nóminas trabajadores pendientes ~3.930€ est.</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="grand-total-row">
+            <td><strong>TOTAL 2026</strong></td>
+            <td class="amount gold">37.898,00 €</td>
+            <td class="amount">~28.405,09 €</td>
+            <td class="amount green">~9.492,91 €</td>
+            <td class="pct" style="color:var(--tc-gold);font-size:13px;font-weight:800">~25,1%</td>
+            <td style="color:var(--tc-text-3);font-size:11px">*Estimaciones incluidas</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- DETALLE MENSUAL TABS -->
+  <div class="section" id="mensual">
+    <div class="section-title">Detalle de gastos por mes</div>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('ene')">Enero</div>
+      <div class="tab" onclick="switchTab('feb')">Febrero</div>
+      <div class="tab" onclick="switchTab('mar')">Marzo</div>
+      <div class="tab" onclick="switchTab('abr')">Abril</div>
+    </div>
+
+    <!-- ENERO -->
+    <div id="tab-ene" class="tab-panel active">
+      <div class="notice info" style="margin-bottom:16px">
+        <b>Enero 2026:</b> Ingresos 8.836€ · Gastos 6.700€ · Margen 2.136€ (24,2%)
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Concepto</th><th>Proveedor</th><th class="right">Importe</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr class="section-row"><td colspan="4">Trabajadores autónomos</td></tr>
+          <tr class="sub-row"><td>Ivan Contreras — Enero</td><td style="color:var(--tc-text-3)">Factura 26001</td><td class="amount">1.391,90 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Gerard Caja — Enero</td><td style="color:var(--tc-text-3)">Factura 26001</td><td class="amount">819,32 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Javier Barrionuevo — Enero</td><td style="color:var(--tc-text-3)">Factura 26001</td><td class="amount">684,30 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="section-row"><td colspan="4">Local & Oficina</td></tr>
+          <tr class="sub-row"><td>Alquiler local C/ Lacy 18</td><td style="color:var(--tc-text-3)">Ferrer Peña CB · 2026-001</td><td class="amount">700,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Taxa Residuos 2026 (anual)</td><td style="color:var(--tc-text-3)">Ferrer Peña CB · 2026-002</td><td class="amount">90,81 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Despacho C/ Duran i Sors (50%)</td><td style="color:var(--tc-text-3)">Nova Vallmy · 6/35</td><td class="amount">233,88 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Bluespace Self-Storage</td><td style="color:var(--tc-text-3)">SAB26/xxx (estimado)</td><td class="amount">181,67 €</td><td><span class="badge est">Estim.</span></td></tr>
+          <tr class="section-row"><td colspan="4">Nómina propietario</td></tr>
+          <tr class="sub-row"><td>Nómina Gerard Chao</td><td style="color:var(--tc-text-3)">Chao Espinalt Group SL</td><td class="amount">1.700,00 €</td><td><span class="badge conf">Fijo</span></td></tr>
+          <tr class="section-row"><td colspan="4">Servicios & Profesionales</td></tr>
+          <tr class="sub-row"><td>Gestoría — cuota mensual</td><td style="color:var(--tc-text-3)">Almar Consultors · 202623590</td><td class="amount">336,09 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>New Gest Digital (NGD2-0013) </td><td style="color:var(--tc-text-3)">New Gest Digital LLC · $200</td><td class="amount">192,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>New Gest Digital (NGD2-0014)</td><td style="color:var(--tc-text-3)">New Gest Digital LLC · $250</td><td class="amount">240,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>AGEDI-AIE licencia música (Q1 prorrateado)</td><td style="color:var(--tc-text-3)">Somos Música</td><td class="amount">8,33 €</td><td><span class="badge est">Estim.</span></td></tr>
+          <tr class="section-row"><td colspan="4">Suministros</td></tr>
+          <tr class="sub-row"><td>Electricidad</td><td style="color:var(--tc-text-3)">Alettoe Energy · 2025002192</td><td class="amount">102,69 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Productos (Hamza Cosmetics)</td><td style="color:var(--tc-text-3)">F000010</td><td class="amount">19,40 €</td><td><span class="badge conf">Fact.</span></td></tr>
+        </tbody>
+        <tfoot>
+          <tr class="total-row"><td colspan="2"><strong>TOTAL GASTOS ENERO</strong></td><td class="amount gold">6.700,39 €</td><td></td></tr>
+        </tfoot>
+      </table></div>
+    </div>
+
+    <!-- FEBRERO -->
+    <div id="tab-feb" class="tab-panel">
+      <div class="notice info" style="margin-bottom:16px">
+        <b>Febrero 2026:</b> Ingresos 8.187,50€ · Gastos 6.436€ · Margen 1.751€ (21,4%)
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Concepto</th><th>Proveedor</th><th class="right">Importe</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr class="section-row"><td colspan="4">Trabajadores autónomos</td></tr>
+          <tr class="sub-row"><td>Ivan Contreras — Febrero</td><td style="color:var(--tc-text-3)">Factura 26002</td><td class="amount">1.368,18 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Gerard Caja — Febrero</td><td style="color:var(--tc-text-3)">Factura 26002</td><td class="amount">887,21 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Javier Barrionuevo — Febrero</td><td style="color:var(--tc-text-3)">Factura 26002</td><td class="amount">668,43 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="section-row"><td colspan="4">Local & Oficina</td></tr>
+          <tr class="sub-row"><td>Alquiler local C/ Lacy 18</td><td style="color:var(--tc-text-3)">Ferrer Peña CB · 2026-003</td><td class="amount">700,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Despacho C/ Duran i Sors (50%)</td><td style="color:var(--tc-text-3)">Nova Vallmy (estimado)</td><td class="amount">234,00 €</td><td><span class="badge est">Estim.</span></td></tr>
+          <tr class="sub-row"><td>Bluespace Self-Storage</td><td style="color:var(--tc-text-3)">SAB26/252</td><td class="amount">181,67 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="section-row"><td colspan="4">Nómina propietario</td></tr>
+          <tr class="sub-row"><td>Nómina Gerard Chao</td><td style="color:var(--tc-text-3)">Chao Espinalt Group SL</td><td class="amount">1.700,00 €</td><td><span class="badge conf">Fijo</span></td></tr>
+          <tr class="section-row"><td colspan="4">Servicios & Profesionales</td></tr>
+          <tr class="sub-row"><td>Gestoría — cuota mensual</td><td style="color:var(--tc-text-3)">Almar Consultors · 202623663</td><td class="amount">336,09 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>New Gest Digital (NGD2-0015)</td><td style="color:var(--tc-text-3)">New Gest Digital LLC · $250</td><td class="amount">240,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>AGEDI-AIE licencia música (Q1 prorrateado)</td><td style="color:var(--tc-text-3)">Somos Música</td><td class="amount">8,33 €</td><td><span class="badge est">Estim.</span></td></tr>
+          <tr class="section-row"><td colspan="4">Suministros</td></tr>
+          <tr class="sub-row"><td>Electricidad</td><td style="color:var(--tc-text-3)">Alettoe Energy · 2025002850</td><td class="amount">112,25 €</td><td><span class="badge conf">Fact.</span></td></tr>
+        </tbody>
+        <tfoot>
+          <tr class="total-row"><td colspan="2"><strong>TOTAL GASTOS FEBRERO</strong></td><td class="amount gold">6.436,16 €</td><td></td></tr>
+        </tfoot>
+      </table></div>
+    </div>
+
+    <!-- MARZO -->
+    <div id="tab-mar" class="tab-panel">
+      <div class="notice ok" style="margin-bottom:16px">
+        <b>Marzo 2026 — Mejor mes:</b> Ingresos 11.119,50€ · Gastos 7.537,73€ · Margen 3.581,77€ (32,2%)
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Concepto</th><th>Proveedor</th><th class="right">Importe</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr class="section-row"><td colspan="4">Trabajadores autónomos</td></tr>
+          <tr class="sub-row"><td>Ivan Contreras — Marzo</td><td style="color:var(--tc-text-3)">Factura 26003</td><td class="amount">1.787,60 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Gerard Caja — Marzo</td><td style="color:var(--tc-text-3)">Factura 26003</td><td class="amount">1.112,98 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Javier Barrionuevo — Marzo</td><td style="color:var(--tc-text-3)">Factura 26003 (definitiva)</td><td class="amount">1.029,92 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="section-row"><td colspan="4">Local & Oficina</td></tr>
+          <tr class="sub-row"><td>Alquiler local C/ Lacy 18</td><td style="color:var(--tc-text-3)">Ferrer Peña CB · 2026-004</td><td class="amount">700,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Despacho C/ Duran i Sors (50%)</td><td style="color:var(--tc-text-3)">Nova Vallmy (estimado)</td><td class="amount">234,00 €</td><td><span class="badge est">Estim.</span></td></tr>
+          <tr class="sub-row"><td>Bluespace Self-Storage</td><td style="color:var(--tc-text-3)">SAB26/1061</td><td class="amount">214,88 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="section-row"><td colspan="4">Nómina propietario</td></tr>
+          <tr class="sub-row"><td>Nómina Gerard Chao</td><td style="color:var(--tc-text-3)">Chao Espinalt Group SL</td><td class="amount">1.700,00 €</td><td><span class="badge conf">Fijo</span></td></tr>
+          <tr class="section-row"><td colspan="4">Servicios & Profesionales</td></tr>
+          <tr class="sub-row"><td>Gestoría — cuota mensual</td><td style="color:var(--tc-text-3)">Almar Consultors · 202623725</td><td class="amount">336,09 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>New Gest Digital (NGD2-0016)</td><td style="color:var(--tc-text-3)">New Gest Digital LLC · $250</td><td class="amount">240,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Shopify — dominio thecrewacademy.es</td><td style="color:var(--tc-text-3)">Shopify #503305059</td><td class="amount">19,42 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Shopify — suscripción TC Academy</td><td style="color:var(--tc-text-3)">Shopify #505377431</td><td class="amount">1,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>AGEDI-AIE licencia música (Q1 prorrateado)</td><td style="color:var(--tc-text-3)">Somos Música</td><td class="amount">8,33 €</td><td><span class="badge est">Estim.</span></td></tr>
+          <tr class="section-row"><td colspan="4">Suministros & Productos</td></tr>
+          <tr class="sub-row"><td>Electricidad</td><td style="color:var(--tc-text-3)">Alettoe Energy · 2025004815</td><td class="amount">84,61 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Productos (Hamza Cosmetics) · 2 facturas</td><td style="color:var(--tc-text-3)">F000038 + F000054</td><td class="amount">68,90 €</td><td><span class="badge conf">Fact.</span></td></tr>
+        </tbody>
+        <tfoot>
+          <tr class="total-row"><td colspan="2"><strong>TOTAL GASTOS MARZO</strong></td><td class="amount gold">7.537,73 €</td><td></td></tr>
+        </tfoot>
+      </table></div>
+    </div>
+
+    <!-- ABRIL -->
+    <div id="tab-abr" class="tab-panel">
+      <div class="notice warn" style="margin-bottom:16px">
+        <b>Abril 2026 (parcial):</b> Ingresos 9.755€ · Gastos conocidos 3.801€ · Workers ~3.930€ estimados · Margen estimado ~2.024€ (20,8%)
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Concepto</th><th>Proveedor</th><th class="right">Importe</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr class="section-row"><td colspan="4">Trabajadores autónomos (PENDIENTES)</td></tr>
+          <tr class="sub-row"><td>Ivan Contreras — Abril</td><td style="color:var(--tc-text-3)">Pendiente fin de mes</td><td class="amount dim">~1.700,00 €</td><td><span class="badge pend">Pend.</span></td></tr>
+          <tr class="sub-row"><td>Gerard Caja — Abril</td><td style="color:var(--tc-text-3)">Pendiente fin de mes</td><td class="amount dim">~1.100,00 €</td><td><span class="badge pend">Pend.</span></td></tr>
+          <tr class="sub-row"><td>Javier Barrionuevo — Abril</td><td style="color:var(--tc-text-3)">Pendiente fin de mes</td><td class="amount dim">~1.030,00 €</td><td><span class="badge pend">Pend.</span></td></tr>
+          <tr class="section-row"><td colspan="4">Local & Oficina</td></tr>
+          <tr class="sub-row"><td>Alquiler local C/ Lacy 18</td><td style="color:var(--tc-text-3)">Ferrer Peña CB · 2026-005</td><td class="amount">700,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Despacho C/ Duran i Sors (50%)</td><td style="color:var(--tc-text-3)">Nova Vallmy (estimado)</td><td class="amount">234,00 €</td><td><span class="badge est">Estim.</span></td></tr>
+          <tr class="sub-row"><td>Bluespace Self-Storage</td><td style="color:var(--tc-text-3)">SAB26/1857</td><td class="amount">214,88 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="section-row"><td colspan="4">Nómina propietario</td></tr>
+          <tr class="sub-row"><td>Nómina Gerard Chao</td><td style="color:var(--tc-text-3)">Chao Espinalt Group SL</td><td class="amount">1.700,00 €</td><td><span class="badge conf">Fijo</span></td></tr>
+          <tr class="section-row"><td colspan="4">Servicios & Profesionales</td></tr>
+          <tr class="sub-row"><td>Gestoría — cuota mensual</td><td style="color:var(--tc-text-3)">Almar Consultors · 202623792</td><td class="amount">336,09 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>New Gest Digital (NGD2-0017)</td><td style="color:var(--tc-text-3)">New Gest Digital LLC · $250</td><td class="amount">240,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Shopify — suscripción TC Academy</td><td style="color:var(--tc-text-3)">Shopify #519011424</td><td class="amount">1,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>AGEDI-AIE licencia música (Q2 prorrateado)</td><td style="color:var(--tc-text-3)">Somos Música · INV_2026_198406</td><td class="amount">8,33 €</td><td><span class="badge est">Estim.</span></td></tr>
+          <tr class="section-row"><td colspan="4">Suministros & Reparaciones</td></tr>
+          <tr class="sub-row"><td>Electricidad</td><td style="color:var(--tc-text-3)">Alettoe Energy · 2025003525</td><td class="amount">96,37 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Productos (Hamza Cosmetics)</td><td style="color:var(--tc-text-3)">F000102</td><td class="amount">9,99 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Reparación persiana enrollable</td><td style="color:var(--tc-text-3)">Jacinto Guiu Noguera · 2026-001926</td><td class="amount">260,15 €</td><td><span class="badge conf">Fact.</span></td></tr>
+        </tbody>
+        <tfoot>
+          <tr class="total-row"><td colspan="2"><strong>GASTOS CONFIRMADOS ABRIL</strong></td><td class="amount gold">3.800,81 €</td><td></td></tr>
+          <tr class="total-row"><td colspan="2"><strong>TOTAL ESTIMADO ABRIL (incl. workers)</strong></td><td class="amount" style="color:var(--tc-warn)">~7.730,81 €</td><td></td></tr>
+        </tfoot>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- RESUMEN POR CATEGORÍA -->
+  <div class="section" id="categorias">
+    <div class="section-title">Gastos totales por categoría (Enero–Marzo + Abril est.)</div>
+    <div class="table-wrap"><table>
+      <thead>
+        <tr>
+          <th>Categoría</th>
+          <th class="right">Enero</th>
+          <th class="right">Febrero</th>
+          <th class="right">Marzo</th>
+          <th class="right">Abril</th>
+          <th class="right">TOTAL</th>
+          <th class="right">% s/ total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Trabajadores (Ivan+Caja+Javier)</strong></td>
+          <td class="amount">2.895,52 €</td>
+          <td class="amount">2.923,82 €</td>
+          <td class="amount">3.930,50 €</td>
+          <td class="amount dim">~3.830,00 €</td>
+          <td class="amount gold">~13.579,84 €</td>
+          <td class="amount" style="color:var(--tc-gold)">47,8%</td>
+        </tr>
+        <tr>
+          <td><strong>Nómina Gerard</strong></td>
+          <td class="amount">1.700,00 €</td>
+          <td class="amount">1.700,00 €</td>
+          <td class="amount">1.700,00 €</td>
+          <td class="amount">1.700,00 €</td>
+          <td class="amount gold">6.800,00 €</td>
+          <td class="amount" style="color:var(--tc-gold)">23,9%</td>
+        </tr>
+        <tr>
+          <td><strong>Alquiler local</strong></td>
+          <td class="amount">700,00 €</td>
+          <td class="amount">700,00 €</td>
+          <td class="amount">700,00 €</td>
+          <td class="amount">700,00 €</td>
+          <td class="amount gold">2.800,00 €</td>
+          <td class="amount" style="color:var(--tc-gold)">9,9%</td>
+        </tr>
+        <tr>
+          <td><strong>Gestoría (Almar)</strong></td>
+          <td class="amount">336,09 €</td>
+          <td class="amount">336,09 €</td>
+          <td class="amount">336,09 €</td>
+          <td class="amount">336,09 €</td>
+          <td class="amount gold">1.344,36 €</td>
+          <td class="amount" style="color:var(--tc-gold)">4,7%</td>
+        </tr>
+        <tr>
+          <td><strong>New Gest Digital</strong></td>
+          <td class="amount">432,00 €</td>
+          <td class="amount">240,00 €</td>
+          <td class="amount">240,00 €</td>
+          <td class="amount">240,00 €</td>
+          <td class="amount gold">1.152,00 €</td>
+          <td class="amount" style="color:var(--tc-gold)">4,1%</td>
+        </tr>
+        <tr>
+          <td><strong>Despacho Duran i Sors (50%)</strong></td>
+          <td class="amount">233,88 €</td>
+          <td class="amount dim">~234,00 €</td>
+          <td class="amount dim">~234,00 €</td>
+          <td class="amount dim">~234,00 €</td>
+          <td class="amount gold">~935,88 €</td>
+          <td class="amount" style="color:var(--tc-gold)">3,3%</td>
+        </tr>
+        <tr>
+          <td><strong>Bluespace Storage</strong></td>
+          <td class="amount dim">~181,67 €</td>
+          <td class="amount">181,67 €</td>
+          <td class="amount">214,88 €</td>
+          <td class="amount">214,88 €</td>
+          <td class="amount gold">793,10 €</td>
+          <td class="amount" style="color:var(--tc-gold)">2,8%</td>
+        </tr>
+        <tr>
+          <td><strong>Electricidad</strong></td>
+          <td class="amount">102,69 €</td>
+          <td class="amount">112,25 €</td>
+          <td class="amount">84,61 €</td>
+          <td class="amount">96,37 €</td>
+          <td class="amount gold">395,92 €</td>
+          <td class="amount" style="color:var(--tc-gold)">1,4%</td>
+        </tr>
+        <tr>
+          <td><strong>Taxa residuos (anual)</strong></td>
+          <td class="amount">90,81 €</td>
+          <td class="amount" style="color:var(--tc-text-3)">—</td>
+          <td class="amount" style="color:var(--tc-text-3)">—</td>
+          <td class="amount" style="color:var(--tc-text-3)">—</td>
+          <td class="amount gold">90,81 €</td>
+          <td class="amount" style="color:var(--tc-gold)">0,3%</td>
+        </tr>
+        <tr>
+          <td><strong>Productos (Hamza Cosmetics)</strong></td>
+          <td class="amount">19,40 €</td>
+          <td class="amount" style="color:var(--tc-text-3)">—</td>
+          <td class="amount">68,90 €</td>
+          <td class="amount">9,99 €</td>
+          <td class="amount gold">98,29 €</td>
+          <td class="amount" style="color:var(--tc-gold)">0,3%</td>
+        </tr>
+        <tr>
+          <td><strong>Shopify TC Academy</strong></td>
+          <td class="amount" style="color:var(--tc-text-3)">—</td>
+          <td class="amount" style="color:var(--tc-text-3)">—</td>
+          <td class="amount">20,42 €</td>
+          <td class="amount">1,00 €</td>
+          <td class="amount gold">21,42 €</td>
+          <td class="amount" style="color:var(--tc-gold)">0,1%</td>
+        </tr>
+        <tr>
+          <td><strong>AGEDI música (trimestral)</strong></td>
+          <td class="amount">8,33 €</td>
+          <td class="amount">8,33 €</td>
+          <td class="amount">8,33 €</td>
+          <td class="amount">8,33 €</td>
+          <td class="amount gold">33,32 €</td>
+          <td class="amount" style="color:var(--tc-gold)">0,1%</td>
+        </tr>
+        <tr>
+          <td><strong>Reparación persiana (puntual)</strong></td>
+          <td class="amount" style="color:var(--tc-text-3)">—</td>
+          <td class="amount" style="color:var(--tc-text-3)">—</td>
+          <td class="amount" style="color:var(--tc-text-3)">—</td>
+          <td class="amount">260,15 €</td>
+          <td class="amount gold">260,15 €</td>
+          <td class="amount" style="color:var(--tc-gold)">0,9%</td>
+        </tr>
+        <tr>
+          <td style="color:var(--tc-red)"><strong>🔍 Seguro del local</strong></td>
+          <td class="amount dim">¿?</td>
+          <td class="amount dim">¿?</td>
+          <td class="amount dim">¿?</td>
+          <td class="amount dim">¿?</td>
+          <td class="amount red">NO ENCONTRADO</td>
+          <td class="amount red">—</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="grand-total-row">
+          <td><strong>TOTAL</strong></td>
+          <td class="amount">6.700,39 €</td>
+          <td class="amount">6.436,16 €</td>
+          <td class="amount">7.537,73 €</td>
+          <td class="amount" style="color:var(--tc-warn)">~7.730,81 €</td>
+          <td class="amount gold">~28.405,09 €</td>
+          <td class="amount gold">100%</td>
+        </tr>
+      </tfoot>
+    </table></div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>Generado por Claude · 29 abr 2026</span>
+    <span>Fuente: Gmail IMAP + PDF parsing · thecrewbarber.co@gmail.com</span>
+    <span>Tasas USD/EUR: ~0.96</span>
+  </div>
+
+</main>
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// P&L Chart
+const months = [
+  {m:'Enero',   ing:8836,    gas:6700.39},
+  {m:'Febrero', ing:8187.50, gas:6436.16},
+  {m:'Marzo',   ing:11119.50,gas:7537.73},
+  {m:'Abril',   ing:9755,    gas:7730.81},
+];
+const maxVal = Math.max(...months.map(m => m.ing));
+const chartWrap = document.getElementById('chart-pl');
+const labelsWrap = document.getElementById('chart-labels-pl');
+months.forEach(({m, ing, gas}) => {
+  const col = document.createElement('div');
+  col.className = 'chart-col';
+  const h1 = Math.round((ing / maxVal) * 150);
+  const h2 = Math.round((gas / maxVal) * 150);
+  col.innerHTML = `
+    <div style="font-size:9px;color:var(--tc-green);font-weight:700;margin-bottom:2px">${(ing-gas).toLocaleString('es',{maximumFractionDigits:0})}€</div>
+    <div class="chart-col-inner" style="height:${h1}px">
+      <div class="bar-gas" style="height:${Math.round((gas/ing)*100)}%"></div>
+      <div class="bar-ing" style="height:${Math.round(((ing-gas)/ing)*100)}%"></div>
+    </div>`;
+  chartWrap.appendChild(col);
+  const lbl = document.createElement('div');
+  lbl.style.cssText = 'flex:1;text-align:center;font-size:10px;color:var(--tc-text-3);font-weight:600;margin-top:4px';
+  lbl.textContent = m;
+  labelsWrap.appendChild(lbl);
+});
+</script>
+</body>
+</html>
