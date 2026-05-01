@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Empleados 2026 — TCB</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --tc-bg:#080808; --tc-bg-2:#111111; --tc-bg-3:#181818;
+  --tc-gold:#C9A84C; --tc-gold-dim:#9a7c34; --tc-gold-bg:rgba(201,168,76,.07); --tc-gold-border:rgba(201,168,76,.18);
+  --tc-text-1:#f0ede6; --tc-text-2:#9a9690; --tc-text-3:#5a5652;
+  --tc-green:#4ade80; --tc-red:#f87171; --tc-blue:#60a5fa; --tc-warn:#fbbf24;
+  --ivan:#C9A84C; --caja:#60a5fa; --javier:#a78bfa;
+  --r:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--tc-bg);color:var(--tc-text-1);font-family:'Montserrat',sans-serif;font-size:13px;min-height:100vh}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:220px;min-width:220px;background:var(--tc-bg-2);border-right:1px solid rgba(255,255,255,.05);display:flex;flex-direction:column;padding:28px 0 20px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar__logo{padding:0 20px 28px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sidebar__logo-title{font-size:11px;font-weight:700;letter-spacing:.18em;color:var(--tc-gold);text-transform:uppercase}
+.sidebar__logo-sub{font-size:10px;color:var(--tc-text-3);margin-top:3px}
+.sidebar__nav{padding:16px 0;flex:1}
+.sidebar__item{display:block;padding:9px 20px;font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--tc-text-2);text-decoration:none;transition:color .15s,background .15s}
+.sidebar__item:hover{color:var(--tc-text-1);background:rgba(255,255,255,.03)}
+.sidebar__item.active{color:var(--tc-gold);background:var(--tc-gold-bg);border-left:2px solid var(--tc-gold)}
+.sidebar__sep{height:1px;background:rgba(255,255,255,.05);margin:8px 20px}
+.sidebar__section{padding:12px 20px 4px;font-size:9px;font-weight:700;letter-spacing:.14em;color:var(--tc-text-3);text-transform:uppercase}
+.content{flex:1;padding:36px 40px 60px;max-width:1100px}
+
+.doc-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--tc-gold);background:var(--tc-gold-bg);border:1px solid var(--tc-gold-border);border-radius:20px;padding:3px 10px;margin-bottom:12px}
+.doc-title{font-size:28px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
+.doc-title em{color:var(--tc-gold);font-style:normal}
+.doc-meta{display:flex;gap:18px;margin-bottom:28px;flex-wrap:wrap}
+.doc-meta-item{font-size:10px;color:var(--tc-text-2)}
+.doc-meta-item span{color:var(--tc-text-1);font-weight:600}
+
+/* EMPLOYEE CARDS */
+.emp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+@media(max-width:800px){.emp-grid{grid-template-columns:1fr}}
+.emp-card{background:var(--tc-bg-2);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:22px 22px 18px;position:relative;overflow:hidden}
+.emp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.emp-card.ivan::before{background:var(--ivan)}
+.emp-card.caja::before{background:var(--caja)}
+.emp-card.javier::before{background:var(--javier)}
+.emp-rank{position:absolute;top:14px;right:14px;font-size:18px;font-weight:900;opacity:.15}
+.emp-name{font-size:14px;font-weight:800;letter-spacing:.02em;margin-bottom:2px}
+.emp-role{font-size:10px;color:var(--tc-text-3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+.emp-total{font-size:26px;font-weight:800;margin-bottom:4px}
+.emp-total.ivan{color:var(--ivan)}
+.emp-total.caja{color:var(--caja)}
+.emp-total.javier{color:var(--javier)}
+.emp-sub{font-size:10px;color:var(--tc-text-2);margin-bottom:16px}
+.emp-months{display:flex;flex-direction:column;gap:5px}
+.emp-month-row{display:flex;align-items:center;gap:8px;font-size:11px}
+.emp-month-label{width:24px;color:var(--tc-text-3);font-weight:700;font-size:9px;text-transform:uppercase}
+.emp-month-bar{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.emp-month-fill{height:100%;border-radius:2px}
+.emp-month-fill.ivan{background:var(--ivan)}
+.emp-month-fill.caja{background:var(--caja)}
+.emp-month-fill.javier{background:var(--javier)}
+.emp-month-amt{width:68px;text-align:right;color:var(--tc-text-2);font-variant-numeric:tabular-nums;font-size:11px}
+.emp-month-trend{font-size:9px;width:32px;text-align:right;font-weight:700}
+.trend-up{color:var(--tc-green)}
+.trend-dn{color:var(--tc-red)}
+.trend-new{color:var(--tc-gold)}
+
+/* SECTION */
+.section{margin-bottom:36px}
+.section-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--tc-gold);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--tc-gold-border)}
+
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tc-text-3);padding:8px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06)}
+th.right{text-align:right}
+td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;color:var(--tc-text-1);vertical-align:middle}
+td.right{text-align:right;font-variant-numeric:tabular-nums}
+td.gold{color:var(--tc-gold);font-weight:700}
+td.dim{color:var(--tc-text-3);font-style:italic}
+tr.total-row td{background:var(--tc-gold-bg);border-top:1px solid var(--tc-gold-border);font-weight:700}
+tr.total-row td.gold{color:var(--tc-gold);font-size:13px}
+tr:hover td{background:rgba(255,255,255,.015)}
+tr.total-row:hover td{background:unset}
+
+/* INSIGHTS */
+.insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px}
+@media(max-width:700px){.insights-grid{grid-template-columns:1fr}}
+.insight-card{background:var(--tc-bg-2);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:16px 18px}
+.insight-icon{font-size:18px;margin-bottom:8px}
+.insight-title{font-size:11px;font-weight:700;color:var(--tc-text-1);margin-bottom:4px}
+.insight-body{font-size:11px;color:var(--tc-text-2);line-height:1.65}
+.insight-body strong{color:var(--tc-text-1)}
+.insight-card.good{border-color:rgba(74,222,128,.2);background:rgba(74,222,128,.04)}
+.insight-card.warn{border-color:rgba(251,191,36,.2);background:rgba(251,191,36,.04)}
+.insight-card.info{border-color:rgba(96,165,250,.2);background:rgba(96,165,250,.04)}
+
+/* CHART */
+.chart-section{background:var(--tc-bg-2);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:20px 22px;margin-bottom:28px}
+.chart-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tc-text-3);margin-bottom:16px}
+.grouped-bars{display:flex;gap:12px;align-items:flex-end;height:140px;margin-bottom:8px}
+.month-group{flex:1;display:flex;flex-direction:column;align-items:center;gap:0}
+.month-bars{display:flex;gap:3px;align-items:flex-end;height:120px;width:100%;justify-content:center}
+.bar-emp{width:22px;border-radius:3px 3px 0 0;cursor:default;transition:opacity .15s;position:relative}
+.bar-emp:hover{opacity:.8}
+.month-lbl{font-size:9px;color:var(--tc-text-3);font-weight:700;text-transform:uppercase;margin-top:6px}
+.chart-legend{display:flex;gap:16px;justify-content:center;margin-top:4px}
+.legend-dot{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:5px;vertical-align:middle}
+
+/* BADGE */
+.badge{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:3px;padding:2px 5px;margin-left:4px;vertical-align:middle}
+.badge.pend{background:rgba(248,113,113,.12);color:var(--tc-red)}
+.badge.conf{background:rgba(74,222,128,.1);color:var(--tc-green)}
+
+.footer{margin-top:48px;padding-top:20px;border-top:1px solid rgba(255,255,255,.05);font-size:10px;color:var(--tc-text-3);display:flex;gap:24px;justify-content:space-between;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="sidebar">
+  <div class="sidebar__logo">
+    <div class="sidebar__logo-title">TCB Docs</div>
+    <div class="sidebar__logo-sub">The Crew Barbershop</div>
+  </div>
+  <div class="sidebar__nav">
+    <div class="sidebar__section">Negocio</div>
+    <a href="index.html" class="sidebar__item">◈ &nbsp;Facturación</a>
+    <a href="gastos_2026.html" class="sidebar__item">◈ &nbsp;Gastos &amp; P&amp;L</a>
+    <a href="empleados.html" class="sidebar__item active">◈ &nbsp;Empleados</a>
+    <div class="sidebar__sep"></div>
+    <div class="sidebar__section">Academia</div>
+    <a href="#" class="sidebar__item">◈ &nbsp;ROOTS Ebook</a>
+    <a href="#" class="sidebar__item">◈ &nbsp;Materiales</a>
+  </div>
+</nav>
+
+<main class="content">
+
+  <div class="doc-tag">Empleados</div>
+  <h1 class="doc-title"><em>2026</em> — Enero a Abril</h1>
+  <div class="doc-meta">
+    <div class="doc-meta-item">📅 Actualizado: <span>1 may 2026</span></div>
+    <div class="doc-meta-item">👥 <span>3 autónomos</span></div>
+    <div class="doc-meta-item">⚠️ <span>Ivan y Caja · abril pendiente</span></div>
+  </div>
+
+  <!-- EMPLOYEE CARDS -->
+  <div class="emp-grid">
+
+    <!-- IVAN -->
+    <div class="emp-card ivan">
+      <div class="emp-rank">🥇</div>
+      <div class="emp-name">Ivan Contreras</div>
+      <div class="emp-role">Barbero · Principal</div>
+      <div class="emp-total ivan">4.547,68 €</div>
+      <div class="emp-sub">Ene–Mar confirmado · Apr pendiente</div>
+      <div class="emp-months">
+        <div class="emp-month-row">
+          <div class="emp-month-label">ENE</div>
+          <div class="emp-month-bar"><div class="emp-month-fill ivan" style="width:77%"></div></div>
+          <div class="emp-month-amt">1.391,90 €</div>
+          <div class="emp-month-trend">—</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">FEB</div>
+          <div class="emp-month-bar"><div class="emp-month-fill ivan" style="width:76%"></div></div>
+          <div class="emp-month-amt">1.368,18 €</div>
+          <div class="emp-month-trend trend-dn">-1,7%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">MAR</div>
+          <div class="emp-month-bar"><div class="emp-month-fill ivan" style="width:100%"></div></div>
+          <div class="emp-month-amt">1.787,60 €</div>
+          <div class="emp-month-trend trend-up">+30,7%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">ABR</div>
+          <div class="emp-month-bar"><div class="emp-month-fill ivan" style="width:80%;opacity:.3"></div></div>
+          <div class="emp-month-amt dim">~1.700 €</div>
+          <div class="emp-month-trend" style="color:var(--tc-text-3)">pend.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVIER -->
+    <div class="emp-card javier">
+      <div class="emp-rank">🥈</div>
+      <div class="emp-name">Javier Barrionuevo</div>
+      <div class="emp-role">Barbero · Crecimiento</div>
+      <div class="emp-total javier">3.524,63 €</div>
+      <div class="emp-sub">Ene–Abr confirmado ✅</div>
+      <div class="emp-months">
+        <div class="emp-month-row">
+          <div class="emp-month-label">ENE</div>
+          <div class="emp-month-bar"><div class="emp-month-fill javier" style="width:60%"></div></div>
+          <div class="emp-month-amt">684,30 €</div>
+          <div class="emp-month-trend">—</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">FEB</div>
+          <div class="emp-month-bar"><div class="emp-month-fill javier" style="width:59%"></div></div>
+          <div class="emp-month-amt">668,43 €</div>
+          <div class="emp-month-trend trend-dn">-2,3%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">MAR</div>
+          <div class="emp-month-bar"><div class="emp-month-fill javier" style="width:90%"></div></div>
+          <div class="emp-month-amt">1.029,92 €</div>
+          <div class="emp-month-trend trend-up">+54,1%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">ABR</div>
+          <div class="emp-month-bar"><div class="emp-month-fill javier" style="width:100%"></div></div>
+          <div class="emp-month-amt">1.141,98 €</div>
+          <div class="emp-month-trend trend-up">+10,9%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAJA -->
+    <div class="emp-card caja">
+      <div class="emp-rank">🥉</div>
+      <div class="emp-name">Gerard Caja</div>
+      <div class="emp-role">Barbero · Constante</div>
+      <div class="emp-total caja">2.819,51 €</div>
+      <div class="emp-sub">Ene–Mar confirmado · Apr pendiente</div>
+      <div class="emp-months">
+        <div class="emp-month-row">
+          <div class="emp-month-label">ENE</div>
+          <div class="emp-month-bar"><div class="emp-month-fill caja" style="width:73%"></div></div>
+          <div class="emp-month-amt">819,32 €</div>
+          <div class="emp-month-trend">—</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">FEB</div>
+          <div class="emp-month-bar"><div class="emp-month-fill caja" style="width:80%"></div></div>
+          <div class="emp-month-amt">887,21 €</div>
+          <div class="emp-month-trend trend-up">+8,3%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">MAR</div>
+          <div class="emp-month-bar"><div class="emp-month-fill caja" style="width:100%"></div></div>
+          <div class="emp-month-amt">1.112,98 €</div>
+          <div class="emp-month-trend trend-up">+25,5%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">ABR</div>
+          <div class="emp-month-bar"><div class="emp-month-fill caja" style="width:90%;opacity:.3"></div></div>
+          <div class="emp-month-amt dim">~1.100 €</div>
+          <div class="emp-month-trend" style="color:var(--tc-text-3)">pend.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CHART -->
+  <div class="section">
+    <div class="section-title">Evolución mensual por empleado</div>
+    <div class="chart-section">
+      <div class="chart-title">Facturación mensual (€) — Ene a Abr 2026</div>
+      <div class="grouped-bars" id="grouped-chart"></div>
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background:var(--ivan)"></span>Ivan Contreras</span>
+        <span><span class="legend-dot" style="background:var(--javier)"></span>Javier Barrionuevo</span>
+        <span><span class="legend-dot" style="background:var(--caja)"></span>Gerard Caja</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLA COMPARATIVA -->
+  <div class="section">
+    <div class="section-title">Resumen comparativo Jan–Abr 2026</div>
+    <div class="table-wrap"><table>
+      <thead>
+        <tr>
+          <th>Empleado</th>
+          <th class="right">Enero</th>
+          <th class="right">Febrero</th>
+          <th class="right">Marzo</th>
+          <th class="right">Abril</th>
+          <th class="right">TOTAL</th>
+          <th class="right">Media/mes</th>
+          <th class="right">Mejor mes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:var(--ivan)">Ivan Contreras</strong></td>
+          <td class="right">1.391,90 €</td>
+          <td class="right">1.368,18 €</td>
+          <td class="right">1.787,60 €</td>
+          <td class="right dim">~1.700 € <span class="badge pend">Pend.</span></td>
+          <td class="right gold">~6.247,68 €</td>
+          <td class="right" style="color:var(--tc-text-2)">~1.562 €</td>
+          <td class="right" style="color:var(--tc-gold)">Marzo</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--javier)">Javier Barrionuevo</strong></td>
+          <td class="right">684,30 €</td>
+          <td class="right">668,43 €</td>
+          <td class="right">1.029,92 €</td>
+          <td class="right">1.141,98 € <span class="badge conf">✓</span></td>
+          <td class="right gold">3.524,63 €</td>
+          <td class="right" style="color:var(--tc-text-2)">881 €</td>
+          <td class="right" style="color:var(--tc-gold)">Abril</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--caja)">Gerard Caja</strong></td>
+          <td class="right">819,32 €</td>
+          <td class="right">887,21 €</td>
+          <td class="right">1.112,98 €</td>
+          <td class="right dim">~1.100 € <span class="badge pend">Pend.</span></td>
+          <td class="right gold">~3.919,51 €</td>
+          <td class="right" style="color:var(--tc-text-2)">~980 €</td>
+          <td class="right" style="color:var(--tc-gold)">Marzo</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="total-row">
+          <td><strong>TOTAL EQUIPO</strong></td>
+          <td class="right gold">2.895,52 €</td>
+          <td class="right gold">2.923,82 €</td>
+          <td class="right gold">3.930,50 €</td>
+          <td class="right" style="color:var(--tc-warn)">~3.942 €</td>
+          <td class="right gold">~13.692 €</td>
+          <td class="right gold">~3.423 €</td>
+          <td class="right gold">Marzo/Abr</td>
+        </tr>
+      </tfoot>
+    </table></div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="section">
+    <div class="section-title">Análisis & puntos de mejora</div>
+    <div class="insights-grid">
+
+      <div class="insight-card good">
+        <div class="insight-icon">📈</div>
+        <div class="insight-title">Javier — el que más crece</div>
+        <div class="insight-body">Es el único con los <strong>4 meses cerrados</strong> y marca máximo en abril (1.141€). Creció un <strong>+67% desde enero</strong>. Si mantiene este ritmo, superará a Caja en total anual antes de julio.</div>
+      </div>
+
+      <div class="insight-card good">
+        <div class="insight-icon">👑</div>
+        <div class="insight-title">Ivan — el pilar del equipo</div>
+        <div class="insight-body">Factura <strong>casi el doble que los otros</strong> cada mes. Su mejor mes fue marzo con 1.787€. Representa el ~46% del gasto total en trabajadores. Sin él el negocio sería muy diferente.</div>
+      </div>
+
+      <div class="insight-card warn">
+        <div class="insight-icon">⚠️</div>
+        <div class="insight-title">Febrero flojo para todos</div>
+        <div class="insight-body">Los tres bajaron o se estancaron en febrero. Ivan -1,7%, Javier -2,3%, solo Caja creció (+8,3%). Posible <strong>efecto estacionalidad</strong> — pocos días hábiles + post-enero. A vigilar en 2027.</div>
+      </div>
+
+      <div class="insight-card warn">
+        <div class="insight-icon">📊</div>
+        <div class="insight-title">Caja — recorrido de mejora</div>
+        <div class="insight-body">Gerard Caja tiene la facturación más baja pero <strong>lleva 3 meses creciendo</strong> (+8% y +25%). Está en buena dirección. Si sube otro 15% en mayo llegaría a los 1.300€, acercándose a Javier.</div>
+      </div>
+
+      <div class="insight-card info">
+        <div class="insight-icon">🚀</div>
+        <div class="insight-title">Marzo fue el mes estrella</div>
+        <div class="insight-body">Los tres alcanzaron su <strong>máximo histórico en marzo</strong>. Ivan 1.788€, Caja 1.113€, Javier 1.030€. Total equipo: 3.930€ — el mejor mes del año. Semana Santa, días festivos y tempo alto.</div>
+      </div>
+
+      <div class="insight-card info">
+        <div class="insight-icon">💡</div>
+        <div class="insight-title">Coste equipo vs ingresos</div>
+        <div class="insight-body">El equipo representa de media <strong>~36% de los ingresos totales</strong> del negocio. En marzo, con 11.120€ de ingresos y 3.930€ en workers, el ratio fue óptimo. El objetivo sería mantenerlo por debajo del 40%.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Generado por Claude · 1 may 2026</span>
+    <span>Fuente: Facturas PDF vía Gmail</span>
+    <span>Apr Ivan + Caja pendientes de confirmación</span>
+  </div>
+
+</main>
+</div>
+
+<script>
+const empData = [
+  {m:'Ene', ivan:1391.90, javier:684.30,  caja:819.32},
+  {m:'Feb', ivan:1368.18, javier:668.43,  caja:887.21},
+  {m:'Mar', ivan:1787.60, javier:1029.92, caja:1112.98},
+  {m:'Abr', ivan:1700,    javier:1141.98, caja:1100},
+];
+const maxVal = Math.max(...empData.map(d => Math.max(d.ivan, d.javier, d.caja)));
+const chart = document.getElementById('grouped-chart');
+
+empData.forEach(d => {
+  const grp = document.createElement('div');
+  grp.className = 'month-group';
+  const bars = document.createElement('div');
+  bars.className = 'month-bars';
+
+  [['ivan',d.ivan,'var(--ivan)'],['javier',d.javier,'var(--javier)'],['caja',d.caja,'var(--caja)']].forEach(([name, val, color]) => {
+    const b = document.createElement('div');
+    b.className = 'bar-emp';
+    b.style.cssText = `height:${Math.round((val/maxVal)*115)}px;background:${color};opacity:${name==='ivan'&&d.m==='Abr'||name==='caja'&&d.m==='Abr'?'.4':'1'}`;
+    b.title = `${name}: ${val.toLocaleString('es')}€`;
+    bars.appendChild(b);
+  });
+
+  const lbl = document.createElement('div');
+  lbl.className = 'month-lbl';
+  lbl.textContent = d.m;
+
+  grp.appendChild(bars);
+  grp.appendChild(lbl);
+  chart.appendChild(grp);
+});
+</script>
+</body>
+</html>
