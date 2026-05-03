@@ -222,77 +222,72 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
           <tr>
             <th>Mes</th>
             <th class="right">Ingresos</th>
-            <th class="right">Gastos op.</th>
-            <th class="right">Margen €</th>
-            <th class="right">Margen %</th>
-            <th>Nota</th>
+            <th class="right">Gastos negocio</th>
+            <th class="right">Financiación + impuestos</th>
+            <th class="right">Total real caja</th>
+            <th class="right">Resultado mes</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Enero</td>
+            <td><strong>Enero</strong></td>
             <td class="amount gold">8.569,00 €</td>
             <td class="amount">7.678,59 €</td>
-            <td class="amount green">890,41 €</td>
-            <td class="pct" style="color:var(--warn)">
-              <div class="margin-bar-wrap">
-                <div class="margin-bar"><div class="margin-bar-fill ok" style="width:10.4%"></div></div>
-                10,4%
-              </div>
-            </td>
-            <td style="color:var(--t2);font-size:11px">IVA+IRPF Q4 6.935€ · préstamos 1.414€ no incluidos</td>
+            <td class="amount" style="color:var(--warn)">9.548,60 €</td>
+            <td class="amount">17.227,19 €</td>
+            <td class="amount red">−8.658,19 €</td>
+          </tr>
+          <tr style="padding-left:12px">
+            <td style="font-size:10px;color:var(--t3);padding-left:20px" colspan="5">↳ Préstamos 1.413,60€ + José Chao 1.200€ + IVA+IRPF Q4 6.935€ — mes muy negativo por la liquidación fiscal del Q4</td>
           </tr>
           <tr>
-            <td>Febrero</td>
+            <td><strong>Febrero</strong></td>
             <td class="amount gold">8.075,00 €</td>
             <td class="amount">7.228,69 €</td>
-            <td class="amount green">846,31 €</td>
-            <td class="pct" style="color:var(--warn)">
-              <div class="margin-bar-wrap">
-                <div class="margin-bar"><div class="margin-bar-fill ok" style="width:10.5%"></div></div>
-                10,5%
-              </div>
-            </td>
-            <td style="color:var(--t2);font-size:11px">Mes más flojo · préstamos 1.414€ no incluidos</td>
+            <td class="amount" style="color:var(--warn)">2.613,60 €</td>
+            <td class="amount">9.842,29 €</td>
+            <td class="amount red">−1.767,29 €</td>
           </tr>
           <tr>
-            <td>Marzo</td>
+            <td style="font-size:10px;color:var(--t3);padding-left:20px" colspan="5">↳ Préstamos 1.413,60€ + José Chao 1.200€</td>
+          </tr>
+          <tr>
+            <td><strong>Marzo</strong></td>
             <td class="amount gold">10.849,00 €</td>
             <td class="amount">8.422,44 €</td>
-            <td class="amount green">2.426,56 €</td>
-            <td class="pct" style="color:var(--grn)">
-              <div class="margin-bar-wrap">
-                <div class="margin-bar"><div class="margin-bar-fill good" style="width:22.4%"></div></div>
-                22,4%
-              </div>
-            </td>
-            <td style="color:var(--t2);font-size:11px">Mejor margen del año · buenos ingresos</td>
+            <td class="amount" style="color:var(--warn)">2.613,60 €</td>
+            <td class="amount">11.036,04 €</td>
+            <td class="amount red">−187,04 €</td>
           </tr>
           <tr>
-            <td>Abril</td>
+            <td style="font-size:10px;color:var(--t3);padding-left:20px" colspan="5">↳ Préstamos 1.413,60€ + José Chao 1.200€ — casi en equilibrio</td>
+          </tr>
+          <tr>
+            <td><strong>Abril</strong></td>
             <td class="amount gold">11.258,00 €</td>
             <td class="amount">9.176,08 €</td>
-            <td class="amount green">2.081,92 €</td>
-            <td class="pct" style="color:var(--grn)">
-              <div class="margin-bar-wrap">
-                <div class="margin-bar"><div class="margin-bar-fill good" style="width:18.5%"></div></div>
-                18,5%
-              </div>
-            </td>
-            <td style="color:var(--t2);font-size:11px">Máxima facturación · IVA+IRPF Q1 3.331€ no incluidos</td>
+            <td class="amount" style="color:var(--warn)">5.943,60 €</td>
+            <td class="amount">15.119,68 €</td>
+            <td class="amount red">−3.861,68 €</td>
+          </tr>
+          <tr>
+            <td style="font-size:10px;color:var(--t3);padding-left:20px" colspan="5">↳ Préstamos 1.413,60€ + José Chao 1.200€ + IVA+IRPF Q1 3.331€</td>
           </tr>
         </tbody>
         <tfoot>
           <tr class="grand-total-row">
             <td><strong>TOTAL 2026</strong></td>
             <td class="amount gold">38.751,00 €</td>
-            <td class="amount">~32.505,80 €</td>
-            <td class="amount green">~6.245,20 €</td>
-            <td class="pct" style="color:var(--grn);font-size:13px;font-weight:800">~16,1%</td>
-            <td style="color:var(--t3);font-size:11px">P&L operativo · sin préstamos ni impuestos</td>
+            <td class="amount">~32.506 €</td>
+            <td class="amount" style="color:var(--warn)">~20.719 €</td>
+            <td class="amount">~53.225 €</td>
+            <td class="amount red">−14.474 €</td>
           </tr>
         </tfoot>
       </table>
+    </div>
+    <div class="notice warn" style="margin-top:16px">
+      <b>📌 Cómo leer esta tabla:</b> "Gastos negocio" = lo que cuesta operar (trabajadores, alquiler, suministros...). "Financiación + impuestos" = préstamos, distribución socio, IVA trimestral. El "Resultado mes" es lo que queda o falta en caja real después de todo. El negocio tiene un margen operativo del <b>16,1%</b> — el déficit de caja viene de la carga financiera y fiscal encima.
     </div>
   </div>
 
@@ -348,9 +343,15 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
           <tr class="sub-row"><td>Hector Navarro — servicio</td><td style="color:var(--t3)">Domiciliado BBVA</td><td class="amount">35,79 €</td><td><span class="badge banco">Banco</span></td></tr>
           <tr class="sub-row"><td>Mantenimiento cuenta CaixaBank</td><td style="color:var(--t3)">CaixaBank</td><td class="amount">30,00 €</td><td><span class="badge banco">Banco</span></td></tr>
           <tr class="sub-row"><td>Liquidación Cta.Cto. (intereses)</td><td style="color:var(--t3)">CaixaBank</td><td class="amount">20,88 €</td><td><span class="badge banco">Banco</span></td></tr>
+          <tr class="section-row"><td colspan="4">Financiación & Obligaciones (salen del banco pero no son gasto del negocio)</td></tr>
+          <tr class="sub-row"><td>Préstamo reforma local</td><td style="color:var(--t3)">CaixaBank · mensual</td><td class="amount" style="color:var(--warn)">694,85 €</td><td><span class="badge banco">Banco</span></td></tr>
+          <tr class="sub-row"><td>Préstamo financiación empresa</td><td style="color:var(--t3)">CaixaBank · mensual</td><td class="amount" style="color:var(--warn)">718,75 €</td><td><span class="badge banco">Banco</span></td></tr>
+          <tr class="sub-row"><td>José Chao Mingorance — distribución socio</td><td style="color:var(--t3)">BBVA · mensual</td><td class="amount" style="color:var(--warn)">1.200,00 €</td><td><span class="badge banco">Banco</span></td></tr>
+          <tr class="sub-row"><td>Hacienda — IVA + IRPF Q4 2025</td><td style="color:var(--t3)">BBVA · liquidación trimestral</td><td class="amount" style="color:var(--red)">6.935,00 €</td><td><span class="badge banco">Banco</span></td></tr>
         </tbody>
         <tfoot>
-          <tr class="total-row"><td colspan="2"><strong>TOTAL GASTOS ENERO</strong></td><td class="amount gold">7.678,59 €</td><td></td></tr>
+          <tr class="total-row"><td colspan="2"><strong>Gastos negocio Enero</strong></td><td class="amount gold">7.678,59 €</td><td></td></tr>
+          <tr style="background:rgba(196,112,104,.08);border-top:1px solid rgba(196,112,104,.2)"><td colspan="2" style="font-weight:700;color:var(--t1);padding:12px 20px">TOTAL REAL QUE SALIÓ DE CAJA</td><td class="amount" style="color:var(--red);font-weight:800;font-size:14px;text-align:right;padding:12px 20px">17.227,19 €</td><td style="padding:12px 20px;font-size:11px;color:var(--red)">vs 8.569€ ingresados</td></tr>
         </tfoot>
       </table></div>
     </div>
@@ -389,9 +390,14 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
           <tr class="sub-row"><td>MYBOX — TPV tarjetas</td><td style="color:var(--t3)">Cuota agrupada · Caixa</td><td class="amount">64,68 €</td><td><span class="badge banco">Banco</span></td></tr>
           <tr class="sub-row"><td>Hector Navarro — servicio</td><td style="color:var(--t3)">Domiciliado BBVA</td><td class="amount">35,79 €</td><td><span class="badge banco">Banco</span></td></tr>
           <tr class="sub-row"><td>Mantenimiento cuenta CaixaBank</td><td style="color:var(--t3)">CaixaBank</td><td class="amount">30,00 €</td><td><span class="badge banco">Banco</span></td></tr>
+          <tr class="section-row"><td colspan="4">Financiación & Obligaciones (salen del banco pero no son gasto del negocio)</td></tr>
+          <tr class="sub-row"><td>Préstamo reforma local</td><td style="color:var(--t3)">CaixaBank · mensual</td><td class="amount" style="color:var(--warn)">694,85 €</td><td><span class="badge banco">Banco</span></td></tr>
+          <tr class="sub-row"><td>Préstamo financiación empresa</td><td style="color:var(--t3)">CaixaBank · mensual</td><td class="amount" style="color:var(--warn)">718,75 €</td><td><span class="badge banco">Banco</span></td></tr>
+          <tr class="sub-row"><td>José Chao Mingorance — distribución socio</td><td style="color:var(--t3)">BBVA · mensual</td><td class="amount" style="color:var(--warn)">1.200,00 €</td><td><span class="badge banco">Banco</span></td></tr>
         </tbody>
         <tfoot>
-          <tr class="total-row"><td colspan="2"><strong>TOTAL GASTOS FEBRERO</strong></td><td class="amount gold">7.228,69 €</td><td></td></tr>
+          <tr class="total-row"><td colspan="2"><strong>Gastos negocio Febrero</strong></td><td class="amount gold">7.228,69 €</td><td></td></tr>
+          <tr style="background:rgba(196,112,104,.08);border-top:1px solid rgba(196,112,104,.2)"><td colspan="2" style="font-weight:700;color:var(--t1);padding:12px 20px">TOTAL REAL QUE SALIÓ DE CAJA</td><td class="amount" style="color:var(--red);font-weight:800;font-size:14px;text-align:right;padding:12px 20px">9.842,29 €</td><td style="padding:12px 20px;font-size:11px;color:var(--red)">vs 8.075€ ingresados</td></tr>
         </tfoot>
       </table></div>
     </div>
@@ -434,9 +440,14 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
           <tr class="sub-row"><td>MYBOX — TPV tarjetas</td><td style="color:var(--t3)">Cuota agrupada · Caixa</td><td class="amount">64,68 €</td><td><span class="badge banco">Banco</span></td></tr>
           <tr class="sub-row"><td>Hector Navarro — servicio</td><td style="color:var(--t3)">Domiciliado BBVA</td><td class="amount">35,79 €</td><td><span class="badge banco">Banco</span></td></tr>
           <tr class="sub-row"><td>Mantenimiento cuenta CaixaBank</td><td style="color:var(--t3)">CaixaBank</td><td class="amount">30,00 €</td><td><span class="badge banco">Banco</span></td></tr>
+          <tr class="section-row"><td colspan="4">Financiación & Obligaciones (salen del banco pero no son gasto del negocio)</td></tr>
+          <tr class="sub-row"><td>Préstamo reforma local</td><td style="color:var(--t3)">CaixaBank · mensual</td><td class="amount" style="color:var(--warn)">694,85 €</td><td><span class="badge banco">Banco</span></td></tr>
+          <tr class="sub-row"><td>Préstamo financiación empresa</td><td style="color:var(--t3)">CaixaBank · mensual</td><td class="amount" style="color:var(--warn)">718,75 €</td><td><span class="badge banco">Banco</span></td></tr>
+          <tr class="sub-row"><td>José Chao Mingorance — distribución socio</td><td style="color:var(--t3)">BBVA · mensual</td><td class="amount" style="color:var(--warn)">1.200,00 €</td><td><span class="badge banco">Banco</span></td></tr>
         </tbody>
         <tfoot>
-          <tr class="total-row"><td colspan="2"><strong>TOTAL GASTOS MARZO</strong></td><td class="amount gold">8.422,44 €</td><td></td></tr>
+          <tr class="total-row"><td colspan="2"><strong>Gastos negocio Marzo</strong></td><td class="amount gold">8.422,44 €</td><td></td></tr>
+          <tr style="background:rgba(196,112,104,.08);border-top:1px solid rgba(196,112,104,.2)"><td colspan="2" style="font-weight:700;color:var(--t1);padding:12px 20px">TOTAL REAL QUE SALIÓ DE CAJA</td><td class="amount" style="color:var(--red);font-weight:800;font-size:14px;text-align:right;padding:12px 20px">11.036,04 €</td><td style="padding:12px 20px;font-size:11px;color:var(--t3)">vs 10.849€ ingresados · casi empate</td></tr>
         </tfoot>
       </table></div>
     </div>
@@ -482,9 +493,15 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
           <tr class="sub-row"><td>MYBOX — TPV tarjetas</td><td style="color:var(--t3)">Cuota agrupada · Caixa</td><td class="amount">64,68 €</td><td><span class="badge banco">Banco</span></td></tr>
           <tr class="sub-row"><td>Hector Navarro — servicio</td><td style="color:var(--t3)">Domiciliado BBVA</td><td class="amount">35,79 €</td><td><span class="badge banco">Banco</span></td></tr>
           <tr class="sub-row"><td>Mantenimiento cuenta CaixaBank</td><td style="color:var(--t3)">CaixaBank</td><td class="amount">30,00 €</td><td><span class="badge banco">Banco</span></td></tr>
+          <tr class="section-row"><td colspan="4">Financiación & Obligaciones (salen del banco pero no son gasto del negocio)</td></tr>
+          <tr class="sub-row"><td>Préstamo reforma local</td><td style="color:var(--t3)">CaixaBank · mensual</td><td class="amount" style="color:var(--warn)">694,85 €</td><td><span class="badge banco">Banco</span></td></tr>
+          <tr class="sub-row"><td>Préstamo financiación empresa</td><td style="color:var(--t3)">CaixaBank · mensual</td><td class="amount" style="color:var(--warn)">718,75 €</td><td><span class="badge banco">Banco</span></td></tr>
+          <tr class="sub-row"><td>José Chao Mingorance — distribución socio</td><td style="color:var(--t3)">BBVA · mensual</td><td class="amount" style="color:var(--warn)">1.200,00 €</td><td><span class="badge banco">Banco</span></td></tr>
+          <tr class="sub-row"><td>Hacienda — IVA + IRPF Q1 2026</td><td style="color:var(--t3)">BBVA · liquidación trimestral</td><td class="amount" style="color:var(--red)">3.331,00 €</td><td><span class="badge banco">Banco</span></td></tr>
         </tbody>
         <tfoot>
-          <tr class="total-row"><td colspan="2"><strong>TOTAL GASTOS ABRIL</strong></td><td class="amount gold">9.176,08 €</td><td></td></tr>
+          <tr class="total-row"><td colspan="2"><strong>Gastos negocio Abril</strong></td><td class="amount gold">9.176,08 €</td><td></td></tr>
+          <tr style="background:rgba(196,112,104,.08);border-top:1px solid rgba(196,112,104,.2)"><td colspan="2" style="font-weight:700;color:var(--t1);padding:12px 20px">TOTAL REAL QUE SALIÓ DE CAJA</td><td class="amount" style="color:var(--red);font-weight:800;font-size:14px;text-align:right;padding:12px 20px">15.119,68 €</td><td style="padding:12px 20px;font-size:11px;color:var(--red)">vs 11.258€ ingresados</td></tr>
         </tfoot>
       </table></div>
     </div>
