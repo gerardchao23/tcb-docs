@@ -123,6 +123,23 @@ tr.total-row:hover td{background:unset}
 .insight-card.warn{border-color:rgba(212,168,80,.2)}
 .insight-card.info{border-color:rgba(138,158,148,.2)}
 
+/* REUNIÓN DE EQUIPO */
+.meeting-header{margin-bottom:24px}
+.meeting-date{font-size:13px;font-weight:700;color:var(--t1);letter-spacing:-.01em}
+.meeting-sub{font-size:11px;color:var(--t3);margin-top:4px}
+.meeting-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.meeting-grid{grid-template-columns:1fr}}
+.meeting-col{border:1px solid var(--ln);border-radius:var(--r);padding:22px 24px}
+.meeting-col.pos{border-left:3px solid var(--grn)}
+.meeting-col.imp{border-left:3px solid var(--gold)}
+.meeting-col-title{font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:16px}
+.meeting-col.pos .meeting-col-title{color:var(--grn)}
+.meeting-col.imp .meeting-col-title{color:var(--gold)}
+.meeting-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.meeting-list li{font-size:12px;color:var(--t2);line-height:1.7;padding-left:16px;position:relative}
+.meeting-list li::before{content:"—";position:absolute;left:0;color:var(--t3)}
+.meeting-list li strong{color:var(--t1);font-weight:600}
+
 /* FOOTER */
 .footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--ln);font-size:10px;color:var(--t3);display:flex;gap:24px;justify-content:space-between;flex-wrap:wrap}
 </style>
@@ -383,6 +400,41 @@ tr.total-row:hover td{background:unset}
         <div class="insight-icon">💡</div>
         <div class="insight-title">Coste equipo vs ingresos</div>
         <div class="insight-body">El equipo representa de media <strong>~37% de los ingresos totales</strong> del negocio. En marzo, con 10.849€ de ingresos y 4.166€ en workers, el ratio fue del 38%. El objetivo sería mantenerlo por debajo del 40%.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- REUNIÓN DE EQUIPO -->
+  <div class="section">
+    <div class="section-title">Reunión de equipo</div>
+
+    <div class="meeting-header">
+      <div class="meeting-date">Mayo 2026</div>
+      <div class="meeting-sub">Notas para la próxima reunión con el equipo · edita esto antes de cada sesión</div>
+    </div>
+
+    <div class="meeting-grid">
+
+      <div class="meeting-col pos">
+        <div class="meeting-col-title">Lo que va bien</div>
+        <ul class="meeting-list">
+          <li><strong>Abril fue el mejor mes del año</strong> — 11.258€ de facturación. El equipo está creciendo.</li>
+          <li><strong>Javier está en racha</strong> — creció un +67% desde enero. El que más sube del equipo y marcó máximo en abril.</li>
+          <li><strong>Caja es el más constante</strong> — lleva 3 meses seguidos creciendo, nunca ha bajado más de un mes.</li>
+          <li><strong>Ivan es el pilar</strong> — sigue siendo el que más factura con diferencia. Marzo fue su mejor mes histórico (1.894€).</li>
+          <li>Booksy creciendo mes a mes desde enero — buena señal de que la visibilidad online funciona.</li>
+        </ul>
+      </div>
+
+      <div class="meeting-col imp">
+        <div class="meeting-col-title">A trabajar</div>
+        <ul class="meeting-list">
+          <li><strong>Ivan bajó un -15% en abril</strong> respecto a marzo. Hablar con él — ¿hubo algo, o es ajuste normal post-Semana Santa?</li>
+          <li><strong>Febrero es el punto débil</strong> — los tres bajaron. Pensar qué se puede hacer en febrero 2027 para compensar.</li>
+          <li><strong>Caja tiene recorrido</strong> — si sube un 15% en mayo llegaría a ~1.320€, acercándose al nivel de Javier.</li>
+          <li>Javier superará a Caja en total anual antes de julio si mantiene el ritmo actual — momento de fijarse objetivos.</li>
+        </ul>
       </div>
 
     </div>
