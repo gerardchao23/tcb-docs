@@ -10,7 +10,7 @@
   --bg:#080808;--surf:#0d0d0d;--surf2:#131313;
   --gold:#C9A84C;--ga:rgba(201,168,76,.09);--gb:rgba(201,168,76,.2);
   --t1:#f0ede6;--t2:rgba(240,237,230,.5);--t3:rgba(240,237,230,.24);
-  --ln:rgba(240,237,230,.07);--grn:#4ade80;--red:#f87171;--blu:#60a5fa;--warn:#fbbf24;
+  --ln:rgba(240,237,230,.07);--grn:#7FAE7A;--red:#C47068;--blu:#8A9E94;--warn:#D4A850;
   --r:3px;--sw:220px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -98,9 +98,9 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
 
 /* BADGE */
 .badge{display:inline-block;font-size:7px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:2px;padding:2px 5px;margin-left:4px;vertical-align:middle}
-.badge.est{background:rgba(251,191,36,.1);color:var(--warn)}
-.badge.pend{background:rgba(248,113,113,.1);color:var(--red)}
-.badge.conf{background:rgba(74,222,128,.08);color:var(--grn)}
+.badge.est{background:rgba(212,168,80,.12);color:var(--warn)}
+.badge.pend{background:rgba(196,112,104,.12);color:var(--red)}
+.badge.conf{background:rgba(127,174,122,.12);color:var(--grn)}
 
 /* PROGRESS BAR */
 .margin-bar-wrap{display:flex;align-items:center;gap:10px}
@@ -115,7 +115,7 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
 .chart-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;height:100%;justify-content:flex-end}
 .chart-col-inner{width:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:1px}
 .bar-ing{border-radius:2px 2px 0 0;background:var(--gold);opacity:.75;width:100%}
-.bar-gas{border-radius:2px 2px 0 0;background:var(--blu);opacity:.6;width:100%}
+.bar-gas{border-radius:2px 2px 0 0;background:rgba(240,237,230,.22);width:100%}
 .chart-label{font-size:9px;color:var(--t3);font-weight:600;margin-top:4px}
 .chart-legend{display:flex;gap:16px;margin-bottom:24px}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t2)}
@@ -205,8 +205,8 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
     <div class="section-title">P&amp;L mensual — Enero a Abril</div>
 
     <div class="chart-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--tc-gold)"></div>Ingresos</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div>Gastos</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Ingresos</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--blu)"></div>Gastos</div>
     </div>
     <div class="chart-wrap" id="chart-pl"></div>
     <div style="display:flex;gap:2px;margin-bottom:28px;" id="chart-labels-pl"></div>
@@ -229,52 +229,52 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
             <td class="amount gold">8.569,00 €</td>
             <td class="amount">7.052,11 €</td>
             <td class="amount green">1.516,89 €</td>
-            <td class="pct" style="color:var(--tc-gold)">
+            <td class="pct" style="color:var(--gold)">
               <div class="margin-bar-wrap">
                 <div class="margin-bar"><div class="margin-bar-fill ok" style="width:17.7%"></div></div>
                 17,7%
               </div>
             </td>
-            <td style="color:var(--tc-text-2);font-size:11px">2 facturas New Gest + taxa residuos + AGEDI Q1</td>
+            <td style="color:var(--t2);font-size:11px">2 facturas New Gest + taxa residuos + AGEDI Q1</td>
           </tr>
           <tr>
             <td>Febrero</td>
             <td class="amount gold">8.075,00 €</td>
             <td class="amount">6.714,57 €</td>
             <td class="amount green">1.360,43 €</td>
-            <td class="pct" style="color:var(--tc-gold)">
+            <td class="pct" style="color:var(--gold)">
               <div class="margin-bar-wrap">
                 <div class="margin-bar"><div class="margin-bar-fill ok" style="width:16.8%"></div></div>
                 16,8%
               </div>
             </td>
-            <td style="color:var(--tc-text-2);font-size:11px">Mes más flojo en ingresos</td>
+            <td style="color:var(--t2);font-size:11px">Mes más flojo en ingresos</td>
           </tr>
           <tr>
             <td>Marzo</td>
             <td class="amount gold">10.849,00 €</td>
             <td class="amount">7.843,32 €</td>
             <td class="amount green">3.005,68 €</td>
-            <td class="pct" style="color:var(--tc-green)">
+            <td class="pct" style="color:var(--grn)">
               <div class="margin-bar-wrap">
                 <div class="margin-bar"><div class="margin-bar-fill good" style="width:27.7%"></div></div>
                 27,7%
               </div>
             </td>
-            <td style="color:var(--tc-text-2);font-size:11px">Buen mes — workers más caros</td>
+            <td style="color:var(--t2);font-size:11px">Buen mes — workers más caros</td>
           </tr>
           <tr>
             <td>Abril + 1 mayo <span class="badge pend">Workers pend.</span></td>
             <td class="amount gold">11.258,00 €</td>
             <td class="amount">~7.855,48 €</td>
             <td class="amount green">3.402,52 €</td>
-            <td class="pct" style="color:var(--tc-green)">
+            <td class="pct" style="color:var(--grn)">
               <div class="margin-bar-wrap">
                 <div class="margin-bar"><div class="margin-bar-fill good" style="width:30.2%"></div></div>
                 30,2%
               </div>
             </td>
-            <td style="color:var(--tc-text-2);font-size:11px">Mejor mes del año · trabajadores confirmados</td>
+            <td style="color:var(--t2);font-size:11px">Mejor mes del año · trabajadores confirmados</td>
           </tr>
         </tbody>
         <tfoot>
@@ -283,8 +283,8 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
             <td class="amount gold">38.751,00 €</td>
             <td class="amount">~29.465,48 €</td>
             <td class="amount green">~9.285,52 €</td>
-            <td class="pct" style="color:var(--tc-green);font-size:13px;font-weight:800">~24,0%</td>
-            <td style="color:var(--tc-text-3);font-size:11px">Solo despacho Nova Vallmy estimado</td>
+            <td class="pct" style="color:var(--grn);font-size:13px;font-weight:800">~24,0%</td>
+            <td style="color:var(--t3);font-size:11px">Solo despacho Nova Vallmy estimado</td>
           </tr>
         </tfoot>
       </table>
@@ -310,24 +310,24 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
         <thead><tr><th>Concepto</th><th>Proveedor</th><th class="right">Importe (TOTAL fact.)</th><th>Estado</th></tr></thead>
         <tbody>
           <tr class="section-row"><td colspan="4">Trabajadores autónomos</td></tr>
-          <tr class="sub-row"><td>Ivan Contreras — Enero</td><td style="color:var(--tc-text-3)">Factura 26001 · base 1.391,90</td><td class="amount">1.475,41 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Gerard Caja — Enero</td><td style="color:var(--tc-text-3)">Factura 26001 · base 819,32</td><td class="amount">868,48 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Javier Barrionuevo — Enero</td><td style="color:var(--tc-text-3)">Factura 26001 · base 684,30</td><td class="amount">725,36 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Ivan Contreras — Enero</td><td style="color:var(--t3)">Factura 26001 · base 1.391,90</td><td class="amount">1.475,41 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Gerard Caja — Enero</td><td style="color:var(--t3)">Factura 26001 · base 819,32</td><td class="amount">868,48 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Javier Barrionuevo — Enero</td><td style="color:var(--t3)">Factura 26001 · base 684,30</td><td class="amount">725,36 €</td><td><span class="badge conf">Fact.</span></td></tr>
           <tr class="section-row"><td colspan="4">Local & Oficina</td></tr>
-          <tr class="sub-row"><td>Alquiler local C/ Lacy 18</td><td style="color:var(--tc-text-3)">Ferrer Peña CB · 2026-001</td><td class="amount">714,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Taxa Residuos 2026 (anual)</td><td style="color:var(--tc-text-3)">Ferrer Peña CB · 2026-002</td><td class="amount">185,24 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Despacho C/ Duran i Sors (50%)</td><td style="color:var(--tc-text-3)">Nova Vallmy · 6/35</td><td class="amount">233,88 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Bluespace Self-Storage</td><td style="color:var(--tc-text-3)">SAB26252 · 19 ene</td><td class="amount">238,36 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Alquiler local C/ Lacy 18</td><td style="color:var(--t3)">Ferrer Peña CB · 2026-001</td><td class="amount">714,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Taxa Residuos 2026 (anual)</td><td style="color:var(--t3)">Ferrer Peña CB · 2026-002</td><td class="amount">185,24 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Despacho C/ Duran i Sors (50%)</td><td style="color:var(--t3)">Nova Vallmy · 6/35</td><td class="amount">233,88 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Bluespace Self-Storage</td><td style="color:var(--t3)">SAB26252 · 19 ene</td><td class="amount">238,36 €</td><td><span class="badge conf">Fact.</span></td></tr>
           <tr class="section-row"><td colspan="4">Nómina propietario</td></tr>
-          <tr class="sub-row"><td>Nómina Gerard Chao</td><td style="color:var(--tc-text-3)">Chao Espinalt Group SL</td><td class="amount">1.700,00 €</td><td><span class="badge conf">Fijo</span></td></tr>
+          <tr class="sub-row"><td>Nómina Gerard Chao</td><td style="color:var(--t3)">Chao Espinalt Group SL</td><td class="amount">1.700,00 €</td><td><span class="badge conf">Fijo</span></td></tr>
           <tr class="section-row"><td colspan="4">Servicios & Profesionales</td></tr>
-          <tr class="sub-row"><td>Gestoría — cuota mensual</td><td style="color:var(--tc-text-3)">Almar Consultors · 202623590</td><td class="amount">336,09 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>New Gest Digital (NGD2-0013)</td><td style="color:var(--tc-text-3)">New Gest Digital LLC · $200</td><td class="amount">192,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>New Gest Digital (NGD2-0014)</td><td style="color:var(--tc-text-3)">New Gest Digital LLC · $250</td><td class="amount">240,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>AGEDI-AIE licencia música (Q1)</td><td style="color:var(--tc-text-3)">Somos Música · INV_2026_029500</td><td class="amount">21,20 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Gestoría — cuota mensual</td><td style="color:var(--t3)">Almar Consultors · 202623590</td><td class="amount">336,09 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>New Gest Digital (NGD2-0013)</td><td style="color:var(--t3)">New Gest Digital LLC · $200</td><td class="amount">192,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>New Gest Digital (NGD2-0014)</td><td style="color:var(--t3)">New Gest Digital LLC · $250</td><td class="amount">240,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>AGEDI-AIE licencia música (Q1)</td><td style="color:var(--t3)">Somos Música · INV_2026_029500</td><td class="amount">21,20 €</td><td><span class="badge conf">Fact.</span></td></tr>
           <tr class="section-row"><td colspan="4">Suministros</td></tr>
-          <tr class="sub-row"><td>Electricidad</td><td style="color:var(--tc-text-3)">Alettoe Energy · 2025002192</td><td class="amount">102,69 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Productos (Hamza Cosmetics)</td><td style="color:var(--tc-text-3)">F000010</td><td class="amount">19,40 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Electricidad</td><td style="color:var(--t3)">Alettoe Energy · 2025002192</td><td class="amount">102,69 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Productos (Hamza Cosmetics)</td><td style="color:var(--t3)">F000010</td><td class="amount">19,40 €</td><td><span class="badge conf">Fact.</span></td></tr>
         </tbody>
         <tfoot>
           <tr class="total-row"><td colspan="2"><strong>TOTAL GASTOS ENERO</strong></td><td class="amount gold">7.052,11 €</td><td></td></tr>
@@ -344,20 +344,20 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
         <thead><tr><th>Concepto</th><th>Proveedor</th><th class="right">Importe (TOTAL fact.)</th><th>Estado</th></tr></thead>
         <tbody>
           <tr class="section-row"><td colspan="4">Trabajadores autónomos</td></tr>
-          <tr class="sub-row"><td>Ivan Contreras — Febrero</td><td style="color:var(--tc-text-3)">Factura 26002 · base 1.368,18</td><td class="amount">1.450,27 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Gerard Caja — Febrero</td><td style="color:var(--tc-text-3)">Factura 26002 · base 887,21</td><td class="amount">940,44 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Javier Barrionuevo — Febrero</td><td style="color:var(--tc-text-3)">Factura 26002 · base 668,43</td><td class="amount">708,54 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Ivan Contreras — Febrero</td><td style="color:var(--t3)">Factura 26002 · base 1.368,18</td><td class="amount">1.450,27 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Gerard Caja — Febrero</td><td style="color:var(--t3)">Factura 26002 · base 887,21</td><td class="amount">940,44 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Javier Barrionuevo — Febrero</td><td style="color:var(--t3)">Factura 26002 · base 668,43</td><td class="amount">708,54 €</td><td><span class="badge conf">Fact.</span></td></tr>
           <tr class="section-row"><td colspan="4">Local & Oficina</td></tr>
-          <tr class="sub-row"><td>Alquiler local C/ Lacy 18</td><td style="color:var(--tc-text-3)">Ferrer Peña CB · 2026-003</td><td class="amount">714,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Despacho C/ Duran i Sors (50%)</td><td style="color:var(--tc-text-3)">Nova Vallmy (estimado)</td><td class="amount">234,00 €</td><td><span class="badge est">Estim.</span></td></tr>
-          <tr class="sub-row"><td>Bluespace Self-Storage</td><td style="color:var(--tc-text-3)">SAB261061 · 18 feb</td><td class="amount">278,98 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Alquiler local C/ Lacy 18</td><td style="color:var(--t3)">Ferrer Peña CB · 2026-003</td><td class="amount">714,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Despacho C/ Duran i Sors (50%)</td><td style="color:var(--t3)">Nova Vallmy (estimado)</td><td class="amount">234,00 €</td><td><span class="badge est">Estim.</span></td></tr>
+          <tr class="sub-row"><td>Bluespace Self-Storage</td><td style="color:var(--t3)">SAB261061 · 18 feb</td><td class="amount">278,98 €</td><td><span class="badge conf">Fact.</span></td></tr>
           <tr class="section-row"><td colspan="4">Nómina propietario</td></tr>
-          <tr class="sub-row"><td>Nómina Gerard Chao</td><td style="color:var(--tc-text-3)">Chao Espinalt Group SL</td><td class="amount">1.700,00 €</td><td><span class="badge conf">Fijo</span></td></tr>
+          <tr class="sub-row"><td>Nómina Gerard Chao</td><td style="color:var(--t3)">Chao Espinalt Group SL</td><td class="amount">1.700,00 €</td><td><span class="badge conf">Fijo</span></td></tr>
           <tr class="section-row"><td colspan="4">Servicios & Profesionales</td></tr>
-          <tr class="sub-row"><td>Gestoría — cuota mensual</td><td style="color:var(--tc-text-3)">Almar Consultors · 202623663</td><td class="amount">336,09 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>New Gest Digital (NGD2-0015)</td><td style="color:var(--tc-text-3)">New Gest Digital LLC · $250</td><td class="amount">240,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Gestoría — cuota mensual</td><td style="color:var(--t3)">Almar Consultors · 202623663</td><td class="amount">336,09 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>New Gest Digital (NGD2-0015)</td><td style="color:var(--t3)">New Gest Digital LLC · $250</td><td class="amount">240,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
           <tr class="section-row"><td colspan="4">Suministros</td></tr>
-          <tr class="sub-row"><td>Electricidad</td><td style="color:var(--tc-text-3)">Alettoe Energy · 2025002850</td><td class="amount">112,25 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Electricidad</td><td style="color:var(--t3)">Alettoe Energy · 2025002850</td><td class="amount">112,25 €</td><td><span class="badge conf">Fact.</span></td></tr>
         </tbody>
         <tfoot>
           <tr class="total-row"><td colspan="2"><strong>TOTAL GASTOS FEBRERO</strong></td><td class="amount gold">6.714,57 €</td><td></td></tr>
@@ -374,23 +374,23 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
         <thead><tr><th>Concepto</th><th>Proveedor</th><th class="right">Importe (TOTAL fact.)</th><th>Estado</th></tr></thead>
         <tbody>
           <tr class="section-row"><td colspan="4">Trabajadores autónomos</td></tr>
-          <tr class="sub-row"><td>Ivan Contreras — Marzo</td><td style="color:var(--tc-text-3)">Factura 26003 · base 1.787,60</td><td class="amount">1.894,86 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Gerard Caja — Marzo</td><td style="color:var(--tc-text-3)">Factura 26003 · base 1.112,98</td><td class="amount">1.179,75 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Javier Barrionuevo — Marzo</td><td style="color:var(--tc-text-3)">Factura 26003 (definitiva) · base 1.029,92</td><td class="amount">1.091,71 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Ivan Contreras — Marzo</td><td style="color:var(--t3)">Factura 26003 · base 1.787,60</td><td class="amount">1.894,86 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Gerard Caja — Marzo</td><td style="color:var(--t3)">Factura 26003 · base 1.112,98</td><td class="amount">1.179,75 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Javier Barrionuevo — Marzo</td><td style="color:var(--t3)">Factura 26003 (definitiva) · base 1.029,92</td><td class="amount">1.091,71 €</td><td><span class="badge conf">Fact.</span></td></tr>
           <tr class="section-row"><td colspan="4">Local & Oficina</td></tr>
-          <tr class="sub-row"><td>Alquiler local C/ Lacy 18</td><td style="color:var(--tc-text-3)">Ferrer Peña CB · 2026-004</td><td class="amount">714,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Despacho C/ Duran i Sors (50%)</td><td style="color:var(--tc-text-3)">Nova Vallmy (estimado)</td><td class="amount">234,00 €</td><td><span class="badge est">Estim.</span></td></tr>
-          <tr class="sub-row"><td>Bluespace Self-Storage</td><td style="color:var(--tc-text-3)">SAB261857 · 17 mar</td><td class="amount">278,98 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Alquiler local C/ Lacy 18</td><td style="color:var(--t3)">Ferrer Peña CB · 2026-004</td><td class="amount">714,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Despacho C/ Duran i Sors (50%)</td><td style="color:var(--t3)">Nova Vallmy (estimado)</td><td class="amount">234,00 €</td><td><span class="badge est">Estim.</span></td></tr>
+          <tr class="sub-row"><td>Bluespace Self-Storage</td><td style="color:var(--t3)">SAB261857 · 17 mar</td><td class="amount">278,98 €</td><td><span class="badge conf">Fact.</span></td></tr>
           <tr class="section-row"><td colspan="4">Nómina propietario</td></tr>
-          <tr class="sub-row"><td>Nómina Gerard Chao</td><td style="color:var(--tc-text-3)">Chao Espinalt Group SL</td><td class="amount">1.700,00 €</td><td><span class="badge conf">Fijo</span></td></tr>
+          <tr class="sub-row"><td>Nómina Gerard Chao</td><td style="color:var(--t3)">Chao Espinalt Group SL</td><td class="amount">1.700,00 €</td><td><span class="badge conf">Fijo</span></td></tr>
           <tr class="section-row"><td colspan="4">Servicios & Profesionales</td></tr>
-          <tr class="sub-row"><td>Gestoría — cuota mensual</td><td style="color:var(--tc-text-3)">Almar Consultors · 202623725</td><td class="amount">336,09 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>New Gest Digital (NGD2-0016)</td><td style="color:var(--tc-text-3)">New Gest Digital LLC · $250</td><td class="amount">240,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Shopify — dominio thecrewacademy.es</td><td style="color:var(--tc-text-3)">Shopify #503305059</td><td class="amount">19,42 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Shopify — suscripción TC Academy</td><td style="color:var(--tc-text-3)">Shopify #505377431</td><td class="amount">1,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Gestoría — cuota mensual</td><td style="color:var(--t3)">Almar Consultors · 202623725</td><td class="amount">336,09 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>New Gest Digital (NGD2-0016)</td><td style="color:var(--t3)">New Gest Digital LLC · $250</td><td class="amount">240,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Shopify — dominio thecrewacademy.es</td><td style="color:var(--t3)">Shopify #503305059</td><td class="amount">19,42 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Shopify — suscripción TC Academy</td><td style="color:var(--t3)">Shopify #505377431</td><td class="amount">1,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
           <tr class="section-row"><td colspan="4">Suministros & Productos</td></tr>
-          <tr class="sub-row"><td>Electricidad</td><td style="color:var(--tc-text-3)">Alettoe Energy · 2025004815</td><td class="amount">84,61 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Productos (Hamza Cosmetics) · 2 facturas</td><td style="color:var(--tc-text-3)">F000038 + F000054</td><td class="amount">68,90 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Electricidad</td><td style="color:var(--t3)">Alettoe Energy · 2025004815</td><td class="amount">84,61 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Productos (Hamza Cosmetics) · 2 facturas</td><td style="color:var(--t3)">F000038 + F000054</td><td class="amount">68,90 €</td><td><span class="badge conf">Fact.</span></td></tr>
         </tbody>
         <tfoot>
           <tr class="total-row"><td colspan="2"><strong>TOTAL GASTOS MARZO</strong></td><td class="amount gold">7.843,32 €</td><td></td></tr>
@@ -407,24 +407,24 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
         <thead><tr><th>Concepto</th><th>Proveedor</th><th class="right">Importe (TOTAL fact.)</th><th>Estado</th></tr></thead>
         <tbody>
           <tr class="section-row"><td colspan="4">Trabajadores autónomos</td></tr>
-          <tr class="sub-row"><td>Ivan Contreras — Abril</td><td style="color:var(--tc-text-3)">Factura 26004 · base 1.516,86</td><td class="amount">1.607,87 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Gerard Caja — Abril</td><td style="color:var(--tc-text-3)">Factura 26004 · base 1.080,50</td><td class="amount">1.145,33 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Javier Barrionuevo — Abril</td><td style="color:var(--tc-text-3)">Factura 26004 · base 1.141,98</td><td class="amount">1.210,50 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Ivan Contreras — Abril</td><td style="color:var(--t3)">Factura 26004 · base 1.516,86</td><td class="amount">1.607,87 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Gerard Caja — Abril</td><td style="color:var(--t3)">Factura 26004 · base 1.080,50</td><td class="amount">1.145,33 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Javier Barrionuevo — Abril</td><td style="color:var(--t3)">Factura 26004 · base 1.141,98</td><td class="amount">1.210,50 €</td><td><span class="badge conf">Fact.</span></td></tr>
           <tr class="section-row"><td colspan="4">Local & Oficina</td></tr>
-          <tr class="sub-row"><td>Alquiler local C/ Lacy 18</td><td style="color:var(--tc-text-3)">Ferrer Peña CB · 2026-005</td><td class="amount">714,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Despacho C/ Duran i Sors (50%)</td><td style="color:var(--tc-text-3)">Nova Vallmy (estimado)</td><td class="amount">234,00 €</td><td><span class="badge est">Estim.</span></td></tr>
-          <tr class="sub-row"><td>Bluespace Self-Storage</td><td style="color:var(--tc-text-3)">SAB262668 · 16 abr</td><td class="amount">278,98 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Alquiler local C/ Lacy 18</td><td style="color:var(--t3)">Ferrer Peña CB · 2026-005</td><td class="amount">714,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Despacho C/ Duran i Sors (50%)</td><td style="color:var(--t3)">Nova Vallmy (estimado)</td><td class="amount">234,00 €</td><td><span class="badge est">Estim.</span></td></tr>
+          <tr class="sub-row"><td>Bluespace Self-Storage</td><td style="color:var(--t3)">SAB262668 · 16 abr</td><td class="amount">278,98 €</td><td><span class="badge conf">Fact.</span></td></tr>
           <tr class="section-row"><td colspan="4">Nómina propietario</td></tr>
-          <tr class="sub-row"><td>Nómina Gerard Chao</td><td style="color:var(--tc-text-3)">Chao Espinalt Group SL</td><td class="amount">1.700,00 €</td><td><span class="badge conf">Fijo</span></td></tr>
+          <tr class="sub-row"><td>Nómina Gerard Chao</td><td style="color:var(--t3)">Chao Espinalt Group SL</td><td class="amount">1.700,00 €</td><td><span class="badge conf">Fijo</span></td></tr>
           <tr class="section-row"><td colspan="4">Servicios & Profesionales</td></tr>
-          <tr class="sub-row"><td>Gestoría — cuota mensual</td><td style="color:var(--tc-text-3)">Almar Consultors · 202623792</td><td class="amount">336,09 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>New Gest Digital (NGD2-0017)</td><td style="color:var(--tc-text-3)">New Gest Digital LLC · $250</td><td class="amount">240,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Shopify — suscripción TC Academy</td><td style="color:var(--tc-text-3)">Shopify #519011424</td><td class="amount">1,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>AGEDI-AIE licencia música (Q2)</td><td style="color:var(--tc-text-3)">Somos Música · INV_2026_198406</td><td class="amount">21,20 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Gestoría — cuota mensual</td><td style="color:var(--t3)">Almar Consultors · 202623792</td><td class="amount">336,09 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>New Gest Digital (NGD2-0017)</td><td style="color:var(--t3)">New Gest Digital LLC · $250</td><td class="amount">240,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Shopify — suscripción TC Academy</td><td style="color:var(--t3)">Shopify #519011424</td><td class="amount">1,00 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>AGEDI-AIE licencia música (Q2)</td><td style="color:var(--t3)">Somos Música · INV_2026_198406</td><td class="amount">21,20 €</td><td><span class="badge conf">Fact.</span></td></tr>
           <tr class="section-row"><td colspan="4">Suministros & Reparaciones</td></tr>
-          <tr class="sub-row"><td>Electricidad</td><td style="color:var(--tc-text-3)">Alettoe Energy · 2025003525</td><td class="amount">96,37 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Productos (Hamza Cosmetics)</td><td style="color:var(--tc-text-3)">F000102</td><td class="amount">9,99 €</td><td><span class="badge conf">Fact.</span></td></tr>
-          <tr class="sub-row"><td>Reparación persiana enrollable</td><td style="color:var(--tc-text-3)">Jacinto Guiu Noguera · 2026-001926</td><td class="amount">260,15 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Electricidad</td><td style="color:var(--t3)">Alettoe Energy · 2025003525</td><td class="amount">96,37 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Productos (Hamza Cosmetics)</td><td style="color:var(--t3)">F000102</td><td class="amount">9,99 €</td><td><span class="badge conf">Fact.</span></td></tr>
+          <tr class="sub-row"><td>Reparación persiana enrollable</td><td style="color:var(--t3)">Jacinto Guiu Noguera · 2026-001926</td><td class="amount">260,15 €</td><td><span class="badge conf">Fact.</span></td></tr>
         </tbody>
         <tfoot>
           <tr class="total-row"><td colspan="2"><strong>TOTAL GASTOS ABRIL</strong></td><td class="amount gold">~7.855,48 €</td><td></td></tr>
@@ -456,7 +456,7 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
           <td class="amount">4.166,32 €</td>
           <td class="amount">3.963,70 €</td>
           <td class="amount gold">14.298,52 €</td>
-          <td class="amount" style="color:var(--tc-gold)">48,5%</td>
+          <td class="amount" style="color:var(--gold)">48,5%</td>
         </tr>
         <tr>
           <td><strong>Nómina Gerard</strong></td>
@@ -465,7 +465,7 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
           <td class="amount">1.700,00 €</td>
           <td class="amount">1.700,00 €</td>
           <td class="amount gold">6.800,00 €</td>
-          <td class="amount" style="color:var(--tc-gold)">22,9%</td>
+          <td class="amount" style="color:var(--gold)">22,9%</td>
         </tr>
         <tr>
           <td><strong>Alquiler local + taxa</strong></td>
@@ -474,7 +474,7 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
           <td class="amount">714,00 €</td>
           <td class="amount">714,00 €</td>
           <td class="amount gold">3.041,24 €</td>
-          <td class="amount" style="color:var(--tc-gold)">10,2%</td>
+          <td class="amount" style="color:var(--gold)">10,2%</td>
         </tr>
         <tr>
           <td><strong>Gestoría (Almar)</strong></td>
@@ -483,7 +483,7 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
           <td class="amount">336,09 €</td>
           <td class="amount">336,09 €</td>
           <td class="amount gold">1.344,36 €</td>
-          <td class="amount" style="color:var(--tc-gold)">4,5%</td>
+          <td class="amount" style="color:var(--gold)">4,5%</td>
         </tr>
         <tr>
           <td><strong>New Gest Digital</strong></td>
@@ -492,7 +492,7 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
           <td class="amount">240,00 €</td>
           <td class="amount">240,00 €</td>
           <td class="amount gold">1.152,00 €</td>
-          <td class="amount" style="color:var(--tc-gold)">3,9%</td>
+          <td class="amount" style="color:var(--gold)">3,9%</td>
         </tr>
         <tr>
           <td><strong>Despacho Duran i Sors (50%)</strong></td>
@@ -501,7 +501,7 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
           <td class="amount dim">~234,00 €</td>
           <td class="amount dim">~234,00 €</td>
           <td class="amount gold">~935,88 €</td>
-          <td class="amount" style="color:var(--tc-gold)">3,2%</td>
+          <td class="amount" style="color:var(--gold)">3,2%</td>
         </tr>
         <tr>
           <td><strong>Bluespace Storage</strong></td>
@@ -510,7 +510,7 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
           <td class="amount">278,98 €</td>
           <td class="amount">278,98 €</td>
           <td class="amount gold">1.075,30 €</td>
-          <td class="amount" style="color:var(--tc-gold)">3,6%</td>
+          <td class="amount" style="color:var(--gold)">3,6%</td>
         </tr>
         <tr>
           <td><strong>Electricidad</strong></td>
@@ -519,46 +519,46 @@ tr.total-row:hover td,tr.grand-total-row:hover td,tr.section-row:hover td{backgr
           <td class="amount">84,61 €</td>
           <td class="amount">96,37 €</td>
           <td class="amount gold">395,92 €</td>
-          <td class="amount" style="color:var(--tc-gold)">1,3%</td>
+          <td class="amount" style="color:var(--gold)">1,3%</td>
         </tr>
         <tr>
           <td><strong>Productos (Hamza Cosmetics)</strong></td>
           <td class="amount">19,40 €</td>
-          <td class="amount" style="color:var(--tc-text-3)">—</td>
+          <td class="amount" style="color:var(--t3)">—</td>
           <td class="amount">68,90 €</td>
           <td class="amount">9,99 €</td>
           <td class="amount gold">98,29 €</td>
-          <td class="amount" style="color:var(--tc-gold)">0,3%</td>
+          <td class="amount" style="color:var(--gold)">0,3%</td>
         </tr>
         <tr>
           <td><strong>Shopify TC Academy</strong></td>
-          <td class="amount" style="color:var(--tc-text-3)">—</td>
-          <td class="amount" style="color:var(--tc-text-3)">—</td>
+          <td class="amount" style="color:var(--t3)">—</td>
+          <td class="amount" style="color:var(--t3)">—</td>
           <td class="amount">20,42 €</td>
           <td class="amount">1,00 €</td>
           <td class="amount gold">21,42 €</td>
-          <td class="amount" style="color:var(--tc-gold)">0,1%</td>
+          <td class="amount" style="color:var(--gold)">0,1%</td>
         </tr>
         <tr>
           <td><strong>AGEDI música (real, trimestral)</strong></td>
           <td class="amount">21,20 €</td>
-          <td class="amount" style="color:var(--tc-text-3)">—</td>
-          <td class="amount" style="color:var(--tc-text-3)">—</td>
+          <td class="amount" style="color:var(--t3)">—</td>
+          <td class="amount" style="color:var(--t3)">—</td>
           <td class="amount">21,20 €</td>
           <td class="amount gold">42,40 €</td>
-          <td class="amount" style="color:var(--tc-gold)">0,1%</td>
+          <td class="amount" style="color:var(--gold)">0,1%</td>
         </tr>
         <tr>
           <td><strong>Reparación persiana (puntual)</strong></td>
-          <td class="amount" style="color:var(--tc-text-3)">—</td>
-          <td class="amount" style="color:var(--tc-text-3)">—</td>
-          <td class="amount" style="color:var(--tc-text-3)">—</td>
+          <td class="amount" style="color:var(--t3)">—</td>
+          <td class="amount" style="color:var(--t3)">—</td>
+          <td class="amount" style="color:var(--t3)">—</td>
           <td class="amount">260,15 €</td>
           <td class="amount gold">260,15 €</td>
-          <td class="amount" style="color:var(--tc-gold)">0,9%</td>
+          <td class="amount" style="color:var(--gold)">0,9%</td>
         </tr>
         <tr>
-          <td style="color:var(--tc-red)"><strong>🔍 Seguro del local</strong></td>
+          <td style="color:var(--red)"><strong>🔍 Seguro del local</strong></td>
           <td class="amount dim">¿?</td>
           <td class="amount dim">¿?</td>
           <td class="amount dim">¿?</td>
@@ -615,14 +615,14 @@ months.forEach(({m, ing, gas}) => {
   const h1 = Math.round((ing / maxVal) * 150);
   const h2 = Math.round((gas / maxVal) * 150);
   col.innerHTML = `
-    <div style="font-size:9px;color:var(--tc-green);font-weight:700;margin-bottom:2px">${(ing-gas).toLocaleString('es',{maximumFractionDigits:0})}€</div>
+    <div style="font-size:9px;color:var(--grn);font-weight:700;margin-bottom:2px">${(ing-gas).toLocaleString('es',{maximumFractionDigits:0})}€</div>
     <div class="chart-col-inner" style="height:${h1}px">
       <div class="bar-gas" style="height:${Math.round((gas/ing)*100)}%"></div>
       <div class="bar-ing" style="height:${Math.round(((ing-gas)/ing)*100)}%"></div>
     </div>`;
   chartWrap.appendChild(col);
   const lbl = document.createElement('div');
-  lbl.style.cssText = 'flex:1;text-align:center;font-size:10px;color:var(--tc-text-3);font-weight:600;margin-top:4px';
+  lbl.style.cssText = 'flex:1;text-align:center;font-size:10px;color:var(--t3);font-weight:600;margin-top:4px';
   lbl.textContent = m;
   labelsWrap.appendChild(lbl);
 });
