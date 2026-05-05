@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Estrategia Captación 2026 — TCB</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080808;--surf:#0d0d0d;--surf2:#131313;
+  --gold:#C9A84C;--ga:rgba(201,168,76,.09);--gb:rgba(201,168,76,.2);
+  --t1:#f0ede6;--t2:rgba(240,237,230,.5);--t3:rgba(240,237,230,.24);
+  --ln:rgba(240,237,230,.07);--grn:#7FAE7A;--red:#C47068;--blu:#8A9E94;--warn:#D4A850;
+  --r:3px;--sw:220px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t1);font-family:'Montserrat',sans-serif;font-size:13px;min-height:100vh;-webkit-font-smoothing:antialiased}
+.layout{display:flex;min-height:100vh}
+
+.sidebar{width:var(--sw);min-width:var(--sw);background:var(--surf);border-right:1px solid var(--ln);display:flex;flex-direction:column;padding:32px 0 24px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar__logo{padding:0 24px 28px;border-bottom:1px solid var(--ln);margin-bottom:16px}
+.sidebar__logo-title{font-size:10px;font-weight:800;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+.sidebar__logo-sub{font-size:9px;color:var(--t3);margin-top:2px}
+.sidebar__section{padding:14px 24px 6px;font-size:8px;font-weight:700;letter-spacing:.18em;color:var(--t3);text-transform:uppercase}
+.sidebar__item{display:block;padding:9px 24px;font-size:11px;font-weight:500;color:var(--t2);text-decoration:none;border-left:2px solid transparent;transition:color .15s,background .15s}
+.sidebar__item:hover{color:var(--t1);background:rgba(240,237,230,.025)}
+.sidebar__item.active{color:var(--gold);border-left-color:var(--gold);background:var(--ga)}
+.sidebar__sep{height:1px;background:var(--ln);margin:12px 24px}
+
+.content{flex:1;padding:48px 52px 80px;max-width:1060px}
+
+.doc-tag{display:block;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.doc-title{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:14px}
+.doc-title em{color:var(--gold);font-style:normal}
+.doc-meta{display:flex;gap:20px;margin-bottom:36px;flex-wrap:wrap;padding-bottom:28px;border-bottom:1px solid var(--ln)}
+.doc-meta-item{font-size:11px;color:var(--t3)}
+.doc-meta-item span{color:var(--t2);font-weight:600}
+
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:var(--r);overflow:hidden;margin-bottom:40px}
+.stat-card{background:var(--surf);padding:22px 20px;transition:background .2s}
+.stat-card:hover{background:var(--surf2)}
+.stat-card__label{font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.stat-card__value{font-size:22px;font-weight:800;letter-spacing:-.03em}
+.stat-card__sub{font-size:10px;color:var(--t3);margin-top:4px}
+
+.section{margin-bottom:44px}
+.section-title{display:flex;align-items:center;gap:10px;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:18px}
+.section-title::before{content:"";width:3px;height:13px;background:var(--gold);border-radius:1px;flex-shrink:0}
+.section-title::after{content:"";flex:1;height:1px;background:var(--ln)}
+
+.table-wrap{overflow-x:auto;border:1px solid var(--ln);border-radius:var(--r)}
+table{width:100%;border-collapse:collapse}
+th{font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);padding:12px 16px;text-align:left;border-bottom:1px solid var(--ln)}
+th.right{text-align:right}
+td{padding:11px 16px;border-bottom:1px solid rgba(240,237,230,.04);font-size:12px;color:var(--t2);vertical-align:middle}
+td.right{text-align:right;font-variant-numeric:tabular-nums}
+td.gold{color:var(--gold);font-weight:700}
+td.green{color:var(--grn);font-weight:700}
+td.red{color:var(--red);font-weight:600}
+td.warn{color:var(--warn);font-weight:700}
+td.dim{color:var(--t3)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(240,237,230,.02)}
+tr.total-row td{background:var(--ga);border-top:1px solid var(--gb);font-weight:700;color:var(--t1)}
+tr.highlight td{background:rgba(201,168,76,.05)}
+tr.section-row td{background:var(--surf2);font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);padding:5px 16px}
+tr.section-row:hover td{background:unset}
+
+.badge{display:inline-block;padding:2px 6px;border-radius:2px;font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;vertical-align:middle;margin-left:4px}
+.badge.red{background:rgba(196,112,104,.12);color:var(--red)}
+.badge.warn{background:rgba(212,168,80,.12);color:var(--warn)}
+.badge.green{background:rgba(127,174,122,.12);color:var(--grn)}
+.badge.gold{background:rgba(201,168,76,.12);color:var(--gold)}
+
+.notice{border-left:3px solid;padding:10px 16px;font-size:11px;line-height:1.75;margin-bottom:16px}
+.notice.warn{border-color:var(--warn);color:var(--t2)}
+.notice.red{border-color:var(--red);color:var(--t2)}
+.notice.ok{border-color:var(--grn);color:var(--t2)}
+.notice.info{border-color:var(--blu);color:var(--t2)}
+.notice b{color:var(--t1);font-weight:700}
+
+/* DAY BAR CHART */
+.day-chart{display:flex;gap:8px;align-items:flex-end;height:140px;margin-bottom:8px}
+.day-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;height:100%;justify-content:flex-end}
+.day-bar{width:100%;border-radius:3px 3px 0 0}
+.day-lbl{font-size:9px;color:var(--t3);font-weight:700;margin-top:6px;text-align:center}
+.day-val{font-size:9px;color:var(--t2);margin-top:2px;text-align:center;font-variant-numeric:tabular-nums}
+
+/* HOUR BAR */
+.hour-row{display:grid;grid-template-columns:52px 1fr 60px;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid rgba(240,237,230,.03)}
+.hour-row:last-child{border-bottom:none}
+.hour-label{font-size:10px;font-weight:700;color:var(--t3)}
+.hour-bar-outer{height:5px;background:rgba(240,237,230,.06);border-radius:3px;overflow:hidden}
+.hour-bar-fill{height:100%;border-radius:3px}
+.hour-count{font-size:10px;color:var(--t2);text-align:right;font-variant-numeric:tabular-nums}
+
+/* STRATEGY CARDS */
+.strategy-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:0}
+.strat-card{background:var(--surf);border:1px solid var(--ln);border-radius:var(--r);padding:20px;transition:background .2s}
+.strat-card:hover{background:var(--surf2)}
+.strat-card.priority{border-color:var(--gb);background:var(--ga)}
+.strat-num{font-size:22px;font-weight:800;color:var(--gold);margin-bottom:8px}
+.strat-title{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:6px}
+.strat-target{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
+.strat-body{font-size:11px;color:var(--t2);line-height:1.65}
+.strat-body b{color:var(--t1)}
+.strat-impact{display:inline-block;font-size:9px;font-weight:700;padding:3px 8px;border-radius:2px;background:rgba(127,174,122,.12);color:var(--grn);margin-top:10px}
+
+/* OPPORTUNITY TABLE */
+.opp-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid rgba(240,237,230,.04)}
+.opp-row:last-child{border-bottom:none}
+.opp-day{font-size:13px;font-weight:800;width:90px;flex-shrink:0}
+.opp-bars{flex:1}
+.opp-bar-now{height:7px;border-radius:3px;background:rgba(240,237,230,.15);margin-bottom:4px}
+.opp-bar-pot{height:7px;border-radius:3px;background:rgba(201,168,76,.5)}
+.opp-nums{width:110px;flex-shrink:0;text-align:right}
+.opp-now{font-size:11px;color:var(--t3)}
+.opp-pot{font-size:11px;font-weight:700;color:var(--gold)}
+
+.footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--ln);font-size:10px;color:var(--t3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .content{padding:24px 20px 60px}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .strategy-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="sidebar">
+  <div class="sidebar__logo">
+    <div class="sidebar__logo-title">TCB Docs</div>
+    <div class="sidebar__logo-sub">The Crew Barbershop</div>
+  </div>
+  <div class="sidebar__section">Finanzas</div>
+  <a href="index.html" class="sidebar__item">📊 Facturación</a>
+  <a href="gastos_2026.html" class="sidebar__item">📋 P&amp;L 2026</a>
+  <a href="cashflow_2026.html" class="sidebar__item">💸 Cash Flow</a>
+  <div class="sidebar__sep"></div>
+  <div class="sidebar__section">Equipo</div>
+  <a href="empleados.html" class="sidebar__item">👥 Empleados</a>
+  <div class="sidebar__sep"></div>
+  <div class="sidebar__section">Estrategia</div>
+  <a href="estrategia_captacion.html" class="sidebar__item active">🎯 Captación</a>
+</nav>
+
+<main class="content">
+
+  <span class="doc-tag">Análisis de datos Yeasy · Estrategia comercial</span>
+  <h1 class="doc-title">Días flojos y <em>captación</em></h1>
+  <div class="doc-meta">
+    <div class="doc-meta-item">Fuente <span>Yeasy API · 2.340 citas</span></div>
+    <div class="doc-meta-item">Periodo <span>Enero — Mayo 2026</span></div>
+    <div class="doc-meta-item">Objetivo mensual <span>14.000€</span></div>
+    <div class="doc-meta-item">GAP actual <span>−3.000€/mes</span></div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-card__label">Mejor día</div>
+      <div class="stat-card__value" style="color:var(--grn)">480€</div>
+      <div class="stat-card__sub">Viernes · 518 citas totales</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Día más flojo</div>
+      <div class="stat-card__value" style="color:var(--red)">177€</div>
+      <div class="stat-card__sub">Lunes · 37% del viernes</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Sábado actual</div>
+      <div class="stat-card__value" style="color:var(--warn)">270€</div>
+      <div class="stat-card__sub">Solo 15 citas/día — debería ser el mejor</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Ticket medio</div>
+      <div class="stat-card__value" style="color:var(--gold)">17,8€</div>
+      <div class="stat-card__sub">Constante todos los días</div>
+    </div>
+  </div>
+
+  <!-- GRÁFICO POR DÍA -->
+  <div class="section">
+    <div class="section-title">Facturación media por día de la semana</div>
+    <div class="day-chart" id="dayChart"></div>
+    <div style="display:flex;gap:8px" id="dayLabels"></div>
+    <p style="font-size:10px;color:var(--t3);margin-top:12px">Datos de 2.340 citas en 107 días distintos (Ene–May 2026). Domingo cerrado. El sábado rinde como un martes pese a ser fin de semana.</p>
+  </div>
+
+  <!-- ANÁLISIS DÍA A DÍA -->
+  <div class="section">
+    <div class="section-title">Análisis por día — datos Yeasy</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Día</th>
+            <th class="right">Citas/día</th>
+            <th class="right">€/día avg</th>
+            <th class="right">vs Viernes</th>
+            <th>Diagnóstico</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Viernes</strong> <span class="badge green">TOP</span></td>
+            <td class="right">28,8</td>
+            <td class="right green">480€</td>
+            <td class="right dim">—</td>
+            <td style="font-size:11px;color:var(--t2)">Referencia. Todos los barberos a tope.</td>
+          </tr>
+          <tr>
+            <td><strong>Jueves</strong> <span class="badge green">TOP</span></td>
+            <td class="right">28,3</td>
+            <td class="right green">474€</td>
+            <td class="right dim">−1,3%</td>
+            <td style="font-size:11px;color:var(--t2)">Casi igual que viernes. Buena cadencia.</td>
+          </tr>
+          <tr>
+            <td><strong>Miércoles</strong></td>
+            <td class="right">25,8</td>
+            <td class="right gold">451€</td>
+            <td class="right dim">−6,0%</td>
+            <td style="font-size:11px;color:var(--t2)">Mitad de semana fuerte. Sin problemas.</td>
+          </tr>
+          <tr>
+            <td><strong>Martes</strong> <span class="badge warn">OPORTUNIDAD</span></td>
+            <td class="right">20,7</td>
+            <td class="right warn">368€</td>
+            <td class="right" style="color:var(--warn)">−23,3%</td>
+            <td style="font-size:11px;color:var(--t2)">Caída notable vs mié-jue-vie. Potencial sin explotar.</td>
+          </tr>
+          <tr class="highlight">
+            <td><strong>Sábado</strong> <span class="badge red">CRÍTICO</span></td>
+            <td class="right">15,4</td>
+            <td class="right red">270€</td>
+            <td class="right" style="color:var(--red)">−43,8%</td>
+            <td style="font-size:11px;color:var(--t2)"><b style="color:var(--red)">La mayor anomalía:</b> debería ser el día más fuerte. Llena solo la mitad de slots.</td>
+          </tr>
+          <tr>
+            <td><strong>Lunes</strong> <span class="badge red">FLOJO</span></td>
+            <td class="right">10,0</td>
+            <td class="right red">177€</td>
+            <td class="right" style="color:var(--red)">−63,1%</td>
+            <td style="font-size:11px;color:var(--t2)">El más bajo. Desde mayo 18 bloqueado para Gerard. El resto del equipo también rinde poco.</td>
+          </tr>
+          <tr>
+            <td><strong>Domingo</strong></td>
+            <td class="right dim">—</td>
+            <td class="right dim">Cerrado</td>
+            <td class="right dim">—</td>
+            <td style="font-size:11px;color:var(--t3)">No hay datos.</td>
+          </tr>
+          <tr class="total-row">
+            <td>SEMANA ACTUAL</td>
+            <td class="right gold">128,9 citas</td>
+            <td class="right gold">2.020€/sem</td>
+            <td class="right">~9.300€/mes</td>
+            <td style="font-weight:400;font-size:11px;color:var(--t2)">Si sábado y martes fueran como miércoles: +680€/sem</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- HORAS MUERTAS -->
+  <div class="section">
+    <div class="section-title">Franjas horarias — dónde hay hueco</div>
+    <div style="background:var(--surf);border:1px solid var(--ln);border-radius:var(--r);padding:20px 24px">
+      <div id="hourChart"></div>
+    </div>
+    <div class="notice warn" style="margin-top:14px;margin-bottom:0">
+      <b>Franja 14:00 completamente muerta</b> — solo 10 citas en 4 meses. El hueco de la comida española es una barrera cultural, pero también una oportunidad si se trabaja bien con trabajadores cerca que comen rápido.
+    </div>
+  </div>
+
+  <!-- OPORTUNIDAD DE INGRESOS -->
+  <div class="section">
+    <div class="section-title">Potencial de mejora — si llegas al nivel miércoles cada día</div>
+    <div style="background:var(--surf);border:1px solid var(--ln);border-radius:var(--r);overflow:hidden">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--ln);display:flex;gap:32px">
+        <div style="display:flex;align-items:center;gap:8px;font-size:10px;color:var(--t2)"><div style="width:12px;height:5px;border-radius:2px;background:rgba(240,237,230,.15)"></div>Facturación actual</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:10px;color:var(--t2)"><div style="width:12px;height:5px;border-radius:2px;background:rgba(201,168,76,.5)"></div>Potencial realista</div>
+      </div>
+      <div id="oppChart" style="padding:16px 20px"></div>
+    </div>
+    <div class="notice ok" style="margin-top:14px;margin-bottom:0">
+      Solo optimizando <b>sábado y martes</b> hasta el nivel de miércoles (~450€/día), el negocio gana <b>+680€/semana → +2.947€/mes</b>. Eso sería llegar a <b>~12.200€/mes</b> sin añadir un solo barbero nuevo.
+    </div>
+  </div>
+
+  <!-- ESTRATEGIAS -->
+  <div class="section">
+    <div class="section-title">Estrategias concretas por problema</div>
+
+    <div style="margin-bottom:20px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--warn);margin-bottom:12px">🔴 PRIORIDAD 1 — El sábado está roto</div>
+      <div class="strategy-grid">
+        <div class="strat-card priority">
+          <div class="strat-num">01</div>
+          <div class="strat-target">Sábado · causa probable</div>
+          <div class="strat-title">Diagnóstico: ¿por qué el sábado falla?</div>
+          <div class="strat-body">Antes de actuar, confirma: <b>¿trabajan todos los barberos el sábado?</b> Si alguno libra, eso explica la mitad del problema. Con 4 barberos el sábado debería generar 28+ citas/día como el jueves. Si hay horario reducido, amplíalo. Es el día más demandado por la clientela general.</div>
+          <div class="strat-impact">Potencial +150€/día si se equipara plantilla</div>
+        </div>
+        <div class="strat-card priority">
+          <div class="strat-num">02</div>
+          <div class="strat-target">Sábado · Instagram</div>
+          <div class="strat-title">"Sábados disponibles" — contenido semanal</div>
+          <div class="strat-body">Cada <b>viernes por la noche o sábado a las 9:00</b>, publicar stories con los huecos libres del sábado. "Todavía quedan huecos para hoy — reserva ahora" con link directo a Yeasy. La gente planifica el sábado el viernes por la noche o la misma mañana.</div>
+          <div class="strat-impact">Coste: 0€ · tiempo: 5 min/semana</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--warn);margin-bottom:12px">🟡 PRIORIDAD 2 — Martes y lunes tienen hueco</div>
+      <div class="strategy-grid">
+        <div class="strat-card">
+          <div class="strat-num">03</div>
+          <div class="strat-target">Martes · fidelización</div>
+          <div class="strat-title">"Martes sin espera" — agenda abierta</div>
+          <div class="strat-body">El martes tiene 7–8 citas menos que miércoles. Promociónalo como el día sin espera, donde puedes ir con calma. Stories tipo <b>"El martes es tuyo — sin prisas, sin cola"</b>. No hace falta descuento, solo visibilidad. El cliente valora la tranquilidad.</div>
+          <div class="strat-impact">Potencial +80€/día si se llena como mié</div>
+        </div>
+        <div class="strat-card">
+          <div class="strat-num">04</div>
+          <div class="strat-target">Lunes · reorientación</div>
+          <div class="strat-title">Lunes = día de cursos y formación (TCB Academy)</div>
+          <div class="strat-body">Con los lunes ya bloqueados para ti desde mayo, el equipo podría usar tarde de lunes para <b>prácticas de la academia</b>: alumnos que pagan tarifa reducida (~8-10€) por el corte. Genera ingresos de academia + citas = doble ingreso el mismo día.</div>
+          <div class="strat-impact">Academia + citas prácticas = +100€/lunes</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blu);margin-bottom:12px">🔵 PRIORIDAD 3 — Aumentar el ticket medio y recurrencia</div>
+      <div class="strategy-grid">
+        <div class="strat-card">
+          <div class="strat-num">05</div>
+          <div class="strat-target">Ticket medio · 17,8€ → 21€</div>
+          <div class="strat-title">Upsell automático en cita: barba o cejas</div>
+          <div class="strat-body">El ticket está en 17,8€ constante. En el momento de la cita, ofrecer siempre <b>"¿le arreglamos la barba/cejas mientras estás aquí? +3€"</b>. Si 1 de cada 3 clientes acepta: 17,8 → 18,8€ avg. Son +1.000€/mes sin más clientes. Simple, no invasivo.</div>
+          <div class="strat-impact">+1.000€/mes si 1/3 acepta upsell</div>
+        </div>
+        <div class="strat-card">
+          <div class="strat-num">06</div>
+          <div class="strat-target">Recurrencia · cada 21 días</div>
+          <div class="strat-title">Recordatorio automático post-cita</div>
+          <div class="strat-body">La mayoría vuelve cada 3-5 semanas. Si se acorta a <b>21 días</b> con un mensaje de WhatsApp tipo <b>"Han pasado 3 semanas, ¿te reservamos?"</b>, la frecuencia sube un 15-20%. En Yeasy hay función de mensaje automático. Activarla es gratuito.</div>
+          <div class="strat-impact">+15% de recurrencia = +1.400€/mes</div>
+        </div>
+        <div class="strat-card">
+          <div class="strat-num">07</div>
+          <div class="strat-target">Producto · CHAOS Hair</div>
+          <div class="strat-title">Vender producto en cita — ingresos directos</div>
+          <div class="strat-body">CHAOS Hair Product ya tiene logo y concepto. Aunque aún no esté lanzado, puedes vender <b>ceras y productos actuales</b> en la barbería ahora mismo. Cada producto a 15-20€ vendido 2-3 veces por día = +40-60€/día extras sin citas adicionales.</div>
+          <div class="strat-impact">+40-60€/día · ~1.200€/mes adicionales</div>
+        </div>
+        <div class="strat-card">
+          <div class="strat-num">08</div>
+          <div class="strat-target">Captación · nuevos clientes</div>
+          <div class="strat-title">Pack "Trae a un amigo" — boca a boca acelerado</div>
+          <div class="strat-body">El cliente trae a un amigo nuevo → <b>el amigo tiene 5€ de descuento en el primer corte</b> (coste real: ~5€). El nuevo cliente vale ~200-300€/año si se queda. ROI brutal. Comunicarlo con una tarjetita física en caja o QR al salir de la cita.</div>
+          <div class="strat-impact">5€ coste → 200€+ valor de vida cliente</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:12px">⚡ QUICK WINS — Esta semana, coste cero</div>
+      <div class="strategy-grid">
+        <div class="strat-card">
+          <div class="strat-num">09</div>
+          <div class="strat-target">Google · posicionamiento local</div>
+          <div class="strat-title">Completar perfil Google Business al 100%</div>
+          <div class="strat-body">Si el perfil de Google Maps no tiene <b>fotos recientes, horario actualizado, respuestas a reseñas y descripción optimizada</b>, estás perdiendo búsquedas de "barbería Sabadell" gratis. 20 minutos de trabajo = clientes durante años.</div>
+          <div class="strat-impact">Búsquedas orgánicas gratuitas</div>
+        </div>
+        <div class="strat-card">
+          <div class="strat-num">10</div>
+          <div class="strat-target">Instagram · contenido específico días flojos</div>
+          <div class="strat-title">Stories de disponibilidad los días bajos</div>
+          <div class="strat-body">Cada martes a las 10:00 y cada sábado a las 9:00: story con <b>"Huecos disponibles para hoy"</b> + link a Yeasy. Sin descuento, sin esfuerzo extra. La gente que quería ir "cuando haya hueco" reserva impulsivamente al verlo.</div>
+          <div class="strat-impact">Coste: 0€ · 5 min 2 veces/semana</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUMEN DE IMPACTO -->
+  <div class="section">
+    <div class="section-title">Impacto estimado combinado — camino a 14.000€/mes</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Acción</th>
+            <th>Dificultad</th>
+            <th class="right">Impacto estimado/mes</th>
+            <th>Plazo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-row"><td colspan="5">▸ Llenar días flojos</td></tr>
+          <tr>
+            <td class="gold">1</td>
+            <td>Confirmar plantilla completa sábados</td>
+            <td><span class="badge green">Fácil</span></td>
+            <td class="right green">+600–900€</td>
+            <td style="font-size:11px;color:var(--t2)">Esta semana</td>
+          </tr>
+          <tr>
+            <td class="gold">2</td>
+            <td>Stories "sábado disponible" cada viernes noche</td>
+            <td><span class="badge green">Fácil</span></td>
+            <td class="right green">+200–400€</td>
+            <td style="font-size:11px;color:var(--t2)">Esta semana</td>
+          </tr>
+          <tr>
+            <td class="gold">3</td>
+            <td>Stories "martes sin espera" cada martes</td>
+            <td><span class="badge green">Fácil</span></td>
+            <td class="right green">+150–300€</td>
+            <td style="font-size:11px;color:var(--t2)">Esta semana</td>
+          </tr>
+          <tr class="section-row"><td colspan="5">▸ Aumentar ticket y recurrencia</td></tr>
+          <tr>
+            <td class="gold">4</td>
+            <td>Upsell barba/cejas en cada cita (+3€)</td>
+            <td><span class="badge warn">Media</span></td>
+            <td class="right green">+700–1.100€</td>
+            <td style="font-size:11px;color:var(--t2)">Inmediato</td>
+          </tr>
+          <tr>
+            <td class="gold">5</td>
+            <td>Recordatorio WhatsApp a 21 días post-cita</td>
+            <td><span class="badge warn">Media</span></td>
+            <td class="right green">+800–1.400€</td>
+            <td style="font-size:11px;color:var(--t2)">1–2 semanas</td>
+          </tr>
+          <tr>
+            <td class="gold">6</td>
+            <td>Venta de producto en barbería (ceras, etc.)</td>
+            <td><span class="badge warn">Media</span></td>
+            <td class="right green">+600–1.200€</td>
+            <td style="font-size:11px;color:var(--t2)">1 mes</td>
+          </tr>
+          <tr class="section-row"><td colspan="5">▸ Nuevos clientes</td></tr>
+          <tr>
+            <td class="gold">7</td>
+            <td>Pack "trae un amigo" (−5€ primer corte)</td>
+            <td><span class="badge green">Fácil</span></td>
+            <td class="right green">+300–600€</td>
+            <td style="font-size:11px;color:var(--t2)">2 semanas</td>
+          </tr>
+          <tr>
+            <td class="gold">8</td>
+            <td>Google Business optimizado + reseñas activas</td>
+            <td><span class="badge green">Fácil</span></td>
+            <td class="right green">+200–500€</td>
+            <td style="font-size:11px;color:var(--t2)">3–4 semanas</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="2">ESCENARIO REALISTA (implementando 5–6 acciones)</td>
+            <td></td>
+            <td class="right" style="color:var(--grn);font-size:14px">+2.500–3.500€/mes</td>
+            <td style="font-size:11px">2–6 semanas</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="notice ok" style="margin-top:14px;margin-bottom:0">
+      Con el margen operativo actual (~9.300€ base) + estas acciones: <b>11.800–12.800€/mes</b>. Para llegar a los 14.000€ completos necesitarás además <b>un barbero adicional o un 5º puesto de trabajo</b>. Pero con este plan el gap pasa de −4.700€ a −1.200€/mes, que ya es manejable.
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>5 mayo 2026 · Basado en 2.340 citas reales de Yeasy</span>
+    <span>The Crew Barbershop · TCB Academy</span>
+  </div>
+
+</main>
+</div>
+
+<script>
+// DAY BAR CHART
+const days = [
+  {lbl:'Lun', val:177, color:'rgba(196,112,104,.6)'},
+  {lbl:'Mar', val:368, color:'rgba(212,168,80,.7)'},
+  {lbl:'Mié', val:451, color:'rgba(201,168,76,.75)'},
+  {lbl:'Jue', val:474, color:'rgba(127,174,122,.7)'},
+  {lbl:'Vie', val:480, color:'rgba(127,174,122,.85)'},
+  {lbl:'Sáb', val:270, color:'rgba(196,112,104,.6)'},
+];
+const maxDay = Math.max(...days.map(d=>d.val));
+const chartH = 140;
+
+const dayChart = document.getElementById('dayChart');
+const dayLabels = document.getElementById('dayLabels');
+
+days.forEach(d => {
+  const col = document.createElement('div');
+  col.className = 'day-bar-wrap';
+  const h = Math.round((d.val/maxDay)*chartH);
+  const bar = document.createElement('div');
+  bar.className = 'day-bar';
+  bar.style.cssText = `height:${h}px;background:${d.color};width:100%;`;
+  col.appendChild(bar);
+  dayChart.appendChild(col);
+
+  const lbl = document.createElement('div');
+  lbl.style.cssText = 'flex:1;text-align:center;';
+  lbl.innerHTML = `<div style="font-size:9px;color:var(--t3);font-weight:700;margin-top:6px">${d.lbl}</div><div style="font-size:9px;color:var(--t2);margin-top:2px">${d.val}€</div>`;
+  dayLabels.appendChild(lbl);
+});
+
+// HOUR CHART
+const hours = [
+  {h:'09:00', n:35, note:''},
+  {h:'10:00', n:315, note:''},
+  {h:'11:00', n:271, note:''},
+  {h:'12:00', n:276, note:''},
+  {h:'13:00', n:193, note:''},
+  {h:'14:00', n:10,  note:'MUERTO'},
+  {h:'15:00', n:140, note:''},
+  {h:'16:00', n:264, note:''},
+  {h:'17:00', n:268, note:''},
+  {h:'18:00', n:269, note:''},
+  {h:'19:00', n:286, note:''},
+  {h:'20:00', n:13,  note:'BAJO'},
+];
+const maxH = Math.max(...hours.map(h=>h.n));
+const hChart = document.getElementById('hourChart');
+
+hours.forEach(h => {
+  const row = document.createElement('div');
+  row.className = 'hour-row';
+  const pct = h.n/maxH*100;
+  const color = h.n < 20 ? 'var(--red)' : h.n < 100 ? 'var(--warn)' : 'var(--gold)';
+  const noteHtml = h.note ? `<span style="font-size:8px;font-weight:700;color:${h.n<20?'var(--red)':'var(--warn)'};margin-left:6px">${h.note}</span>` : '';
+  row.innerHTML = `
+    <div class="hour-label">${h.h}</div>
+    <div>
+      <div class="hour-bar-outer">
+        <div class="hour-bar-fill" style="width:${pct}%;background:${color}"></div>
+      </div>
+    </div>
+    <div class="hour-count">${h.n} citas${noteHtml}</div>
+  `;
+  hChart.appendChild(row);
+});
+
+// OPPORTUNITY CHART
+const opps = [
+  {lbl:'Lunes',     now:177, pot:250},
+  {lbl:'Martes',    now:368, pot:450},
+  {lbl:'Miércoles', now:451, pot:451},
+  {lbl:'Jueves',    now:474, pot:474},
+  {lbl:'Viernes',   now:480, pot:480},
+  {lbl:'Sábado',    now:270, pot:450},
+];
+const maxOpp = 500;
+const oppChart = document.getElementById('oppChart');
+
+opps.forEach(o => {
+  const row = document.createElement('div');
+  row.className = 'opp-row';
+  const nowPct = o.now/maxOpp*100;
+  const potPct = o.pot/maxOpp*100;
+  const gain = o.pot - o.now;
+  const gainHtml = gain > 0 ? `<span style="font-size:10px;color:var(--grn);font-weight:700">+${gain}€</span>` : '';
+  row.innerHTML = `
+    <div class="opp-day">${o.lbl}</div>
+    <div class="opp-bars">
+      <div class="opp-bar-now" style="width:${nowPct}%"></div>
+      <div class="opp-bar-pot" style="width:${potPct}%"></div>
+    </div>
+    <div class="opp-nums">
+      <div class="opp-now">${o.now}€ actual</div>
+      <div class="opp-pot">${o.pot}€ potencial ${gainHtml}</div>
+    </div>
+  `;
+  oppChart.appendChild(row);
+});
+</script>
+
+</body>
+</html>
