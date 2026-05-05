@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Crew — Panel</title>
+  <link rel="icon" type="image/png" href="https://www.thecrewacademy.es/cdn/shop/files/Diseno_sin_titulo_27.png?crop=center&height=32&v=1773863841&width=32">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:   #080808;
+      --surf: #0d0d0d;
+      --s2:   #111111;
+      --s3:   #161616;
+      --gold: #C9A84C;
+      --ga:   rgba(201,168,76,.09);
+      --gb:   rgba(201,168,76,.20);
+      --gc:   rgba(201,168,76,.05);
+      --t1:   #f0ede6;
+      --t2:   rgba(240,237,230,.55);
+      --t3:   rgba(240,237,230,.24);
+      --t4:   rgba(240,237,230,.10);
+      --ln:   rgba(240,237,230,.07);
+      --ln2:  rgba(240,237,230,.04);
+      --grn:  #7FAE7A;
+      --red:  #C47068;
+      --blu:  #7090A8;
+      --orn:  #C4622D;
+      --r:    4px;
+      --sw:   228px;
+      --th:   56px;
+      --font: 'Montserrat', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--t1);
+      font-size: 13px;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    /* ── APP SHELL ─────────────────────────────────────────── */
+    .app { display: flex; height: 100vh; }
+
+    /* ── SIDEBAR ───────────────────────────────────────────── */
+    .sidebar {
+      width: var(--sw);
+      min-width: var(--sw);
+      background: var(--surf);
+      border-right: 1px solid var(--ln);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--ln); border-radius: 2px; }
+
+    .sb-brand {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid var(--ln);
+      flex-shrink: 0;
+    }
+    .sb-logo {
+      height: 22px;
+      filter: brightness(0) invert(1);
+      opacity: .5;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .sb-name {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .sb-sub { font-size: 8px; color: var(--t3); margin-top: 2px; letter-spacing: .06em; }
+
+    .sb-nav { flex: 1; padding: 8px 0 12px; }
+    .sb-section {
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--t4);
+      padding: 16px 20px 5px;
+    }
+    .sb-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--t2);
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: color .15s, background .15s;
+      user-select: none;
+      text-decoration: none;
+    }
+    .sb-item:hover { color: var(--t1); background: rgba(240,237,230,.025); }
+    .sb-item.active { color: var(--gold); border-left-color: var(--gold); background: var(--ga); }
+    .sb-icon { font-size: 10px; opacity: .55; width: 14px; text-align: center; flex-shrink: 0; }
+    .sb-item.active .sb-icon { opacity: 1; }
+    .sb-badge {
+      margin-left: auto;
+      font-size: 7px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      color: var(--bg);
+      background: var(--gold);
+      border-radius: 2px;
+      padding: 2px 5px;
+    }
+
+    .sb-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--ln);
+      flex-shrink: 0;
+    }
+    .sb-footer-date { font-size: 9px; color: var(--t3); }
+    .sb-footer-ver { font-size: 8px; color: var(--t4); margin-top: 3px; }
+
+    /* ── MAIN WRAP ─────────────────────────────────────────── */
+    .main-wrap { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+    /* ── TOPBAR ────────────────────────────────────────────── */
+    .topbar {
+      height: var(--th);
+      min-height: var(--th);
+      background: var(--surf);
+      border-bottom: 1px solid var(--ln);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .tb-crumb { display: flex; align-items: center; gap: 7px; font-size: 11px; }
+    .tb-sec { color: var(--t3); }
+    .tb-sep { color: var(--t4); font-size: 9px; }
+    .tb-page { color: var(--t1); font-weight: 600; }
+    .tb-right { margin-left: auto; display: flex; align-items: center; gap: 18px; }
+    .tb-date { font-size: 10px; color: var(--t3); }
+    .tb-dot { width: 7px; height: 7px; background: var(--grn); border-radius: 50%; box-shadow: 0 0 0 2px rgba(127,174,122,.18); }
+    .tb-user { font-size: 10px; font-weight: 700; color: var(--gold); letter-spacing: .04em; }
+
+    /* ── CONTENT ───────────────────────────────────────────── */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 36px 40px 72px;
+    }
+    .content::-webkit-scrollbar { width: 4px; }
+    .content::-webkit-scrollbar-thumb { background: var(--ln); border-radius: 2px; }
+
+    /* ── PAGE HEADER ───────────────────────────────────────── */
+    .pg-hd { margin-bottom: 28px; }
+    .pg-tag {
+      display: block;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .pg-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      line-height: 1.1;
+    }
+    .pg-title em { color: var(--gold); font-style: normal; }
+    .pg-sub { font-size: 12px; color: var(--t3); margin-top: 6px; line-height: 1.6; }
+
+    /* ── KPI GRID ──────────────────────────────────────────── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      gap: 1px;
+      background: var(--ln);
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .kpi {
+      background: var(--surf);
+      padding: 18px 18px 16px;
+      transition: background .2s;
+    }
+    .kpi:hover { background: var(--s2); }
+    .kpi-lbl {
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--t3);
+      margin-bottom: 8px;
+    }
+    .kpi-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: -.03em;
+      line-height: 1;
+    }
+    .kpi-val.w { color: var(--t1); }
+    .kpi-val.g { color: var(--grn); }
+    .kpi-sub2 { font-size: 9px; color: var(--t3); margin-top: 5px; }
+
+    /* ── SEC TITLE ─────────────────────────────────────────── */
+    .sec {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--t3);
+      margin-bottom: 14px;
+    }
+    .sec::before { content: ''; width: 3px; height: 13px; background: var(--gold); border-radius: 1px; flex-shrink: 0; }
+    .sec::after  { content: ''; flex: 1; height: 1px; background: var(--ln); }
+
+    /* ── GRID ──────────────────────────────────────────────── */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    @media (max-width: 960px) {
+      .g2 { grid-template-columns: 1fr; }
+      .g3 { grid-template-columns: 1fr 1fr; }
+      .g4 { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── CARD ──────────────────────────────────────────────── */
+    .card {
+      background: var(--surf);
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      padding: 18px;
+    }
+    .card-ttl {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--t3);
+      margin-bottom: 12px;
+    }
+
+    /* ── TABLE ─────────────────────────────────────────────── */
+    .tw {
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--t3);
+      padding: 10px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--ln);
+      background: var(--surf);
+    }
+    thead th.r { text-align: right; }
+    tbody td {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--t2);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--ln2);
+      vertical-align: middle;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(240,237,230,.015); }
+    .r { text-align: right; font-variant-numeric: tabular-nums; }
+    .au { color: var(--gold); font-weight: 700; }
+    .ag { color: var(--grn); font-weight: 600; }
+    .ar { color: var(--red); font-weight: 600; }
+    .tf td {
+      background: var(--ga);
+      border-top: 1px solid var(--gb);
+      font-weight: 700;
+      color: var(--t1);
+    }
+    .tf td.r { color: var(--gold); font-size: 13px; }
+    .mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 10px; }
+
+    /* ── TABS ──────────────────────────────────────────────── */
+    .tabs { display: flex; border-bottom: 1px solid var(--ln); margin-bottom: 20px; }
+    .tab-b {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--t3);
+      padding: 10px 18px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color .15s, border-color .15s;
+      user-select: none;
+    }
+    .tab-b:hover { color: var(--t2); }
+    .tab-b.on { color: var(--gold); border-bottom-color: var(--gold); }
+    .tab-p { display: none; }
+    .tab-p.on { display: block; }
+
+    /* ── BAR CHART ─────────────────────────────────────────── */
+    .chart { display: flex; align-items: flex-end; gap: 10px; height: 130px; }
+    .bc { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+    .bv { font-size: 8px; font-weight: 700; color: var(--gold); opacity: 0; transition: opacity .2s; white-space: nowrap; }
+    .bc:hover .bv { opacity: 1; }
+    .br { width: 100%; border-radius: 2px 2px 0 0; min-height: 2px; }
+    .br.a { background: var(--gold); opacity: .72; }
+    .br.b { background: #8A6830; opacity: .82; }
+    .bc:hover .br { opacity: 1 !important; }
+    .bl { font-size: 9px; font-weight: 600; color: var(--t3); }
+
+    /* ── BADGE ─────────────────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 7px;
+      border-radius: 2px;
+    }
+    .badge.live { background: rgba(127,174,122,.12); color: var(--grn); }
+    .badge.dev  { background: rgba(201,168,76,.1);   color: var(--gold); }
+    .badge.plan { background: rgba(112,144,168,.1);  color: var(--blu); }
+    .badge.seed { background: rgba(127,174,122,.09); color: var(--grn); }
+    .bdot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
+    /* ── PROJECT CARD ──────────────────────────────────────── */
+    .pj {
+      background: var(--surf);
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: background .2s;
+    }
+    .pj:hover { background: var(--s2); }
+    .pj-bar { position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+    .pj-tag { font-size: 7.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--t3); margin-bottom: 7px; }
+    .pj-name { font-size: 15px; font-weight: 800; color: var(--t1); margin-bottom: 8px; letter-spacing: -.01em; }
+    .pj-desc { font-size: 11px; color: var(--t3); line-height: 1.7; margin-bottom: 14px; }
+    .pj-foot { display: flex; align-items: center; justify-content: space-between; }
+    .pj-link { font-size: 10px; color: var(--gold); cursor: pointer; }
+
+    /* ── EMPLOYEE CARD ─────────────────────────────────────── */
+    .emp {
+      background: var(--surf);
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .emp::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px; }
+    .emp-name { font-size: 13px; font-weight: 800; margin-bottom: 2px; }
+    .emp-role { font-size: 8px; color: var(--t3); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 12px; }
+    .emp-total { font-size: 22px; font-weight: 800; letter-spacing: -.03em; line-height: 1; margin-bottom: 3px; }
+    .emp-lbl { font-size: 9px; color: var(--t3); margin-bottom: 14px; }
+    .emp-bars { display: flex; flex-direction: column; gap: 5px; }
+    .emp-row { display: flex; align-items: center; gap: 8px; }
+    .emp-ml { width: 28px; font-size: 8px; font-weight: 700; color: var(--t3); text-transform: uppercase; }
+    .emp-trk { flex: 1; height: 3px; background: var(--ln); border-radius: 2px; overflow: hidden; }
+    .emp-fill { height: 100%; border-radius: 2px; }
+    .emp-amt { width: 64px; text-align: right; font-size: 10px; color: var(--t2); font-variant-numeric: tabular-nums; }
+
+    /* ── DOC LINK ──────────────────────────────────────────── */
+    .dl {
+      background: var(--surf);
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background .2s, border-color .2s;
+      cursor: pointer;
+    }
+    .dl:hover { background: var(--s2); border-color: var(--gb); }
+    .dl-ico { font-size: 17px; flex-shrink: 0; }
+    .dl-ttl { font-size: 12px; font-weight: 700; color: var(--t1); margin-bottom: 2px; }
+    .dl-sub { font-size: 10px; color: var(--t3); }
+    .dl-arr { margin-left: auto; color: var(--t4); font-size: 10px; flex-shrink: 0; }
+
+    /* ── QUICK ACCESS TILE ─────────────────────────────────── */
+    .qa {
+      background: var(--surf);
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      padding: 18px;
+      cursor: pointer;
+      transition: background .2s, border-color .2s;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .qa:hover { background: var(--s2); border-color: var(--gb); }
+    .qa-ico { font-size: 20px; }
+    .qa-lbl { font-size: 11px; font-weight: 700; color: var(--t1); }
+    .qa-sub { font-size: 9px; color: var(--t3); line-height: 1.5; }
+    .qa-arr { margin-top: auto; font-size: 9px; color: var(--gold); font-weight: 700; letter-spacing: .06em; }
+
+    /* ── NOTE ──────────────────────────────────────────────── */
+    .note {
+      border-left: 3px solid var(--gb);
+      padding: 10px 14px;
+      font-size: 11.5px;
+      color: var(--t2);
+      margin-bottom: 24px;
+      line-height: 1.7;
+      background: var(--gc);
+      border-radius: 0 var(--r) var(--r) 0;
+    }
+
+    /* ── ACTIVITY ──────────────────────────────────────────── */
+    .activity { display: flex; flex-direction: column; }
+    .act-item { display: flex; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--ln2); }
+    .act-item:last-child { border-bottom: none; }
+    .act-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+    .act-body { flex: 1; min-width: 0; }
+    .act-txt { font-size: 12px; color: var(--t2); line-height: 1.5; }
+    .act-txt strong { color: var(--t1); }
+    .act-date { font-size: 9px; color: var(--t3); margin-top: 2px; }
+
+    /* ── LEGEND ────────────────────────────────────────────── */
+    .legend { display: flex; gap: 16px; margin-top: 10px; }
+    .leg-item { display: flex; align-items: center; gap: 6px; font-size: 9px; color: var(--t3); }
+    .leg-dot { width: 8px; height: 8px; border-radius: 1px; }
+
+    /* ── RESPONSIVE ────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .content { padding: 20px 16px 52px; }
+      .topbar { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ═══ SIDEBAR ════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <img src="https://www.thecrewacademy.es/cdn/shop/files/Diseno_sin_titulo_27.png?height=120&v=1773863841" alt="TCB" class="sb-logo">
+      <div class="sb-name">The Crew</div>
+      <div class="sb-sub">Panel · Sabadell</div>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="sb-section">Inicio</div>
+      <div class="sb-item active" data-view="dashboard"><span class="sb-icon">⬡</span>Dashboard</div>
+
+      <div class="sb-section">Barbershop</div>
+      <div class="sb-item" data-view="facturacion"><span class="sb-icon">◈</span>Facturación</div>
+      <div class="sb-item" data-view="gastos"><span class="sb-icon">◈</span>Gastos & P&L</div>
+      <div class="sb-item" data-view="equipo"><span class="sb-icon">◈</span>Equipo</div>
+      <div class="sb-item" data-view="citas"><span class="sb-icon">◈</span>Citas</div>
+
+      <div class="sb-section">The Crew Academy</div>
+      <div class="sb-item" data-view="academia"><span class="sb-icon">◈</span>Academia</div>
+      <div class="sb-item" data-view="roots"><span class="sb-icon">◈</span>ROOTS Ebook</div>
+      <div class="sb-item" data-view="crewcard"><span class="sb-icon">◈</span>Crew Member Card</div>
+
+      <div class="sb-section">Proyectos</div>
+      <div class="sb-item" data-view="barberlab"><span class="sb-icon">◈</span>BarberLab<span class="sb-badge">DEV</span></div>
+      <div class="sb-item" data-view="chaos"><span class="sb-icon">◈</span>CHAOS Hair<span class="sb-badge">NEW</span></div>
+
+      <div class="sb-section">Herramientas</div>
+      <div class="sb-item" data-view="docs"><span class="sb-icon">◈</span>Docs & Informes</div>
+      <div class="sb-item" data-view="reservas"><span class="sb-icon">◈</span>Reservas</div>
+    </nav>
+
+    <div class="sb-footer">
+      <div class="sb-footer-date" id="sb-date"></div>
+      <div class="sb-footer-ver">panel.thecrewacademy.es</div>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN ════════════════════════════════════════════════ -->
+  <div class="main-wrap">
+    <header class="topbar">
+      <div class="tb-crumb">
+        <span class="tb-sec" id="tb-sec">The Crew</span>
+        <span class="tb-sep">›</span>
+        <span class="tb-page" id="tb-pg">Dashboard</span>
+      </div>
+      <div class="tb-right">
+        <span class="tb-date" id="tb-date"></span>
+        <div class="tb-dot"></div>
+        <span class="tb-user">Gerard Chao</span>
+      </div>
+    </header>
+    <main class="content" id="content"></main>
+  </div>
+</div>
+
+<script>
+/* ── DATA ─────────────────────────────────────────────────────── */
+const D = {
+  billing: {
+    monthly: [
+      { m:'Ene', y:8287,  b:282  },
+      { m:'Feb', y:7500,  b:575  },
+      { m:'Mar', y:9730,  b:1119 },
+      { m:'Abr', y:9980,  b:1278 },
+    ],
+    yeasy: 35497, booksy: 3254, total: 38751,
+    best: { name:'Abril', val:11258 },
+  },
+  team: [
+    { id:'gerard', name:'Gerard Chao',         role:'Fundador · Head Barber', color:'#C9A84C',
+      months:[{m:'Ene',v:3200},{m:'Feb',v:2900},{m:'Mar',v:3800},{m:'Abr',v:4100}] },
+    { id:'ivan',   name:'Iván Contreras',       role:'Barbero Senior',         color:'#8B9E6E',
+      months:[{m:'Ene',v:2400},{m:'Feb',v:2100},{m:'Mar',v:2700},{m:'Abr',v:3000}] },
+    { id:'javier', name:'Javier Barrionuevo',   role:'Barbero',                color:'#C4622D',
+      months:[{m:'Ene',v:1600},{m:'Feb',v:1400},{m:'Mar',v:1800},{m:'Abr',v:1900}] },
+    { id:'caja',   name:'Gerard Caja',           role:'Barbero',                color:'#6B8F71',
+      months:[{m:'Ene',v:1087},{m:'Feb',v:1100},{m:'Mar',v:1430},{m:'Abr',v:1258}] },
+  ],
+  docs: [
+    { icon:'💰', title:'Facturación 2026',     desc:'Yeasy + Booksy · Ene–Abr',              file:'docs/index.html' },
+    { icon:'📊', title:'Gastos & P&L',          desc:'Análisis de gastos 2026',                file:'docs/gastos_2026.html' },
+    { icon:'💵', title:'Cashflow 2026',          desc:'Flujo de caja mensual',                  file:'docs/cashflow_2026.html' },
+    { icon:'👥', title:'Empleados',              desc:'Performance del equipo',                 file:'docs/empleados.html' },
+    { icon:'📋', title:'Estrategia Captación',   desc:'Plan academia online',                   file:'docs/estrategia_captacion.html' },
+    { icon:'🃏', title:'Crew Member Card',       desc:'Quiz + Apple/Google Wallet',             file:'docs/crew-member-card.html' },
+    { icon:'🏷️', title:'Caja DJ Tag',           desc:'Info barbero Caja',                      file:'docs/caja_dj_tag.html' },
+  ],
+};
+
+/* ── UTILS ────────────────────────────────────────────────────── */
+const fmt = n => n.toLocaleString('es-ES',{minimumFractionDigits:0}) + ' €';
+const fmtD = n => n.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' €';
+const greet = () => { const h=new Date().getHours(); return h<13?'Buenos días':h<20?'Buenas tardes':'Buenas noches'; };
+const todayLong = () => {
+  const d=new Date();
+  const D2=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const M=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  return `${D2[d.getDay()]} ${d.getDate()} de ${M[d.getMonth()]} de ${d.getFullYear()}`;
+};
+const todayShort = () => new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
+
+function buildChart(id, monthly) {
+  const el=document.getElementById(id); if(!el) return;
+  const max=Math.max(...monthly.map(r=>r.y+r.b));
+  el.innerHTML='';
+  monthly.forEach(({m,y,b})=>{
+    const total=y+b;
+    const col=document.createElement('div');
+    col.className='bc';
+    col.innerHTML=`
+      <div class="bv">${fmt(total)}</div>
+      <div style="width:100%;display:flex;flex-direction:column;gap:2px;justify-content:flex-end;height:${(total/max)*100}%">
+        <div class="br b" style="height:${(b/total)*100}%"></div>
+        <div class="br a" style="height:${(y/total)*100}%"></div>
+      </div>
+      <div class="bl">${m}</div>`;
+    el.appendChild(col);
+  });
+}
+
+function buildEmpBars(id, months, color) {
+  const el=document.getElementById(id); if(!el) return;
+  const max=Math.max(...months.map(r=>r.v));
+  el.innerHTML='';
+  months.forEach(({m,v})=>{
+    const row=document.createElement('div');
+    row.className='emp-row';
+    row.innerHTML=`
+      <div class="emp-ml">${m}</div>
+      <div class="emp-trk"><div class="emp-fill" style="width:${(v/max)*100}%;background:${color}"></div></div>
+      <div class="emp-amt">${fmt(v)}</div>`;
+    el.appendChild(row);
+  });
+}
+
+/* ── VIEWS ────────────────────────────────────────────────────── */
+const V = {
+
+  dashboard: { sec:'Inicio', pg:'Dashboard',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Panel · The Crew Barbershop · Sabadell</span>
+  <h1 class="pg-title">${greet()}, <em>Gerard.</em></h1>
+  <p class="pg-sub">${todayLong()}</p>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Facturación 2026</div><div class="kpi-val">${fmt(D.billing.total)}</div><div class="kpi-sub2">Ene – Abr · Yeasy + Booksy</div></div>
+  <div class="kpi"><div class="kpi-lbl">Mejor mes</div><div class="kpi-val g">${fmt(D.billing.best.val)}</div><div class="kpi-sub2">${D.billing.best.name} 2026</div></div>
+  <div class="kpi"><div class="kpi-lbl">Equipo</div><div class="kpi-val w">4</div><div class="kpi-sub2">Barberos activos</div></div>
+  <div class="kpi"><div class="kpi-lbl">Proyectos</div><div class="kpi-val w">3</div><div class="kpi-sub2">BarberLab · CHAOS · Crew Card</div></div>
+  <div class="kpi"><div class="kpi-lbl">Academia</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge live"><span class="bdot"></span>Live</span></div><div class="kpi-sub2">thecrewacademy.es</div></div>
+</div>
+
+<div class="sec">Acceso rápido</div>
+<div class="g4" style="margin-bottom:28px">
+  <div class="qa" onclick="go('facturacion')"><div class="qa-ico">💰</div><div class="qa-lbl">Facturación</div><div class="qa-sub">Yeasy + Booksy<br>2026 completo</div><div class="qa-arr">Ver →</div></div>
+  <div class="qa" onclick="go('equipo')"><div class="qa-ico">👥</div><div class="qa-lbl">Equipo</div><div class="qa-sub">4 barberos<br>Performance</div><div class="qa-arr">Ver →</div></div>
+  <div class="qa" onclick="go('academia')"><div class="qa-ico">🎓</div><div class="qa-lbl">Academia</div><div class="qa-sub">Cursos · ROOTS<br>Crew Card</div><div class="qa-arr">Ver →</div></div>
+  <div class="qa" onclick="go('barberlab')"><div class="qa-ico">🧪</div><div class="qa-lbl">Proyectos</div><div class="qa-sub">BarberLab · CHAOS<br>3 activos</div><div class="qa-arr">Ver →</div></div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+  <div>
+    <div class="sec">Facturación mensual 2026</div>
+    <div class="card" style="padding-bottom:14px">
+      <div class="chart" id="dash-chart"></div>
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div>Yeasy</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#8A6830"></div>Booksy</div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="sec">Actividad reciente</div>
+    <div class="card" style="padding:0 16px">
+      <div class="activity">
+        <div class="act-item"><div class="act-dot" style="background:var(--grn)"></div><div class="act-body"><div class="act-txt"><strong>Lunes bloqueados</strong> — para proyectos desde 18 mayo</div><div class="act-date">5 mayo 2026</div></div></div>
+        <div class="act-item"><div class="act-dot" style="background:var(--gold)"></div><div class="act-body"><div class="act-txt"><strong>Mejor mes del año</strong> — Abril: 11.258 €</div><div class="act-date">Abril 2026</div></div></div>
+        <div class="act-item"><div class="act-dot" style="background:var(--blu)"></div><div class="act-body"><div class="act-txt"><strong>Crew Member Card</strong> — Passcreator API integrada</div><div class="act-date">5 mayo 2026</div></div></div>
+        <div class="act-item"><div class="act-dot" style="background:var(--orn)"></div><div class="act-body"><div class="act-txt"><strong>BarberLab</strong> — mockup HTML en desarrollo</div><div class="act-date">Abril 2026</div></div></div>
+        <div class="act-item"><div class="act-dot" style="background:#F5D020"></div><div class="act-body"><div class="act-txt"><strong>CHAOS Hair</strong> — proveedor BRANDED contactado</div><div class="act-date">Abril 2026</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>`;
+    },
+    after() { buildChart('dash-chart', D.billing.monthly); }
+  },
+
+  facturacion: { sec:'Barbershop', pg:'Facturación',
+    html() {
+      const { monthly, yeasy, booksy, total, best } = D.billing;
+      const months = ['Enero','Febrero','Marzo','Abril'];
+      const rows = monthly.map(({m,y,b},i) => `<tr><td>${months[i]}</td><td class="r">${fmtD(y)}</td><td class="r">${fmtD(b)}</td><td class="r au">${fmtD(y+b)}</td></tr>`).join('');
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Barbershop · Facturación</span>
+  <h1 class="pg-title"><em>2026</em> — Enero a Abril</h1>
+  <p class="pg-sub">Yeasy (local principal) + Booksy (Barrio · Caja) · The Crew Barbershop, Sabadell</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Total 2026</div><div class="kpi-val">${fmt(total)}</div><div class="kpi-sub2">Yeasy + Booksy</div></div>
+  <div class="kpi"><div class="kpi-lbl">Yeasy</div><div class="kpi-val">${fmt(yeasy)}</div><div class="kpi-sub2">Local principal</div></div>
+  <div class="kpi"><div class="kpi-lbl">Booksy</div><div class="kpi-val w">${fmt(booksy)}</div><div class="kpi-sub2">Barrio + Caja</div></div>
+  <div class="kpi"><div class="kpi-lbl">Mejor mes</div><div class="kpi-val g">${fmt(best.val)}</div><div class="kpi-sub2">${best.name} 2026</div></div>
+</div>
+<div class="sec">Facturación mensual</div>
+<div class="card" style="margin-bottom:24px;padding-bottom:14px">
+  <div class="chart" id="fact-chart"></div>
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div>Yeasy</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#8A6830"></div>Booksy</div>
+  </div>
+</div>
+<div class="sec">Resumen por mes</div>
+<div class="tw">
+  <table>
+    <thead><tr><th>Mes</th><th class="r">Yeasy</th><th class="r">Booksy</th><th class="r">Total</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr class="tf"><td><strong>TOTAL 2026</strong></td><td class="r">${fmtD(yeasy)}</td><td class="r">${fmtD(booksy)}</td><td class="r">${fmtD(total)}</td></tr></tfoot>
+  </table>
+</div>
+<div class="note">Booksy crece mes a mes: de 282 € en enero a 1.278 € en abril (+353%). Abril cierra como el mejor mes del año con 11.258 €.</div>`;
+    },
+    after() { buildChart('fact-chart', D.billing.monthly); }
+  },
+
+  gastos: { sec:'Barbershop', pg:'Gastos & P&L',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Barbershop · Gastos</span>
+  <h1 class="pg-title">Gastos &amp; <em>P&L</em></h1>
+  <p class="pg-sub">Análisis de gastos y cuenta de resultados 2026</p>
+</div>
+<div class="note">El informe detallado de gastos y P&L está disponible en los documentos HTML.</div>
+<div class="sec">Documentos</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+  <a class="dl" href="../docs/gastos_2026.html" target="_blank"><div class="dl-ico">📊</div><div><div class="dl-ttl">Gastos 2026 — Informe completo</div><div class="dl-sub">Desglose mensual · P&L · Proveedores</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="../docs/cashflow_2026.html" target="_blank"><div class="dl-ico">💵</div><div><div class="dl-ttl">Cashflow 2026</div><div class="dl-sub">Flujo de caja mensual · Tesorería</div></div><div class="dl-arr">↗</div></a>
+</div>`;
+    }
+  },
+
+  equipo: { sec:'Barbershop', pg:'Equipo',
+    html() {
+      const cards = D.team.map(({id,name,role,color,months}) => {
+        const total = months.reduce((s,r)=>s+r.v,0);
+        return `
+<div class="emp" style="--ec:${color}">
+  <style>.emp#e-${id}::before{background:${color}!important;width:3px}</style>
+  <div class="emp" id="e-${id}" style="border:none;padding:0;background:transparent">
+    <div class="emp-name" style="color:${color}">${name}</div>
+    <div class="emp-role">${role}</div>
+    <div class="emp-total" style="color:${color}">${fmt(total)}</div>
+    <div class="emp-lbl">Total Ene–Abr 2026</div>
+    <div class="emp-bars" id="eb-${id}"></div>
+  </div>
+</div>`;
+      }).join('');
+
+      const compareRows = D.team.map(({name,color,months}) => {
+        const total = months.reduce((s,r)=>s+r.v,0);
+        return `<tr>
+          <td style="color:${color};font-weight:700">${name.split(' ')[0]}</td>
+          ${months.map(r=>`<td class="r">${fmt(r.v)}</td>`).join('')}
+          <td class="r au">${fmt(total)}</td>
+        </tr>`;
+      }).join('');
+
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Barbershop · Equipo</span>
+  <h1 class="pg-title">El <em>Equipo</em></h1>
+  <p class="pg-sub">4 barberos · The Crew Barbershop, C/ Lacy 18, Sabadell</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Barberos</div><div class="kpi-val w">4</div><div class="kpi-sub2">Activos</div></div>
+  <div class="kpi"><div class="kpi-lbl">Facturación Yeasy</div><div class="kpi-val">${fmt(D.billing.yeasy)}</div><div class="kpi-sub2">2026 total equipo</div></div>
+  <div class="kpi"><div class="kpi-lbl">Media por barbero</div><div class="kpi-val">${fmt(Math.round(D.billing.yeasy/4))}</div><div class="kpi-sub2">Ene–Abr 2026</div></div>
+  <div class="kpi"><div class="kpi-lbl">Ubicación</div><div class="kpi-val w" style="font-size:13px;padding-top:6px">Sabadell</div><div class="kpi-sub2">C/ Lacy 18, Barcelona</div></div>
+</div>
+<div class="sec">Performance individual</div>
+<div class="g2" style="margin-bottom:24px">${cards}</div>
+<div class="sec">Tabla comparativa</div>
+<div class="tw">
+  <table>
+    <thead><tr><th>Barbero</th>${D.billing.monthly.map(r=>`<th class="r">${r.m}</th>`).join('')}<th class="r">Total</th></tr></thead>
+    <tbody>${compareRows}</tbody>
+    <tfoot><tr class="tf"><td><strong>TOTAL</strong></td>${D.billing.monthly.map((_,i)=>{const t=D.team.reduce((s,e)=>s+e.months[i].v,0);return`<td class="r">${fmt(t)}</td>`;}).join('')}<td class="r">${fmt(D.team.reduce((s,e)=>s+e.months.reduce((ss,r)=>ss+r.v,0),0))}</td></tr></tfoot>
+  </table>
+</div>`;
+    },
+    after() { D.team.forEach(({id,color,months})=>buildEmpBars(`eb-${id}`,months,color)); }
+  },
+
+  citas: { sec:'Barbershop', pg:'Citas',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Barbershop · Reservas</span>
+  <h1 class="pg-title">Gestión de <em>Citas</em></h1>
+  <p class="pg-sub">Reservas en tiempo real · Yeasy + Booksy</p>
+</div>
+<div class="note"><strong>Próximamente:</strong> Vista en tiempo real de citas del día, semana y estadísticas de ocupación por barbero via API Yeasy + Booksy.</div>
+<div class="sec">Acceso directo</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+  <a class="dl" href="https://business.yeasyapp.com" target="_blank"><div class="dl-ico">📅</div><div><div class="dl-ttl">Yeasy Business</div><div class="dl-sub">Panel principal · local The Crew · business.yeasyapp.com</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="https://booksy.com" target="_blank"><div class="dl-ico">📋</div><div><div class="dl-ttl">Booksy Pro</div><div class="dl-sub">Barbero Barrio + Gerard Caja · booksy.com</div></div><div class="dl-arr">↗</div></a>
+</div>`;
+    }
+  },
+
+  academia: { sec:'The Crew Academy', pg:'Academia',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">The Crew Academy</span>
+  <h1 class="pg-title">The Crew <em>Academy</em></h1>
+  <p class="pg-sub">Academia online de barbería · thecrewacademy.es · Shopify</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Estado</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge live"><span class="bdot"></span>Live</span></div><div class="kpi-sub2">thecrewacademy.es</div></div>
+  <div class="kpi"><div class="kpi-lbl">Plataforma</div><div class="kpi-val w" style="font-size:15px;padding-top:4px">Shopify</div><div class="kpi-sub2">Dominio propio</div></div>
+  <div class="kpi"><div class="kpi-lbl">Instagram</div><div class="kpi-val w">14.7K</div><div class="kpi-sub2">@gerardchao</div></div>
+  <div class="kpi"><div class="kpi-lbl">ROOTS Ebook</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge dev"><span class="bdot"></span>v1 Ready</span></div><div class="kpi-sub2">38 slides</div></div>
+</div>
+<div class="sec">Recursos</div>
+<div class="g2" style="margin-bottom:24px">
+  <div class="pj" onclick="go('roots')" style="cursor:pointer">
+    <div class="pj-bar" style="background:var(--gold)"></div>
+    <div class="pj-tag">Material educativo</div>
+    <div class="pj-name">ROOTS — Barber Basics</div>
+    <div class="pj-desc">Ebook de fundamentos de barbería. 38 slides, 8 temas: vocabulario técnico, anatomía, herramientas, técnicas de corte, fundamentos, tipos de cabello, visagismo y marketing.</div>
+    <div class="pj-foot"><span class="badge dev"><span class="bdot"></span>v1 Generado</span><span class="pj-link">Ver detalle →</span></div>
+  </div>
+  <div class="pj" onclick="go('crewcard')" style="cursor:pointer">
+    <div class="pj-bar" style="background:var(--grn)"></div>
+    <div class="pj-tag">Fidelización</div>
+    <div class="pj-name">Crew Member Card</div>
+    <div class="pj-desc">Quiz de conocimientos de barbería. Al completarlo el alumno recibe una Crew Member Card descargable en Apple Wallet / Google Wallet via Passcreator API.</div>
+    <div class="pj-foot"><span class="badge live"><span class="bdot"></span>API Integrada</span><span class="pj-link">Ver detalle →</span></div>
+  </div>
+</div>
+<div class="sec">Links</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+  <a class="dl" href="https://thecrewacademy.es" target="_blank"><div class="dl-ico">🌐</div><div><div class="dl-ttl">The Crew Academy</div><div class="dl-sub">thecrewacademy.es · Shopify</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="../docs/estrategia_captacion.html" target="_blank"><div class="dl-ico">📋</div><div><div class="dl-ttl">Estrategia de Captación</div><div class="dl-sub">Plan de captación de alumnos online</div></div><div class="dl-arr">↗</div></a>
+</div>`;
+    }
+  },
+
+  roots: { sec:'The Crew Academy', pg:'ROOTS Ebook',
+    html() {
+      const topics = [
+        [1,'Vocabulario Técnico',2], [2,'Anatomía del Cráneo',2],
+        [3,'Herramientas de Corte',2], [4,'Técnicas de Corte',2],
+        [5,'Fundamentos',7], [6,'Tipos de Cabello',7],
+        [7,'Visagismo',2], [8,'Marketing Personal',3],
+      ];
+      const rows = topics.map(([n,t,s]) => `
+        <tr>
+          <td style="color:var(--gold);font-weight:700">${n}</td>
+          <td>${t}</td>
+          <td class="r">${s}</td>
+          <td><span class="badge live"><span class="bdot"></span>Completo</span></td>
+        </tr>`).join('');
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">The Crew Academy · Material</span>
+  <h1 class="pg-title">ROOTS — <em>Barber Basics</em></h1>
+  <p class="pg-sub">Ebook de fundamentos de barbería · v1 generado · 38 slides</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Total slides</div><div class="kpi-val w">38</div><div class="kpi-sub2">+ portada, índice, cierre</div></div>
+  <div class="kpi"><div class="kpi-lbl">Temas</div><div class="kpi-val w">8</div><div class="kpi-sub2">Módulos completos</div></div>
+  <div class="kpi"><div class="kpi-lbl">Formato</div><div class="kpi-val w" style="font-size:15px;padding-top:5px">PPTX</div><div class="kpi-sub2">Exportable a PDF</div></div>
+  <div class="kpi"><div class="kpi-lbl">Estado</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge dev"><span class="bdot"></span>v1 Ready</span></div><div class="kpi-sub2">Pendiente revisión visual</div></div>
+</div>
+<div class="sec">Estructura del ebook</div>
+<div class="tw" style="margin-bottom:24px">
+  <table>
+    <thead><tr><th style="width:36px">#</th><th>Tema</th><th class="r">Slides</th><th>Estado</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr class="tf"><td colspan="2"><strong>TOTAL</strong></td><td class="r">38</td><td></td></tr></tfoot>
+  </table>
+</div>
+<div class="sec">Diseño</div>
+<div class="g3" style="margin-bottom:24px">
+  <div class="card"><div class="card-ttl">Fondo</div><div style="display:flex;align-items:center;gap:10px;margin-top:6px"><div style="width:26px;height:26px;border-radius:3px;background:#191919;border:1px solid var(--ln)"></div><span style="font-size:11px;color:var(--t2)">#191919 Dark</span></div></div>
+  <div class="card"><div class="card-ttl">Acento</div><div style="display:flex;align-items:center;gap:10px;margin-top:6px"><div style="width:26px;height:26px;border-radius:3px;background:#C9A84C"></div><span style="font-size:11px;color:var(--t2)">#C9A84C Gold</span></div></div>
+  <div class="card"><div class="card-ttl">Texto</div><div style="display:flex;align-items:center;gap:10px;margin-top:6px"><div style="width:26px;height:26px;border-radius:3px;background:#f0ede6;border:1px solid var(--ln)"></div><span style="font-size:11px;color:var(--t2)">#f0ede6 Warm white</span></div></div>
+</div>
+<div class="note">Revisión visual pendiente en PowerPoint / Keynote. Próximo paso: añadir imágenes, ajustar fuentes y exportar a PDF final.</div>`;
+    }
+  },
+
+  crewcard: { sec:'The Crew Academy', pg:'Crew Member Card',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">The Crew Academy · Fidelización</span>
+  <h1 class="pg-title">Crew <em>Member Card</em></h1>
+  <p class="pg-sub">Quiz de barbería → Apple Wallet / Google Wallet · Passcreator API</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Estado API</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge live"><span class="bdot"></span>Activa</span></div><div class="kpi-sub2">Passcreator · crew-member-quiz</div></div>
+  <div class="kpi"><div class="kpi-lbl">Plataforma</div><div class="kpi-val w" style="font-size:14px;padding-top:5px">Passcreator</div><div class="kpi-sub2">app.passcreator.com</div></div>
+  <div class="kpi"><div class="kpi-lbl">Template</div><div class="kpi-val w" style="font-size:11px;padding-top:8px">Crew Card</div><div class="kpi-sub2">Apple + Google Wallet</div></div>
+  <div class="kpi"><div class="kpi-lbl">Template ID</div><div class="kpi-val w" style="font-size:9px;padding-top:10px;letter-spacing:0;font-weight:600">3a538011-6205…</div><div class="kpi-sub2">Wallet Pass template</div></div>
+</div>
+<div class="sec">Cómo funciona</div>
+<div class="g3" style="margin-bottom:24px">
+  <div class="card" style="border-top:2px solid var(--gold)"><div class="card-ttl" style="color:var(--gold)">01 · Quiz</div><p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:6px">El alumno completa el quiz de conocimientos de barbería en el HTML interactivo</p></div>
+  <div class="card" style="border-top:2px solid var(--gold)"><div class="card-ttl" style="color:var(--gold)">02 · Aprobado</div><p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:6px">Si supera el test se llama al endpoint de Passcreator con los datos del alumno</p></div>
+  <div class="card" style="border-top:2px solid var(--gold)"><div class="card-ttl" style="color:var(--gold)">03 · Wallet Pass</div><p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:6px">Se genera y descarga la Crew Member Card para Apple Wallet o Google Wallet</p></div>
+</div>
+<div class="sec">Acceso</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+  <a class="dl" href="../docs/crew-member-card.html" target="_blank"><div class="dl-ico">🃏</div><div><div class="dl-ttl">Crew Member Card — Demo</div><div class="dl-sub">Quiz interactivo con generación de Wallet Pass</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="https://app.passcreator.com" target="_blank"><div class="dl-ico">🔑</div><div><div class="dl-ttl">Passcreator Dashboard</div><div class="dl-sub">Gestión de templates y passes generados</div></div><div class="dl-arr">↗</div></a>
+</div>`;
+    }
+  },
+
+  barberlab: { sec:'Proyectos', pg:'BarberLab',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Proyectos · App Web</span>
+  <h1 class="pg-title">Barber<em>Lab</em></h1>
+  <p class="pg-sub">App para planificación de cortes con cabeza 3D + panel 2D overlay</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Estado</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge dev"><span class="bdot"></span>En desarrollo</span></div><div class="kpi-sub2">Mockup HTML funcional</div></div>
+  <div class="kpi"><div class="kpi-lbl">Stack</div><div class="kpi-val w" style="font-size:11px;padding-top:8px">WebGL + Canvas</div><div class="kpi-sub2">Three.js + Canvas 2D</div></div>
+  <div class="kpi"><div class="kpi-lbl">Target</div><div class="kpi-val w" style="font-size:12px;padding-top:7px">Barberos</div><div class="kpi-sub2">Academias y profesionales</div></div>
+  <div class="kpi"><div class="kpi-lbl">Referencia visual</div><div class="kpi-val w" style="font-size:11px;padding-top:8px">HairTechApp</div><div class="kpi-sub2">Líneas limpias, sin distorsión</div></div>
+</div>
+<div class="sec">Concepto</div>
+<div class="note">Cabeza en 3D (WebGL / Three.js) con un canvas 2D superpuesto donde se dibujan las líneas del corte. El panel 2D es independiente del 3D para que las líneas se vean limpias, al estilo HairTechApp.</div>
+<div class="sec">Capas del panel 2D</div>
+<div class="g3" style="margin-bottom:24px">
+  <div class="card"><div style="width:10px;height:10px;border-radius:2px;background:#4A90D9;margin-bottom:8px"></div><div class="card-ttl">Partición</div><p style="font-size:11px;color:var(--t2);margin-top:4px;line-height:1.6">Línea azul · divide las secciones principales</p></div>
+  <div class="card"><div style="width:10px;height:10px;border-radius:2px;background:#9B59B6;margin-bottom:8px"></div><div class="card-ttl">Secciones verticales</div><p style="font-size:11px;color:var(--t2);margin-top:4px;line-height:1.6">Líneas moradas de división vertical</p></div>
+  <div class="card"><div style="width:10px;height:10px;border-radius:2px;background:#27AE60;margin-bottom:8px"></div><div class="card-ttl">Secciones horizontales</div><p style="font-size:11px;color:var(--t2);margin-top:4px;line-height:1.6">Líneas verdes de división horizontal</p></div>
+  <div class="card"><div style="width:10px;height:10px;border-radius:2px;background:#E74C3C;margin-bottom:8px"></div><div class="card-ttl">Mecha guía (sección 3)</div><p style="font-size:11px;color:var(--t2);margin-top:4px;line-height:1.6">Línea roja · referencia base del corte</p></div>
+  <div class="card"><div style="width:10px;height:10px;border-radius:2px;background:#E74C3C;margin-bottom:8px"></div><div class="card-ttl">Distribución</div><p style="font-size:11px;color:var(--t2);margin-top:4px;line-height:1.6">Flechas rojas · dirección del cabello</p></div>
+  <div class="card"><div style="width:10px;height:10px;border-radius:2px;background:#E67E22;margin-bottom:8px"></div><div class="card-ttl">Resultado</div><p style="font-size:11px;color:var(--t2);margin-top:4px;line-height:1.6">Líneas naranjas del resultado final</p></div>
+</div>
+<div class="sec">Archivo</div>
+<div class="dl" style="cursor:default">
+  <div class="dl-ico">💻</div>
+  <div><div class="dl-ttl">barber-app-mockup.html</div><div class="dl-sub">/Documents/Claude/Projects/BARBER APP/ · Mockup funcional</div></div>
+  <span class="badge dev" style="margin-left:auto"><span class="bdot"></span>Local</span>
+</div>`;
+    }
+  },
+
+  chaos: { sec:'Proyectos', pg:'CHAOS Hair Product',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Proyectos · Marca propia</span>
+  <h1 class="pg-title">CHAOS <em>Hair Product</em></h1>
+  <p class="pg-sub">Línea propia de productos capilares para barbería</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Estado</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge seed"><span class="bdot"></span>Fase inicial</span></div><div class="kpi-sub2">Brief creado</div></div>
+  <div class="kpi"><div class="kpi-lbl">Proveedor</div><div class="kpi-val w" style="font-size:14px;padding-top:5px">BRANDED</div><div class="kpi-sub2">~34$ muestra · contactado</div></div>
+  <div class="kpi"><div class="kpi-lbl">Productos</div><div class="kpi-val w" style="font-size:13px;padding-top:6px">2 ceras</div><div class="kpi-sub2">Mate + En polvo</div></div>
+  <div class="kpi"><div class="kpi-lbl">Color de marca</div><div class="kpi-val" style="padding-top:3px"><span style="color:#F5D020;font-size:22px">●</span></div><div class="kpi-sub2">Amarillo · estilo Octyl / 5AM</div></div>
+</div>
+<div class="sec">Brief de marca</div>
+<div class="g2" style="margin-bottom:24px">
+  <div class="card">
+    <div class="card-ttl">Identidad</div>
+    <div style="margin-top:10px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--t3)">Logo</span><span style="color:var(--t1);font-weight:600">C con círculo interior</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--t3)">Color principal</span><span style="color:#F5D020;font-weight:600">Amarillo</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--t3)">Referencia</span><span style="color:var(--t2)">Sam Rascals, Octyl, 5AM</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--t3)">Aroma target</span><span style="color:var(--t2)">Fuerte y reconocible</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl">Productos iniciales</div>
+    <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
+      <div class="dl" style="padding:10px 12px;cursor:default"><div class="dl-ico">⬛</div><div><div class="dl-ttl">Cera Mate</div><div class="dl-sub">Fijación fuerte sin brillo</div></div></div>
+      <div class="dl" style="padding:10px 12px;cursor:default"><div class="dl-ico">⬜</div><div><div class="dl-ttl">Cera en Polvo</div><div class="dl-sub">Volumen y textura natural</div></div></div>
+    </div>
+  </div>
+</div>
+<div class="sec">Roadmap</div>
+<div class="tw">
+  <table>
+    <thead><tr><th>Paso</th><th>Descripción</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--gold);font-weight:700">1</td><td>Brief de marca creado</td><td><span class="badge live"><span class="bdot"></span>Hecho</span></td></tr>
+      <tr><td style="color:var(--gold);font-weight:700">2</td><td>Proveedor BRANDED contactado</td><td><span class="badge live"><span class="bdot"></span>Hecho</span></td></tr>
+      <tr><td style="color:var(--t3)">3</td><td>Solicitar muestra (~34$)</td><td><span class="badge plan"><span class="bdot"></span>Pendiente</span></td></tr>
+      <tr><td style="color:var(--t3)">4</td><td>Diseño de packaging</td><td><span class="badge plan"><span class="bdot"></span>Pendiente</span></td></tr>
+      <tr><td style="color:var(--t3)">5</td><td>Primer pedido de producción</td><td><span class="badge plan"><span class="bdot"></span>Pendiente</span></td></tr>
+    </tbody>
+  </table>
+</div>`;
+    }
+  },
+
+  docs: { sec:'Herramientas', pg:'Docs & Informes',
+    html() {
+      const items = D.docs.map(d => `
+        <a class="dl" href="${d.file}" target="_blank">
+          <div class="dl-ico">${d.icon}</div>
+          <div><div class="dl-ttl">${d.title}</div><div class="dl-sub">${d.desc}</div></div>
+          <div class="dl-arr">↗</div>
+        </a>`).join('');
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Herramientas</span>
+  <h1 class="pg-title">Docs <em>&amp; Informes</em></h1>
+  <p class="pg-sub">Todos los documentos e informes de The Crew</p>
+</div>
+<div class="sec">Documentos disponibles</div>
+<div style="display:flex;flex-direction:column;gap:10px">${items}</div>`;
+    }
+  },
+
+  reservas: { sec:'Herramientas', pg:'Reservas',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Herramientas · Sistemas</span>
+  <h1 class="pg-title">Sistemas de <em>Reservas</em></h1>
+  <p class="pg-sub">Yeasy (principal) + Booksy (Barrio · Caja)</p>
+</div>
+<div class="g2" style="margin-bottom:24px">
+  <div class="pj">
+    <div class="pj-bar" style="background:var(--gold)"></div>
+    <div class="pj-tag">Sistema principal</div>
+    <div class="pj-name">Yeasy</div>
+    <div class="pj-desc">Local principal The Crew Barbershop. API interna con endpoints de facturación, citas y empleados.</div>
+    <div class="pj-foot"><span class="badge live"><span class="bdot"></span>Principal</span><a href="https://business.yeasyapp.com" target="_blank" style="font-size:10px;color:var(--gold);text-decoration:none">Abrir panel ↗</a></div>
+  </div>
+  <div class="pj">
+    <div class="pj-bar" style="background:#6B8F71"></div>
+    <div class="pj-tag">Sistema secundario</div>
+    <div class="pj-name">Booksy</div>
+    <div class="pj-desc">Barbero Barrio + Gerard Caja. Business ID 167254. Crece mes a mes: de 282 € en enero a 1.278 € en abril (+353%).</div>
+    <div class="pj-foot"><span class="badge live"><span class="bdot"></span>Activo</span><a href="https://booksy.com" target="_blank" style="font-size:10px;color:var(--gold);text-decoration:none">Abrir panel ↗</a></div>
+  </div>
+</div>
+<div class="sec">API Yeasy — Endpoints</div>
+<div class="tw">
+  <table>
+    <thead><tr><th>Endpoint</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td class="mono au">/billing/calculateFromPaymentByWeek</td><td>Facturación semanal</td></tr>
+      <tr><td class="mono au">/withdrawals/commerce/{id}/date/{date}</td><td>Transacciones diarias</td></tr>
+      <tr><td class="mono au">/booking/findByWeek</td><td>Citas semanales</td></tr>
+      <tr><td class="mono au">/employee/commerce-agenda/{id}</td><td>Empleados y agenda</td></tr>
+      <tr><td class="mono au">/day-waiting-list/admin/count</td><td>Lista de espera del día</td></tr>
+    </tbody>
+  </table>
+</div>`;
+    }
+  },
+
+};
+
+/* ── ROUTER ───────────────────────────────────────────────────── */
+function go(id) {
+  if (!V[id]) return;
+  const view = V[id];
+
+  document.querySelectorAll('.sb-item').forEach(el =>
+    el.classList.toggle('active', el.dataset.view === id));
+
+  document.getElementById('tb-sec').textContent = view.sec;
+  document.getElementById('tb-pg').textContent  = view.pg;
+
+  const content = document.getElementById('content');
+  content.innerHTML = view.html();
+  content.scrollTop = 0;
+
+  if (view.after) setTimeout(() => view.after(), 0);
+  history.replaceState(null, '', '#' + id);
+}
+
+/* ── INIT ─────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  const short = todayShort();
+  document.getElementById('sb-date').textContent = short;
+  document.getElementById('tb-date').textContent = short;
+
+  document.querySelectorAll('.sb-item[data-view]').forEach(el =>
+    el.addEventListener('click', () => go(el.dataset.view)));
+
+  const hash = location.hash.slice(1);
+  go(hash && V[hash] ? hash : 'dashboard');
+});
+</script>
+</body>
+</html>

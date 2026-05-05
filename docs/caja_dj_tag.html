@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAJA — DJ Entry Tag</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 40px;
+      font-family: 'Space Grotesk', sans-serif;
+      padding: 40px;
+    }
+
+    .label {
+      color: #555;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: -30px;
+    }
+
+    /* ───── TAG CONTAINER ───── */
+    .tag-wrap {
+      position: relative;
+    }
+
+    .tag {
+      width: 260px;
+      background: #f0ebe3;
+      border-radius: 16px;
+      padding: 32px 24px 28px;
+      position: relative;
+      box-shadow:
+        0 2px 0 #c9c3bb,
+        0 8px 32px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+      overflow: hidden;
+    }
+
+    /* Hole at top */
+    .tag::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 20px;
+      background: #1a1a1a;
+      border-radius: 50%;
+      border: 3px solid #c9c3bb;
+      z-index: 10;
+    }
+
+    /* Subtle texture grain */
+    .tag::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      border-radius: 16px;
+    }
+
+    /* Torn edge strip at bottom */
+    .torn {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: repeating-linear-gradient(
+        90deg,
+        #f0ebe3 0px, #f0ebe3 6px,
+        transparent 6px, transparent 9px
+      );
+    }
+
+    /* ─── Header chip ─── */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #1a1a1a;
+      color: #f0ebe3;
+      font-size: 9px;
+      letter-spacing: 2.5px;
+      font-family: 'Space Mono', monospace;
+      padding: 5px 10px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .chip span.dot {
+      width: 5px;
+      height: 5px;
+      background: #b8a898;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* ─── Main title ─── */
+    .venue {
+      font-size: 72px;
+      font-weight: 800;
+      color: #1a1a1a;
+      line-height: 0.9;
+      letter-spacing: -3px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 11px;
+      font-weight: 400;
+      color: #9a9088;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+      margin-bottom: 24px;
+    }
+
+    /* ─── Divider ─── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, #d0cac2 0%, transparent 100%);
+      margin-bottom: 18px;
+    }
+
+    /* ─── Info rows ─── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .info-block label {
+      display: block;
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: #b0a89e;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+      margin-bottom: 3px;
+    }
+
+    .info-block .val {
+      font-size: 13px;
+      font-weight: 700;
+      color: #2a2420;
+      letter-spacing: -0.3px;
+    }
+
+    /* ─── Barcode ─── */
+    .barcode-wrap {
+      background: white;
+      border-radius: 8px;
+      padding: 10px 12px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .bars {
+      display: flex;
+      gap: 2px;
+      height: 36px;
+      align-items: flex-end;
+    }
+
+    .bars span {
+      display: inline-block;
+      background: #1a1a1a;
+      border-radius: 1px;
+    }
+
+    .barcode-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      color: #999;
+      letter-spacing: 2px;
+    }
+
+    /* ─── WRISTBAND VERSION ─── */
+    .wrist {
+      width: 580px;
+      height: 80px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
+      gap: 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 4px 20px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    /* Wristband perforation lines */
+    .wrist::before {
+      content: '';
+      position: absolute;
+      left: 130px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: repeating-linear-gradient(
+        180deg,
+        rgba(255,255,255,0.15) 0, rgba(255,255,255,0.15) 4px,
+        transparent 4px, transparent 8px
+      );
+    }
+
+    .wrist::after {
+      content: '';
+      position: absolute;
+      right: 130px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: repeating-linear-gradient(
+        180deg,
+        rgba(255,255,255,0.15) 0, rgba(255,255,255,0.15) 4px,
+        transparent 4px, transparent 8px
+      );
+    }
+
+    .wrist-left {
+      width: 108px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .wrist-left .wl {
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: #555;
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+    }
+
+    .wrist-left .wl-big {
+      font-size: 20px;
+      font-weight: 800;
+      color: #f0ebe3;
+      letter-spacing: -0.5px;
+    }
+
+    .wrist-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 0 20px;
+    }
+
+    .wrist-name {
+      font-size: 46px;
+      font-weight: 800;
+      color: #f0ebe3;
+      letter-spacing: -2px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .wrist-sub {
+      font-size: 8px;
+      letter-spacing: 5px;
+      color: #5a5450;
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+    }
+
+    .wrist-right {
+      width: 108px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .wrist-bars {
+      display: flex;
+      gap: 1.5px;
+      height: 28px;
+      align-items: flex-end;
+    }
+
+    .wrist-bars span {
+      display: inline-block;
+      background: #3a3530;
+      border-radius: 1px;
+    }
+
+    .wrist-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 7px;
+      color: #3a3530;
+      letter-spacing: 1px;
+    }
+
+    /* accent line on wristband */
+    .accent-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #b8a898 30%, #b8a898 70%, transparent);
+      opacity: 0.4;
+    }
+
+  </style>
+</head>
+<body>
+
+  <p class="label">Hang Tag</p>
+
+  <!-- ── HANG TAG ── -->
+  <div class="tag-wrap">
+    <div class="tag">
+
+      <div class="chip">
+        <span class="dot"></span>
+        Entrada DJ
+      </div>
+
+      <div class="venue">CAJA</div>
+      <div class="subtitle">Crew Access</div>
+
+      <div class="divider"></div>
+
+      <div class="info-grid">
+        <div class="info-block">
+          <label>Acceso</label>
+          <div class="val">Cabina</div>
+        </div>
+        <div class="info-block">
+          <label>Tipo</label>
+          <div class="val">DJ Pass</div>
+        </div>
+        <div class="info-block">
+          <label>Válido</label>
+          <div class="val">1 Noche</div>
+        </div>
+        <div class="info-block">
+          <label>Nivel</label>
+          <div class="val">Full</div>
+        </div>
+      </div>
+
+      <div class="barcode-wrap">
+        <div class="bars" id="bars"></div>
+        <div class="barcode-num">CAJA · 0001</div>
+      </div>
+
+      <div class="torn"></div>
+    </div>
+  </div>
+
+  <p class="label">Wristband</p>
+
+  <!-- ── WRISTBAND ── -->
+  <div class="wrist">
+    <div class="wrist-left">
+      <span class="wl">Entrada</span>
+      <span class="wl-big">DJ</span>
+      <span class="wl">Cabina</span>
+    </div>
+
+    <div class="wrist-center">
+      <div class="wrist-name">CAJA</div>
+      <div class="wrist-sub">Crew Access</div>
+    </div>
+
+    <div class="wrist-right">
+      <div class="wrist-bars" id="wbars"></div>
+      <div class="wrist-num">0001</div>
+    </div>
+
+    <div class="accent-line"></div>
+  </div>
+
+  <script>
+    // Generate barcode bars
+    function makeBars(container, count, minH, maxH, widths) {
+      for (let i = 0; i < count; i++) {
+        const bar = document.createElement('span');
+        const h = minH + Math.random() * (maxH - minH);
+        const w = widths[Math.floor(Math.random() * widths.length)];
+        bar.style.height = h + 'px';
+        bar.style.width = w + 'px';
+        container.appendChild(bar);
+      }
+    }
+    makeBars(document.getElementById('bars'), 42, 18, 36, [1, 1, 1, 2, 3]);
+    makeBars(document.getElementById('wbars'), 32, 12, 28, [1, 1, 2]);
+  </script>
+
+</body>
+</html>

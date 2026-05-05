@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cash Flow 2026 — TCB</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080808;--surf:#0d0d0d;--surf2:#131313;
+  --gold:#C9A84C;--ga:rgba(201,168,76,.09);--gb:rgba(201,168,76,.2);
+  --t1:#f0ede6;--t2:rgba(240,237,230,.5);--t3:rgba(240,237,230,.24);
+  --ln:rgba(240,237,230,.07);--grn:#7FAE7A;--red:#C47068;--blu:#8A9E94;--warn:#D4A850;
+  --r:3px;--sw:220px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t1);font-family:'Montserrat',sans-serif;font-size:13px;min-height:100vh;-webkit-font-smoothing:antialiased}
+
+.layout{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:var(--sw);min-width:var(--sw);background:var(--surf);border-right:1px solid var(--ln);display:flex;flex-direction:column;padding:32px 0 24px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar__logo{padding:0 24px 28px;border-bottom:1px solid var(--ln);margin-bottom:16px}
+.sidebar__logo-title{font-size:10px;font-weight:800;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+.sidebar__logo-sub{font-size:9px;color:var(--t3);margin-top:2px}
+.sidebar__section{padding:14px 24px 6px;font-size:8px;font-weight:700;letter-spacing:.18em;color:var(--t3);text-transform:uppercase}
+.sidebar__item{display:block;padding:9px 24px;font-size:11px;font-weight:500;color:var(--t2);text-decoration:none;border-left:2px solid transparent;transition:color .15s,background .15s}
+.sidebar__item:hover{color:var(--t1);background:rgba(240,237,230,.025)}
+.sidebar__item.active{color:var(--gold);border-left-color:var(--gold);background:var(--ga)}
+.sidebar__sep{height:1px;background:var(--ln);margin:12px 24px}
+
+/* CONTENT */
+.content{flex:1;padding:48px 52px 80px;max-width:1060px}
+
+/* HEADER */
+.doc-tag{display:block;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.doc-title{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:14px}
+.doc-title em{color:var(--gold);font-style:normal}
+.doc-meta{display:flex;gap:20px;margin-bottom:36px;flex-wrap:wrap;padding-bottom:28px;border-bottom:1px solid var(--ln)}
+.doc-meta-item{font-size:11px;color:var(--t3)}
+.doc-meta-item span{color:var(--t2);font-weight:600}
+
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:var(--r);overflow:hidden;margin-bottom:40px}
+.stat-card{background:var(--surf);padding:22px 20px;transition:background .2s}
+.stat-card:hover{background:var(--surf2)}
+.stat-card__label{font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.stat-card__value{font-size:22px;font-weight:800;color:var(--gold);letter-spacing:-.03em}
+.stat-card__value.white{color:var(--t1)}
+.stat-card__value.green{color:var(--grn)}
+.stat-card__value.red{color:var(--red)}
+.stat-card__sub{font-size:10px;color:var(--t3);margin-top:4px}
+
+/* SECTION */
+.section{margin-bottom:44px}
+.section-title{display:flex;align-items:center;gap:10px;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:18px}
+.section-title::before{content:"";width:3px;height:13px;background:var(--gold);border-radius:1px;flex-shrink:0}
+.section-title::after{content:"";flex:1;height:1px;background:var(--ln)}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border:1px solid var(--ln);border-radius:var(--r)}
+table{width:100%;border-collapse:collapse}
+th{font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);padding:12px 16px;text-align:left;border-bottom:1px solid var(--ln)}
+th.right{text-align:right}
+td{padding:11px 16px;border-bottom:1px solid rgba(240,237,230,.04);font-size:12px;color:var(--t2);vertical-align:middle}
+td.right{text-align:right;font-variant-numeric:tabular-nums}
+td.gold{color:var(--gold);font-weight:700}
+td.green{color:var(--grn);font-weight:700}
+td.red{color:var(--red)}
+td.warn{color:var(--warn);font-weight:700}
+td.white{color:var(--t1);font-weight:600}
+td.dim{color:var(--t3);font-style:italic;font-size:11px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(240,237,230,.02)}
+tr.total-row td{background:var(--ga);border-top:1px solid var(--gb);font-weight:700;color:var(--t1)}
+tr.total-row td.gold{color:var(--gold)}
+tr.section-row td{background:var(--surf2);font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);padding:5px 16px}
+tr.warn-row td{background:rgba(196,112,104,.06)}
+tr.section-row:hover td,tr.total-row:hover td{background:unset}
+
+/* BADGES */
+.badge{display:inline-block;padding:2px 6px;border-radius:2px;font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;vertical-align:middle;margin-left:3px}
+.badge.act{background:rgba(127,174,122,.12);color:var(--grn)}
+.badge.est{background:rgba(240,237,230,.07);color:var(--t3)}
+.badge.warn{background:rgba(212,168,80,.12);color:var(--warn)}
+.badge.hac{background:rgba(196,112,104,.12);color:var(--red)}
+.badge.ok{background:rgba(127,174,122,.12);color:var(--grn)}
+
+/* NOTICE */
+.notice{border-left:3px solid;padding:10px 16px;font-size:11px;line-height:1.75;margin-bottom:20px;background:none;border-radius:0}
+.notice.warn{border-color:var(--warn);color:var(--t2)}
+.notice.info{border-color:var(--blu);color:var(--t2)}
+.notice.ok{border-color:var(--grn);color:var(--t2)}
+.notice.red{border-color:var(--red);color:var(--t2)}
+.notice b{color:var(--t1);font-weight:700}
+
+/* TIMELINE — pagos dentro del mes */
+.timeline{border:1px solid var(--ln);border-radius:var(--r);overflow:hidden}
+.tl-row{display:grid;grid-template-columns:96px 1fr 120px;align-items:center;gap:16px;padding:13px 20px;border-bottom:1px solid rgba(240,237,230,.04)}
+.tl-row:last-child{border-bottom:none}
+.tl-row:hover{background:rgba(240,237,230,.018)}
+.tl-day{font-size:9px;font-weight:700;color:var(--t3);letter-spacing:.04em;line-height:1.4}
+.tl-day strong{color:var(--t2);display:block;font-size:10px;margin-bottom:1px}
+.tl-mid{}
+.tl-label{font-size:11px;color:var(--t2);margin-bottom:5px;font-weight:500}
+.tl-bar-outer{height:5px;background:rgba(240,237,230,.06);border-radius:3px;overflow:hidden}
+.tl-bar{height:100%;border-radius:3px}
+.tl-bar.loan{background:var(--blu)}
+.tl-bar.bank{background:rgba(240,237,230,.18)}
+.tl-bar.svc{background:rgba(240,237,230,.12)}
+.tl-bar.ss{background:var(--warn)}
+.tl-bar.hac{background:var(--red)}
+.tl-bar.payroll{background:var(--gold)}
+.tl-bar.dist{background:var(--blu);opacity:.7}
+.tl-amount{text-align:right;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* CREDIT GAUGE */
+.gauge-wrap{background:var(--surf);border:1px solid var(--ln);border-radius:var(--r);padding:24px 28px;display:flex;gap:32px;align-items:center;flex-wrap:wrap;margin-bottom:0}
+.gauge-side{flex-shrink:0}
+.gauge-label{font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
+.gauge-val{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.gauge-sub{font-size:10px;color:var(--t3);margin-top:3px}
+.gauge-center{flex:1;min-width:200px}
+.gauge-range{display:flex;justify-content:space-between;font-size:9px;color:var(--t3);margin-bottom:6px}
+.gauge-bar-outer{height:8px;background:rgba(240,237,230,.06);border-radius:4px;overflow:hidden}
+.gauge-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--grn) 0%,var(--warn) 60%,var(--red) 100%)}
+.gauge-avail{display:flex;justify-content:flex-end;margin-top:6px;font-size:10px;color:var(--t3)}
+
+/* BREAK-EVEN */
+.be-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:var(--r);overflow:hidden}
+.be-cell{background:var(--surf);padding:20px 18px;text-align:center}
+.be-val{font-size:20px;font-weight:800;margin-bottom:4px;letter-spacing:-.02em}
+.be-lbl{font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
+.be-desc{font-size:10px;color:var(--t3);line-height:1.4}
+
+/* ALERT BOXES */
+.alert{border:1px solid;border-radius:var(--r);padding:14px 18px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start}
+.alert.red{border-color:rgba(196,112,104,.28);background:rgba(196,112,104,.06)}
+.alert.warn{border-color:rgba(212,168,80,.28);background:rgba(212,168,80,.06)}
+.alert.green{border-color:rgba(127,174,122,.28);background:rgba(127,174,122,.06)}
+.alert.blue{border-color:rgba(138,158,148,.28);background:rgba(138,158,148,.06)}
+.alert__icon{font-size:15px;flex-shrink:0;line-height:1.4}
+.alert__title{font-size:11px;font-weight:700;color:var(--t1);margin-bottom:4px}
+.alert__body{font-size:11px;color:var(--t2);line-height:1.6}
+.alert__body b{color:var(--t1)}
+
+/* MINI CHART */
+.chart-wrap{display:flex;gap:2px;align-items:flex-end;height:120px;margin-bottom:8px}
+.chart-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;height:100%;justify-content:flex-end}
+.bar-in{width:100%;border-radius:2px 2px 0 0;background:rgba(127,174,122,.55)}
+.bar-out{width:100%;border-radius:2px 2px 0 0;background:rgba(196,112,104,.5);margin-bottom:2px}
+.chart-lbl{font-size:8px;color:var(--t3);margin-top:5px;font-weight:600}
+.chart-legend{display:flex;gap:16px;margin-bottom:16px}
+.legend-dot{width:8px;height:8px;border-radius:1px;flex-shrink:0}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t2)}
+
+/* FOOTER */
+.footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--ln);font-size:10px;color:var(--t3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .content{padding:24px 20px 60px}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .be-grid{grid-template-columns:1fr}
+  .tl-row{grid-template-columns:70px 1fr 90px;gap:10px;padding:11px 14px}
+  .gauge-wrap{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar__logo">
+    <div class="sidebar__logo-title">TCB Docs</div>
+    <div class="sidebar__logo-sub">The Crew Barbershop</div>
+  </div>
+  <div class="sidebar__section">Finanzas</div>
+  <a href="index.html" class="sidebar__item">📊 Facturación</a>
+  <a href="gastos_2026.html" class="sidebar__item">📋 P&amp;L 2026</a>
+  <a href="cashflow_2026.html" class="sidebar__item active">💸 Cash Flow</a>
+  <div class="sidebar__sep"></div>
+  <div class="sidebar__section">Equipo</div>
+  <a href="empleados.html" class="sidebar__item">👥 Empleados</a>
+</nav>
+
+<!-- CONTENT -->
+<main class="content">
+
+  <!-- HEADER -->
+  <span class="doc-tag">Control de Tesorería</span>
+  <h1 class="doc-title">Cash Flow <em>2026</em></h1>
+  <div class="doc-meta">
+    <div class="doc-meta-item">Actualizado <span>5 mayo 2026</span></div>
+    <div class="doc-meta-item">Datos reales <span>Enero — Abril</span></div>
+    <div class="doc-meta-item">Proyección <span>Mayo — Diciembre</span></div>
+    <div class="doc-meta-item">CaixaBank <span>ES66 2100 3684 1422 0015 3191</span></div>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-card__label">Ingreso medio / mes</div>
+      <div class="stat-card__value white">9.688€</div>
+      <div class="stat-card__sub">Ene–Abr · base real</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Salida real media / mes</div>
+      <div class="stat-card__value red">13.306€</div>
+      <div class="stat-card__sub">Con préstamos, nóminas, Hacienda</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Margen operativo medio</div>
+      <div class="stat-card__value">+16,1%</div>
+      <div class="stat-card__sub">Antes de financiación e impuestos</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Cash consumido Ene–Abr</div>
+      <div class="stat-card__value red">−14.477€</div>
+      <div class="stat-card__sub">Financiado por crédito CaixaBank</div>
+    </div>
+  </div>
+
+  <!-- MINI CHART -->
+  <div class="section">
+    <div class="section-title">Ingresos vs salidas totales — enero a abril</div>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(127,174,122,.55)"></div>Ingresos</div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(196,112,104,.5)"></div>Total salidas (op + financiación + Hacienda)</div>
+    </div>
+    <div class="chart-wrap" id="mainChart"></div>
+    <div style="display:flex;gap:2px" id="mainChartLabels"></div>
+  </div>
+
+  <!-- FLUJO MENSUAL REAL -->
+  <div class="section">
+    <div class="section-title">Flujo mensual real — enero a abril 2026</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Mes</th>
+            <th class="right">Ingresos</th>
+            <th class="right">Gastos op.</th>
+            <th class="right">Margen op.</th>
+            <th class="right">Financiación</th>
+            <th class="right">Hacienda</th>
+            <th class="right">Total salidas</th>
+            <th class="right">Neto mes</th>
+            <th class="right">Acumulado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Enero</strong><span class="badge act">real</span></td>
+            <td class="right green">8.569€</td>
+            <td class="right">7.679€</td>
+            <td class="right gold">+890€ <span style="color:var(--t3);font-size:10px;font-weight:400">10,4%</span></td>
+            <td class="right">2.614€</td>
+            <td class="right red">6.935€</td>
+            <td class="right">17.228€</td>
+            <td class="right red">−8.659€</td>
+            <td class="right red">−8.659€</td>
+          </tr>
+          <tr>
+            <td><strong>Febrero</strong><span class="badge act">real</span></td>
+            <td class="right green">8.075€</td>
+            <td class="right">7.229€</td>
+            <td class="right gold">+846€ <span style="color:var(--t3);font-size:10px;font-weight:400">10,5%</span></td>
+            <td class="right">2.614€</td>
+            <td class="right dim">—</td>
+            <td class="right">9.843€</td>
+            <td class="right red">−1.768€</td>
+            <td class="right red">−10.427€</td>
+          </tr>
+          <tr>
+            <td><strong>Marzo</strong><span class="badge act">real</span></td>
+            <td class="right green">10.849€</td>
+            <td class="right">8.422€</td>
+            <td class="right gold">+2.427€ <span style="color:var(--t3);font-size:10px;font-weight:400">22,4%</span></td>
+            <td class="right">2.614€</td>
+            <td class="right dim">—</td>
+            <td class="right">11.036€</td>
+            <td class="right red">−187€</td>
+            <td class="right red">−10.614€</td>
+          </tr>
+          <tr>
+            <td><strong>Abril</strong><span class="badge act">real</span></td>
+            <td class="right green">11.258€</td>
+            <td class="right">9.176€</td>
+            <td class="right gold">+2.082€ <span style="color:var(--t3);font-size:10px;font-weight:400">18,5%</span></td>
+            <td class="right">2.614€</td>
+            <td class="right red">3.331€</td>
+            <td class="right">15.121€</td>
+            <td class="right red">−3.863€</td>
+            <td class="right red">−14.477€</td>
+          </tr>
+          <tr class="total-row">
+            <td>TOTAL Q1 + inicio Q2</td>
+            <td class="right gold">38.751€</td>
+            <td class="right">32.506€</td>
+            <td class="right gold">+6.245€</td>
+            <td class="right">10.456€</td>
+            <td class="right" style="color:var(--red)">10.266€</td>
+            <td class="right">53.228€</td>
+            <td class="right" style="color:var(--red)">−14.477€</td>
+            <td class="right" style="color:var(--red)">−14.477€</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:10px;color:var(--t3);margin-top:10px">· <b style="color:var(--t2)">Financiación:</b> Préstamos CaixaBank (694,85 + 718,75€) + distribución José Chao (1.200€) = 2.613,60€/mes · <b style="color:var(--t2)">Hacienda:</b> IVA + IRPF trimestral — Q4 2025 en enero, Q1 2026 en abril</p>
+  </div>
+
+  <!-- CALENDARIO DE PAGOS DENTRO DEL MES -->
+  <div class="section">
+    <div class="section-title">Cuándo sale el dinero — calendario dentro del mes</div>
+    <div class="notice info">Este calendario muestra el <b>orden cronológico</b> en que los pagos salen de cuenta a lo largo del mes. Útil para saber cuándo debes tener saldo disponible.</div>
+    <div class="timeline">
+      <div class="tl-row">
+        <div class="tl-day"><strong>Días 1–5</strong>Inicio mes</div>
+        <div class="tl-mid">
+          <div class="tl-label">Préstamo reforma + préstamo financiación <span style="font-size:10px;color:var(--t3)">· CaixaBank cargo automático</span></div>
+          <div class="tl-bar-outer"><div class="tl-bar loan" style="width:27%"></div></div>
+        </div>
+        <div class="tl-amount" style="color:var(--blu)">1.413,60€</div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-day"><strong>Días 10–15</strong>Primera quincena</div>
+        <div class="tl-mid">
+          <div class="tl-label">MYBOX TPV · Mantenimiento cuenta · Liquidación CaixaBank</div>
+          <div class="tl-bar-outer"><div class="tl-bar bank" style="width:5%"></div></div>
+        </div>
+        <div class="tl-amount" style="color:var(--t3)">115,56€</div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-day"><strong>Días 15–20</strong>Variable</div>
+        <div class="tl-mid">
+          <div class="tl-label">Suministros, servicios, proveedores de producto <span style="font-size:10px;color:var(--t3)">· variable</span></div>
+          <div class="tl-bar-outer"><div class="tl-bar svc" style="width:11%"></div></div>
+        </div>
+        <div class="tl-amount" style="color:var(--t3)">~600€</div>
+      </div>
+      <div class="tl-row" style="background:rgba(212,168,80,.04)">
+        <div class="tl-day"><strong>Día 20</strong><span style="color:var(--warn);font-size:8px;font-weight:700">TRIMESTRAL</span></div>
+        <div class="tl-mid">
+          <div class="tl-label" style="color:var(--warn)">⚠ Hacienda — IVA + IRPF <span style="color:var(--t3);font-size:10px">· solo en enero / abril / julio / octubre</span></div>
+          <div class="tl-bar-outer"><div class="tl-bar hac" style="width:75%"></div></div>
+        </div>
+        <div class="tl-amount" style="color:var(--warn)">3.500–7.000€</div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-day"><strong>Días 20–25</strong>Seguridad Social</div>
+        <div class="tl-mid">
+          <div class="tl-label">Seguridad Social empleados <span style="font-size:10px;color:var(--t3)">· cargo AEAT el día 22 aprox.</span></div>
+          <div class="tl-bar-outer"><div class="tl-bar ss" style="width:23%"></div></div>
+        </div>
+        <div class="tl-amount" style="color:var(--warn)">~1.200€</div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-day"><strong>Día 28–31</strong>Mayor salida</div>
+        <div class="tl-mid">
+          <div class="tl-label">Nóminas (3 empleados + Gerard) <span style="font-size:10px;color:var(--t3)">· el mayor pago mensual</span></div>
+          <div class="tl-bar-outer"><div class="tl-bar payroll" style="width:100%"></div></div>
+        </div>
+        <div class="tl-amount" style="color:var(--gold)">~5.300€</div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-day"><strong>Variable</strong>Distribución</div>
+        <div class="tl-mid">
+          <div class="tl-label">José Chao — distribución mensual socio</div>
+          <div class="tl-bar-outer"><div class="tl-bar dist" style="width:23%"></div></div>
+        </div>
+        <div class="tl-amount" style="color:var(--blu)">1.200€</div>
+      </div>
+    </div>
+    <p style="font-size:10px;color:var(--t3);margin-top:10px">⚡ <b style="color:var(--t2)">Punto de riesgo:</b> los primeros 5 días del mes hay que pagar 1.414€ de préstamos cuando aún no has acumulado casi ingresos. Y el día 28 se va el mayor bloque (nóminas ~5.300€). Tener saldo positivo el día 27 del mes anterior es clave.</p>
+  </div>
+
+  <!-- CALENDARIO HACIENDA -->
+  <div class="section">
+    <div class="section-title">Calendario Hacienda 2026 — pagos trimestrales</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Periodo</th>
+            <th>Fecha límite</th>
+            <th>Qué cubre</th>
+            <th class="right">Importe</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Q4 2025</strong></td>
+            <td>20 Enero 2026</td>
+            <td class="dim">Oct–Dic 2025 · IVA + IRPF</td>
+            <td class="right">6.935€</td>
+            <td><span class="badge ok">✓ Pagado</span></td>
+          </tr>
+          <tr>
+            <td><strong>Q1 2026</strong></td>
+            <td>20 Abril 2026</td>
+            <td class="dim">Ene–Mar 2026 · IVA + IRPF</td>
+            <td class="right">3.331€</td>
+            <td><span class="badge ok">✓ Pagado</span></td>
+          </tr>
+          <tr class="warn-row">
+            <td><strong>Q2 2026</strong></td>
+            <td style="color:var(--warn);font-weight:700">20 Julio 2026</td>
+            <td class="dim">Abr–Jun 2026 · IVA + IRPF</td>
+            <td class="right warn">~4.000€ est.</td>
+            <td><span class="badge warn">⚠ Pendiente</span></td>
+          </tr>
+          <tr class="warn-row">
+            <td><strong>Q3 2026</strong></td>
+            <td style="color:var(--warn);font-weight:700">20 Octubre 2026</td>
+            <td class="dim">Jul–Sep 2026 · IVA + IRPF</td>
+            <td class="right warn">~4.000€ est.</td>
+            <td><span class="badge warn">⚠ Pendiente</span></td>
+          </tr>
+          <tr>
+            <td><strong>Q4 2026</strong></td>
+            <td style="color:var(--t3)">20 Enero 2027</td>
+            <td class="dim">Oct–Dic 2026 · IVA + IRPF</td>
+            <td class="right dim">~5.500€ est.</td>
+            <td><span class="badge est">2027</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:10px;color:var(--t3);margin-top:10px">* Estimaciones Q2–Q4 basadas en Q1 2026 (3.331€) con crecimiento moderado. El Q4 2025 fue excepcionalmente alto (6.935€) por ser fin de año y posibles liquidaciones adicionales. Confirmar importes con el gestor antes de cada pago.</p>
+  </div>
+
+  <!-- LÍNEA DE CRÉDITO -->
+  <div class="section">
+    <div class="section-title">Estado línea de crédito — CaixaBank</div>
+    <div class="gauge-wrap">
+      <div class="gauge-side">
+        <div class="gauge-label">Crédito utilizado</div>
+        <div class="gauge-val" style="color:var(--red)">9.292€</div>
+        <div class="gauge-sub">de 12.000€ totales</div>
+      </div>
+      <div class="gauge-center">
+        <div class="gauge-range">
+          <span>0€ — libre</span>
+          <span style="color:var(--red);font-weight:700">77,4% consumido</span>
+          <span>12.000€ — límite</span>
+        </div>
+        <div class="gauge-bar-outer">
+          <div class="gauge-bar-fill" style="width:77.4%"></div>
+        </div>
+        <div class="gauge-avail">Margen restante: <strong style="color:var(--grn);margin-left:5px">2.708€</strong></div>
+      </div>
+      <div class="gauge-side" style="text-align:right">
+        <div class="gauge-label">Disponible</div>
+        <div class="gauge-val" style="color:var(--grn)">2.708€</div>
+        <div class="gauge-sub">Colchón crítico</div>
+      </div>
+    </div>
+    <div class="notice red" style="margin-top:14px;margin-bottom:0">Con solo <b>2.708€ disponibles</b> en la línea de crédito y pagos fijos de 1.413€ en los primeros días del mes, hay un margen muy pequeño ante cualquier imprevisto. Prioridad inmediata: no aumentar el saldo deudor en mayo.</div>
+  </div>
+
+  <!-- PROYECCIÓN MAYO–DICIEMBRE -->
+  <div class="section">
+    <div class="section-title">Proyección cash flow — mayo a diciembre 2026</div>
+    <div class="notice warn">Proyección basada en tendencia actual (+17% margen op.) y estacionalidad típica barbería. Agosto estimado a la baja por vacaciones. Julio y octubre incluyen Hacienda estimada.</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Mes</th>
+            <th class="right">Ingresos est.</th>
+            <th class="right">Gastos op. est.</th>
+            <th class="right">Margen op.</th>
+            <th class="right">Financiación</th>
+            <th class="right">Hacienda</th>
+            <th class="right">Neto mes</th>
+            <th class="right">Acumulado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-row">
+            <td colspan="8">▸ Referencia — datos reales</td>
+          </tr>
+          <tr>
+            <td>Abril 2026 <span class="badge act">real</span></td>
+            <td class="right green">11.258€</td>
+            <td class="right">9.176€</td>
+            <td class="right gold">+2.082€ <span style="color:var(--t3);font-size:10px">18,5%</span></td>
+            <td class="right">2.614€</td>
+            <td class="right red">3.331€</td>
+            <td class="right red">−3.863€</td>
+            <td class="right red">−14.477€</td>
+          </tr>
+          <tr class="section-row">
+            <td colspan="8">▸ Proyección estimada (gastos operativos al 83% de ingresos)</td>
+          </tr>
+          <tr>
+            <td><strong>Mayo</strong><span class="badge est">est</span></td>
+            <td class="right">11.500€</td>
+            <td class="right">9.545€</td>
+            <td class="right gold">+1.955€</td>
+            <td class="right">2.614€</td>
+            <td class="right dim">—</td>
+            <td class="right red">−659€</td>
+            <td class="right red">−15.136€</td>
+          </tr>
+          <tr>
+            <td><strong>Junio</strong><span class="badge est">est</span></td>
+            <td class="right">12.000€</td>
+            <td class="right">9.960€</td>
+            <td class="right gold">+2.040€</td>
+            <td class="right">2.614€</td>
+            <td class="right dim">—</td>
+            <td class="right red">−574€</td>
+            <td class="right red">−15.710€</td>
+          </tr>
+          <tr class="warn-row">
+            <td><strong>Julio</strong><span class="badge hac">Hacienda Q2</span></td>
+            <td class="right">10.000€</td>
+            <td class="right">8.300€</td>
+            <td class="right gold">+1.700€</td>
+            <td class="right">2.614€</td>
+            <td class="right red">~4.000€</td>
+            <td class="right red">−4.914€</td>
+            <td class="right red">−20.624€</td>
+          </tr>
+          <tr>
+            <td><strong>Agosto</strong> <span style="font-size:10px;color:var(--t3)">temporada baja</span></td>
+            <td class="right">7.500€</td>
+            <td class="right">6.225€</td>
+            <td class="right gold">+1.275€</td>
+            <td class="right">2.614€</td>
+            <td class="right dim">—</td>
+            <td class="right red">−1.339€</td>
+            <td class="right red">−21.963€</td>
+          </tr>
+          <tr>
+            <td><strong>Septiembre</strong><span class="badge est">est</span></td>
+            <td class="right">11.000€</td>
+            <td class="right">9.130€</td>
+            <td class="right gold">+1.870€</td>
+            <td class="right">2.614€</td>
+            <td class="right dim">—</td>
+            <td class="right red">−744€</td>
+            <td class="right red">−22.707€</td>
+          </tr>
+          <tr class="warn-row">
+            <td><strong>Octubre</strong><span class="badge hac">Hacienda Q3</span></td>
+            <td class="right">11.000€</td>
+            <td class="right">9.130€</td>
+            <td class="right gold">+1.870€</td>
+            <td class="right">2.614€</td>
+            <td class="right red">~4.000€</td>
+            <td class="right red">−4.744€</td>
+            <td class="right red">−27.451€</td>
+          </tr>
+          <tr>
+            <td><strong>Noviembre</strong><span class="badge est">est</span></td>
+            <td class="right">9.500€</td>
+            <td class="right">7.885€</td>
+            <td class="right gold">+1.615€</td>
+            <td class="right">2.614€</td>
+            <td class="right dim">—</td>
+            <td class="right red">−999€</td>
+            <td class="right red">−28.450€</td>
+          </tr>
+          <tr>
+            <td><strong>Diciembre</strong><span class="badge est">est</span></td>
+            <td class="right">9.000€</td>
+            <td class="right">7.470€</td>
+            <td class="right gold">+1.530€</td>
+            <td class="right">2.614€</td>
+            <td class="right dim">—</td>
+            <td class="right red">−1.084€</td>
+            <td class="right red">−29.534€</td>
+          </tr>
+          <tr class="total-row">
+            <td>AÑO COMPLETO 2026</td>
+            <td class="right gold">120.251€</td>
+            <td class="right">100.048€</td>
+            <td class="right gold">+20.203€</td>
+            <td class="right">31.363€</td>
+            <td class="right" style="color:var(--red)">~18.266€</td>
+            <td class="right" style="color:var(--red)">−29.534€</td>
+            <td class="right" style="color:var(--red)">−29.534€</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:10px;color:var(--t3);margin-top:10px">El acumulado proyectado asume que el crédito CaixaBank continúa disponible. Si los ingresos superan la proyección (posible dado el crecimiento de +31% de enero a abril), el escenario mejora notablemente. · Proyección <em>conservadora</em>.</p>
+  </div>
+
+  <!-- PUNTO DE EQUILIBRIO -->
+  <div class="section">
+    <div class="section-title">Punto de equilibrio — qué necesitas facturar</div>
+    <div class="be-grid">
+      <div class="be-cell">
+        <div class="be-lbl">Financiación fija / mes</div>
+        <div class="be-val" style="color:var(--gold)">2.614€</div>
+        <div class="be-desc">Préstamos (1.414€) + José Chao (1.200€). Fijo e inevitable cada mes.</div>
+      </div>
+      <div class="be-cell">
+        <div class="be-lbl">Objetivo meses normales</div>
+        <div class="be-val" style="color:var(--warn)">~16.300€</div>
+        <div class="be-desc">Con 16% margen op., para cubrir los 2.614€ de financiación sin consumir crédito.</div>
+      </div>
+      <div class="be-cell">
+        <div class="be-lbl">Objetivo meses Hacienda</div>
+        <div class="be-val" style="color:var(--red)">~41.300€</div>
+        <div class="be-desc">Para cubrir también ~4.000€ de Hacienda. Alternativa: reservar mes a mes.</div>
+      </div>
+    </div>
+    <div class="notice info" style="margin-top:14px;margin-bottom:0">
+      Actualmente facturas ~11.000€/mes — <b>el 67% del equilibrio para meses normales.</b> Te faltan ~5.300€/mes más para ser cash-flow neutro antes de Hacienda. Un barbero adicional a jornada completa podría generar eso. · En meses sin Hacienda, marzo 2026 (10.849€) ya está muy cerca.
+    </div>
+  </div>
+
+  <!-- DIAGNÓSTICO -->
+  <div class="section">
+    <div class="section-title">Diagnóstico de tesorería</div>
+
+    <div class="alert red">
+      <div class="alert__icon">🔴</div>
+      <div>
+        <div class="alert__title">Crédito CaixaBank al 77% — margen mínimo</div>
+        <div class="alert__body">Solo quedan <b>2.708€ disponibles</b> en la línea. Un mes malo o un imprevisto (reparación, multa, deuda) puede agotarlo completamente. Si se supera el límite de 12.000€, se generan intereses y cargos adicionales.</div>
+      </div>
+    </div>
+
+    <div class="alert red">
+      <div class="alert__icon">🔴</div>
+      <div>
+        <div class="alert__title">El negocio es operativamente rentable, pero financieramente deficitario</div>
+        <div class="alert__body">El <b>margen operativo es real y sano (+16,1%)</b>. El problema no es la barbería — es que los <b>préstamos + distribución socio + impuestos consumen más de lo que el margen genera</b>. Esto es típico de un negocio en fase de expansión con deuda.</div>
+      </div>
+    </div>
+
+    <div class="alert warn">
+      <div class="alert__icon">⚠️</div>
+      <div>
+        <div class="alert__title">Julio y octubre son los meses más peligrosos</div>
+        <div class="alert__body">El pago de Hacienda en día 20 coincide con que son meses de transición estacional. En julio (verano) y octubre (post-verano), los ingresos suelen bajar mientras el pago fiscal golpea fuerte. <b>Hay que acumular ~4.000€ de reserva antes del día 15 de esos meses.</b></div>
+      </div>
+    </div>
+
+    <div class="alert warn">
+      <div class="alert__icon">⚠️</div>
+      <div>
+        <div class="alert__title">Enero 2027 será el mes más exigente del ciclo</div>
+        <div class="alert__body">Se suma el IVA de Q4 2026 (históricamente el más alto, ~5.500€ est.) a la temporada más baja post-Navidades. Empezar a reservar en octubre-noviembre para este pago. El patrón de 2026 (6.935€ en enero) puede repetirse.</div>
+      </div>
+    </div>
+
+    <div class="alert green">
+      <div class="alert__icon">✅</div>
+      <div>
+        <div class="alert__title">Crecimiento sólido — de 8.569€ a 11.258€ en 4 meses (+31,4%)</div>
+        <div class="alert__body">El negocio está creciendo. Si la tendencia continúa, abril puede ser el nuevo suelo mínimo mensual. Con 14.000€/mes el margen operativo casi cubriría toda la financiación sin Hacienda.</div>
+      </div>
+    </div>
+
+    <div class="alert green">
+      <div class="alert__icon">✅</div>
+      <div>
+        <div class="alert__title">Los préstamos son finitos — hay fecha de fin</div>
+        <div class="alert__body">Los 1.413,60€/mes en préstamos terminan cuando se amorten. Cuando eso suceda, se liberan <b>~17.000€ anuales</b> que actualmente van a banco. Eso cambia completamente el cash flow.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAN DE ACCIÓN -->
+  <div class="section">
+    <div class="section-title">Plan de acción — próximos 6 meses</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Acción</th>
+            <th>Plazo</th>
+            <th>Impacto estimado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--gold);font-weight:800;font-size:15px">1</td>
+            <td>
+              <strong>Reservar 4.000€ para Hacienda julio (día 20)</strong>
+              <div style="font-size:10px;color:var(--t3);margin-top:3px">Apartar 700€/semana durante mayo y junio en una cuenta separada o en BBVA reservado. No tocarlo.</div>
+            </td>
+            <td><span class="badge warn">Mayo–Jun</span></td>
+            <td style="font-size:11px;color:var(--grn)">Evita impago fiscal + recargo 5%</td>
+          </tr>
+          <tr>
+            <td style="color:var(--gold);font-weight:800;font-size:15px">2</td>
+            <td>
+              <strong>Cerrar 52 citas pendientes de Gerard en Yeasy</strong>
+              <div style="font-size:10px;color:var(--t3);margin-top:3px">Hay 915€ sin cobrar en Yeasy (principalmente febrero). Ir a cada cita → cambiar estado a "Realizada". Dinero inmediato.</div>
+            </td>
+            <td><span class="badge warn">Esta semana</span></td>
+            <td style="font-size:11px;color:var(--grn)">+915€ liquidez inmediata</td>
+          </tr>
+          <tr>
+            <td style="color:var(--gold);font-weight:800;font-size:15px">3</td>
+            <td>
+              <strong>Revisar la distribución mensual a José Chao</strong>
+              <div style="font-size:10px;color:var(--t3);margin-top:3px">Convertir de mensual (1.200€) a trimestral (3.600€ cada 3 meses). Mejora el cash flow mensual sin reducir el importe total.</div>
+            </td>
+            <td><span class="badge warn">Junio</span></td>
+            <td style="font-size:11px;color:var(--grn)">+1.200€/mes de liquidez</td>
+          </tr>
+          <tr>
+            <td style="color:var(--gold);font-weight:800;font-size:15px">4</td>
+            <td>
+              <strong>Consultar con gestor: optimización nómina vs dividendo</strong>
+              <div style="font-size:10px;color:var(--t3);margin-top:3px">Revisar si el mix actual de nómina de Gerard + distribuciones está optimizado fiscalmente. A veces reducir nómina y aumentar dividendo reduce el IRPF efectivo total.</div>
+            </td>
+            <td><span class="badge est">Jun–Jul</span></td>
+            <td style="font-size:11px;color:var(--grn)">Reducción carga fiscal</td>
+          </tr>
+          <tr>
+            <td style="color:var(--gold);font-weight:800;font-size:15px">5</td>
+            <td>
+              <strong>Objetivo comercial: 14.000€/mes de ingresos en Q3</strong>
+              <div style="font-size:10px;color:var(--t3);margin-top:3px">Con 14.000€/mes y 83% de gastos op., el margen (2.380€) casi cubre la financiación (2.614€). Solo faltarían 234€ más de margen para equilibrar meses normales.</div>
+            </td>
+            <td><span class="badge est">Q3 2026</span></td>
+            <td style="font-size:11px;color:var(--grn)">Cash flow casi neutro mensual</td>
+          </tr>
+          <tr>
+            <td style="color:var(--gold);font-weight:800;font-size:15px">6</td>
+            <td>
+              <strong>Acumular reserva de 5.000€ antes de octubre</strong>
+              <div style="font-size:10px;color:var(--t3);margin-top:3px">Pensando en Hacienda Q3 (octubre) y el ciclo de bajo rendimiento de agosto. Usar los meses buenos (mayo-junio) para crear colchón.</div>
+            </td>
+            <td><span class="badge est">Sep–Oct</span></td>
+            <td style="font-size:11px;color:var(--grn)">Evita colapso liquidez otoño</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RESUMEN ESTRUCTURAL -->
+  <div class="section">
+    <div class="section-title">Resumen ejecutivo</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:var(--r);overflow:hidden">
+      <div style="background:var(--surf);padding:20px">
+        <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:10px">El negocio</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.7">Barbería rentable, 16% de margen operativo real. Crecimiento del <strong style="color:var(--gold)">+31%</strong> en ingresos en 4 meses. La operativa funciona.</div>
+      </div>
+      <div style="background:var(--surf);padding:20px">
+        <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:10px">El problema</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.7">La deuda, distribuciones e impuestos consumen <strong style="color:var(--red)">más de lo que el margen genera</strong>. Déficit de ~3.600€/mes en promedio.</div>
+      </div>
+      <div style="background:var(--surf);padding:20px">
+        <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:10px">La solución</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.7">Crecer hasta <strong style="color:var(--gold)">14.000–16.000€/mes</strong> mientras los préstamos van reduciéndose. En 12–18 meses el cash flow puede equilibrarse.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>5 mayo 2026 · Datos reales Ene–Abr · Proyección estimada Mayo–Dic</span>
+    <span>The Crew Barbershop · TCB Academy</span>
+  </div>
+
+</main>
+</div>
+
+<script>
+// MINI BAR CHART — ingresos vs total salidas
+const months = [
+  {lbl:'Ene', ing:8569,  sal:17228},
+  {lbl:'Feb', ing:8075,  sal:9843},
+  {lbl:'Mar', ing:10849, sal:11036},
+  {lbl:'Abr', ing:11258, sal:15121},
+];
+const maxVal = Math.max(...months.flatMap(m=>[m.ing,m.sal]));
+const chartH = 120;
+
+const wrap = document.getElementById('mainChart');
+const labWrap = document.getElementById('mainChartLabels');
+
+months.forEach(m=>{
+  const col = document.createElement('div');
+  col.className = 'chart-col';
+  col.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;height:100%;justify-content:flex-end;';
+
+  const inH = Math.round((m.ing/maxVal)*chartH);
+  const salH = Math.round((m.sal/maxVal)*chartH);
+
+  // stacked: sal on bottom, ing on top (but salidas can be taller)
+  // We'll show two side-by-side bars in each column
+  const inner = document.createElement('div');
+  inner.style.cssText = 'width:100%;display:flex;gap:2px;align-items:flex-end;height:100%;justify-content:center;';
+
+  const bIn = document.createElement('div');
+  bIn.style.cssText = `height:${inH}px;flex:1;border-radius:2px 2px 0 0;background:rgba(127,174,122,.55);`;
+  const bOut = document.createElement('div');
+  bOut.style.cssText = `height:${salH}px;flex:1;border-radius:2px 2px 0 0;background:rgba(196,112,104,.5);`;
+
+  inner.appendChild(bIn);
+  inner.appendChild(bOut);
+  col.appendChild(inner);
+  wrap.appendChild(col);
+
+  const lbl = document.createElement('div');
+  lbl.style.cssText = 'flex:1;text-align:center;font-size:8px;color:var(--t3);font-weight:600;font-family:Montserrat,sans-serif;padding-top:5px;';
+  lbl.textContent = m.lbl;
+  labWrap.appendChild(lbl);
+});
+</script>
+
+</body>
+</html>

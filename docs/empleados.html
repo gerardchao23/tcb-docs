@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Empleados 2026 — TCB</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080808;--surf:#0d0d0d;--surf2:#131313;
+  --gold:#C9A84C;--ga:rgba(201,168,76,.09);--gb:rgba(201,168,76,.2);
+  --t1:#f0ede6;--t2:rgba(240,237,230,.5);--t3:rgba(240,237,230,.24);
+  --ln:rgba(240,237,230,.07);--grn:#7FAE7A;--red:#C47068;--blu:#8A9E94;
+  --gerard:#C9A84C;--ivan:#8B9E6E;--caja:#6B8F71;--javier:#C4622D;
+  --r:3px;--sw:220px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t1);font-family:'Montserrat',sans-serif;font-size:13px;min-height:100vh;-webkit-font-smoothing:antialiased}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sw);min-width:var(--sw);background:var(--surf);border-right:1px solid var(--ln);display:flex;flex-direction:column;padding:32px 0 24px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar__logo{padding:0 24px 28px;border-bottom:1px solid var(--ln);margin-bottom:16px}
+.sidebar__logo-title{font-size:10px;font-weight:800;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+.sidebar__logo-sub{font-size:9px;color:var(--t3);margin-top:2px}
+.sidebar__nav{padding:0;flex:1}
+.sidebar__section{padding:14px 24px 6px;font-size:8px;font-weight:700;letter-spacing:.18em;color:var(--t3);text-transform:uppercase}
+.sidebar__item{display:block;padding:9px 24px;font-size:11px;font-weight:500;color:var(--t2);text-decoration:none;border-left:2px solid transparent;transition:color .15s,background .15s}
+.sidebar__item:hover{color:var(--t1);background:rgba(240,237,230,.025)}
+.sidebar__item.active{color:var(--gold);border-left-color:var(--gold);background:var(--ga)}
+.sidebar__sep{height:1px;background:var(--ln);margin:12px 24px}
+.content{flex:1;padding:48px 52px 80px;max-width:1060px}
+.doc-tag{display:block;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;background:none;border:none;padding:0}
+.doc-title{font-size:30px;font-weight:800;letter-spacing:-.03em;margin-bottom:14px}
+.doc-title em{color:var(--gold);font-style:normal}
+.doc-meta{display:flex;gap:20px;margin-bottom:32px;flex-wrap:wrap;padding-bottom:28px;border-bottom:1px solid var(--ln)}
+.doc-meta-item{font-size:11px;color:var(--t3)}
+.doc-meta-item span{color:var(--t2);font-weight:600}
+
+/* EMPLOYEE CARDS */
+.emp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:40px}
+@media(max-width:800px){.emp-grid{grid-template-columns:1fr}}
+.emp-card{background:var(--surf);border:1px solid var(--ln);border-radius:var(--r);padding:24px;position:relative;overflow:hidden}
+.emp-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px}
+.emp-card.gerard::before{background:var(--gerard)}
+.emp-card.ivan::before{background:var(--ivan)}
+.emp-card.caja::before{background:var(--caja)}
+.emp-card.javier::before{background:var(--javier)}
+.emp-rank{position:absolute;top:14px;right:16px;font-size:16px;opacity:.15}
+.emp-name{font-size:14px;font-weight:800;letter-spacing:.01em;margin-bottom:2px}
+.emp-role{font-size:9px;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.emp-total{font-size:26px;font-weight:800;margin-bottom:4px;letter-spacing:-.03em}
+.emp-total.gerard{color:var(--gerard)}
+.emp-total.ivan{color:var(--ivan)}
+.emp-total.caja{color:var(--caja)}
+.emp-total.javier{color:var(--javier)}
+.emp-sub{font-size:10px;color:var(--t3);margin-bottom:18px}
+.emp-months{display:flex;flex-direction:column;gap:6px}
+.emp-month-row{display:flex;align-items:center;gap:8px}
+.emp-month-label{width:32px;color:var(--t3);font-weight:700;font-size:8px;text-transform:uppercase}
+.emp-month-bar{flex:1;height:4px;background:rgba(240,237,230,.06);border-radius:2px;overflow:hidden}
+.emp-month-fill{height:100%;border-radius:2px}
+.emp-month-fill.gerard{background:var(--gerard)}
+.emp-month-fill.ivan{background:var(--ivan)}
+.emp-month-fill.caja{background:var(--caja)}
+.emp-month-fill.javier{background:var(--javier)}
+.emp-month-amt{width:72px;text-align:right;color:var(--t2);font-variant-numeric:tabular-nums;font-size:11px}
+.emp-month-trend{font-size:9px;width:36px;text-align:right;font-weight:700}
+.trend-up{color:var(--grn)}
+.trend-dn{color:var(--red)}
+.trend-new{color:var(--gold)}
+.emp-note{font-size:10px;color:var(--t3);border-top:1px solid var(--ln);margin-top:14px;padding-top:10px;line-height:1.6}
+.emp-note strong{color:var(--t2)}
+
+/* SECTION */
+.section{margin-bottom:44px}
+.section-title{display:flex;align-items:center;gap:10px;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:18px;padding-bottom:0;border-bottom:none}
+.section-title::before{content:"";width:3px;height:13px;background:var(--gold);border-radius:1px;flex-shrink:0}
+.section-title::after{content:"";flex:1;height:1px;background:var(--ln)}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border:1px solid var(--ln);border-radius:var(--r)}
+table{width:100%;border-collapse:collapse}
+th{font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);padding:12px 20px;text-align:left;border-bottom:1px solid var(--ln)}
+th.right{text-align:right}
+td{padding:12px 20px;border-bottom:1px solid rgba(240,237,230,.04);font-size:12px;color:var(--t2);vertical-align:middle}
+td.right{text-align:right;font-variant-numeric:tabular-nums}
+td.gold{color:var(--gold);font-weight:700}
+td.dim{color:var(--t3);font-style:italic}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(240,237,230,.02)}
+tr.total-row td{background:var(--ga);border-top:1px solid var(--gb);font-weight:700;color:var(--t1)}
+tr.total-row td.gold{color:var(--gold);font-size:13px}
+tr.total-row:hover td{background:unset}
+
+/* BADGE */
+.badge{display:inline-block;font-size:7px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:2px;padding:2px 5px;margin-left:4px;vertical-align:middle}
+.badge.pend{background:rgba(196,112,104,.12);color:var(--red)}
+.badge.conf{background:rgba(127,174,122,.12);color:var(--grn)}
+.badge.yeasy{background:rgba(201,168,76,.12);color:var(--gold)}
+
+/* CHART */
+.chart-section{background:var(--surf);border:1px solid var(--ln);border-radius:var(--r);padding:22px;margin-bottom:28px}
+.chart-title{font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:16px}
+.grouped-bars{display:flex;gap:10px;align-items:flex-end;height:140px;margin-bottom:8px}
+.month-group{flex:1;display:flex;flex-direction:column;align-items:center}
+.month-bars{display:flex;gap:2px;align-items:flex-end;height:120px;width:100%;justify-content:center}
+.bar-emp{width:16px;border-radius:2px 2px 0 0;cursor:default;transition:opacity .15s}
+.bar-emp:hover{opacity:.7}
+.month-lbl{font-size:8px;color:var(--t3);font-weight:700;text-transform:uppercase;margin-top:6px}
+.chart-legend{display:flex;gap:16px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.legend-dot{width:8px;height:8px;border-radius:1px;display:inline-block;margin-right:5px;vertical-align:middle}
+
+/* INSIGHTS */
+.insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:36px}
+@media(max-width:700px){.insights-grid{grid-template-columns:1fr}}
+.insight-card{background:var(--surf);border:1px solid var(--ln);border-radius:var(--r);padding:18px 20px}
+.insight-icon{font-size:16px;margin-bottom:8px}
+.insight-title{font-size:11px;font-weight:700;color:var(--t1);margin-bottom:4px}
+.insight-body{font-size:11px;color:var(--t2);line-height:1.7}
+.insight-body strong{color:var(--t1)}
+.insight-card.good{border-color:rgba(127,174,122,.2)}
+.insight-card.warn{border-color:rgba(212,168,80,.2)}
+.insight-card.info{border-color:rgba(138,158,148,.2)}
+
+/* REUNIÓN */
+.meeting-header{margin-bottom:24px}
+.meeting-date{font-size:13px;font-weight:700;color:var(--t1);letter-spacing:-.01em}
+.meeting-sub{font-size:11px;color:var(--t3);margin-top:4px}
+.meeting-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.meeting-grid{grid-template-columns:1fr}}
+.meeting-col{border:1px solid var(--ln);border-radius:var(--r);padding:22px 24px}
+.meeting-col.pos{border-left:3px solid var(--grn)}
+.meeting-col.imp{border-left:3px solid var(--gold)}
+.meeting-col-title{font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:16px}
+.meeting-col.pos .meeting-col-title{color:var(--grn)}
+.meeting-col.imp .meeting-col-title{color:var(--gold)}
+.meeting-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.meeting-list li{font-size:12px;color:var(--t2);line-height:1.7;padding-left:16px;position:relative}
+.meeting-list li::before{content:"—";position:absolute;left:0;color:var(--t3)}
+.meeting-list li strong{color:var(--t1);font-weight:600}
+
+/* FOOTER */
+.footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--ln);font-size:10px;color:var(--t3);display:flex;gap:24px;justify-content:space-between;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="sidebar">
+  <div class="sidebar__logo">
+    <div class="sidebar__logo-title">TCB Docs</div>
+    <div class="sidebar__logo-sub">The Crew Barbershop</div>
+  </div>
+  <div class="sidebar__nav">
+    <div class="sidebar__section">Negocio</div>
+    <a href="index.html" class="sidebar__item">◈ &nbsp;Facturación</a>
+    <a href="gastos_2026.html" class="sidebar__item">◈ &nbsp;Gastos &amp; P&amp;L</a>
+    <a href="empleados.html" class="sidebar__item active">◈ &nbsp;Equipo</a>
+    <div class="sidebar__sep"></div>
+    <div class="sidebar__section">Academia</div>
+    <a href="#" class="sidebar__item">◈ &nbsp;ROOTS Ebook</a>
+    <a href="#" class="sidebar__item">◈ &nbsp;Materiales</a>
+  </div>
+</nav>
+
+<main class="content">
+
+  <div class="doc-tag">Equipo</div>
+  <h1 class="doc-title"><em>2026</em> — Enero a 5 Mayo</h1>
+  <div class="doc-meta">
+    <div class="doc-meta-item">📅 Actualizado: <span>5 may 2026</span></div>
+    <div class="doc-meta-item">👥 <span>4 barberos · Yeasy cobrado</span></div>
+    <div class="doc-meta-item">✅ <span>Ene–Abr completo + 4 mayo</span></div>
+  </div>
+
+  <!-- EMPLOYEE CARDS -->
+  <div class="emp-grid">
+
+    <!-- GERARD -->
+    <div class="emp-card gerard">
+      <div class="emp-rank">🥇</div>
+      <div class="emp-name">Gerard Chao Espinalt</div>
+      <div class="emp-role">Fundador & Barbero</div>
+      <div class="emp-total gerard">11.808 €</div>
+      <div class="emp-sub">Yeasy cobrado · Ene–4May ✅</div>
+      <div class="emp-months">
+        <div class="emp-month-row">
+          <div class="emp-month-label">ENE</div>
+          <div class="emp-month-bar"><div class="emp-month-fill gerard" style="width:74%"></div></div>
+          <div class="emp-month-amt">2.630 €</div>
+          <div class="emp-month-trend">—</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">FEB</div>
+          <div class="emp-month-bar"><div class="emp-month-fill gerard" style="width:71%"></div></div>
+          <div class="emp-month-amt">2.519 €</div>
+          <div class="emp-month-trend trend-dn">−4,2%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">MAR</div>
+          <div class="emp-month-bar"><div class="emp-month-fill gerard" style="width:86%"></div></div>
+          <div class="emp-month-amt">3.040 €</div>
+          <div class="emp-month-trend trend-up">+20,7%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">ABR</div>
+          <div class="emp-month-bar"><div class="emp-month-fill gerard" style="width:100%"></div></div>
+          <div class="emp-month-amt">3.540 €</div>
+          <div class="emp-month-trend trend-up">+16,4%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">4 MAY</div>
+          <div class="emp-month-bar"><div class="emp-month-fill gerard" style="width:2%"></div></div>
+          <div class="emp-month-amt">79 €</div>
+          <div class="emp-month-trend trend-new">+día</div>
+        </div>
+      </div>
+      <div class="emp-note">Nómina fija: <strong>1.700€/mes</strong> · 915€ pendientes de cobrar en Yeasy (feb)</div>
+    </div>
+
+    <!-- IVAN -->
+    <div class="emp-card ivan">
+      <div class="emp-rank">🥈</div>
+      <div class="emp-name">Ivan Contreras</div>
+      <div class="emp-role">Barbero · Principal</div>
+      <div class="emp-total ivan">11.610 €</div>
+      <div class="emp-sub">Yeasy cobrado · Ene–Abr ✅</div>
+      <div class="emp-months">
+        <div class="emp-month-row">
+          <div class="emp-month-label">ENE</div>
+          <div class="emp-month-bar"><div class="emp-month-fill ivan" style="width:85%"></div></div>
+          <div class="emp-month-amt">2.694 €</div>
+          <div class="emp-month-trend">—</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">FEB</div>
+          <div class="emp-month-bar"><div class="emp-month-fill ivan" style="width:83%"></div></div>
+          <div class="emp-month-amt">2.627 €</div>
+          <div class="emp-month-trend trend-dn">−2,5%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">MAR</div>
+          <div class="emp-month-bar"><div class="emp-month-fill ivan" style="width:100%"></div></div>
+          <div class="emp-month-amt">3.183 €</div>
+          <div class="emp-month-trend trend-up">+21,1%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">ABR</div>
+          <div class="emp-month-bar"><div class="emp-month-fill ivan" style="width:97%"></div></div>
+          <div class="emp-month-amt">3.089 €</div>
+          <div class="emp-month-trend trend-dn">−3,0%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">4 MAY</div>
+          <div class="emp-month-bar"><div class="emp-month-fill ivan" style="width:0%"></div></div>
+          <div class="emp-month-amt" style="color:var(--t3)">día libre</div>
+          <div class="emp-month-trend">—</div>
+        </div>
+      </div>
+      <div class="emp-note">Factura al negocio: <strong>~54%</strong> de lo generado · 6.428€ en facturas Ene–Abr</div>
+    </div>
+
+    <!-- CAJA -->
+    <div class="emp-card caja">
+      <div class="emp-rank">🥉</div>
+      <div class="emp-name">Gerard Caja</div>
+      <div class="emp-role">Barbero · Constante</div>
+      <div class="emp-total caja">6.477 €</div>
+      <div class="emp-sub">Yeasy cobrado · Ene–4May ✅</div>
+      <div class="emp-months">
+        <div class="emp-month-row">
+          <div class="emp-month-label">ENE</div>
+          <div class="emp-month-bar"><div class="emp-month-fill caja" style="width:90%"></div></div>
+          <div class="emp-month-amt">1.532 €</div>
+          <div class="emp-month-trend">—</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">FEB</div>
+          <div class="emp-month-bar"><div class="emp-month-fill caja" style="width:88%"></div></div>
+          <div class="emp-month-amt">1.499 €</div>
+          <div class="emp-month-trend trend-dn">−2,2%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">MAR</div>
+          <div class="emp-month-bar"><div class="emp-month-fill caja" style="width:100%"></div></div>
+          <div class="emp-month-amt">1.711 €</div>
+          <div class="emp-month-trend trend-up">+14,1%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">ABR</div>
+          <div class="emp-month-bar"><div class="emp-month-fill caja" style="width:99%"></div></div>
+          <div class="emp-month-amt">1.685 €</div>
+          <div class="emp-month-trend trend-dn">−1,5%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">4 MAY</div>
+          <div class="emp-month-bar"><div class="emp-month-fill caja" style="width:3%"></div></div>
+          <div class="emp-month-amt">50 €</div>
+          <div class="emp-month-trend trend-new">+día</div>
+        </div>
+      </div>
+      <div class="emp-note">Factura al negocio: <strong>~64%</strong> de lo generado · 4.134€ en facturas Ene–Abr</div>
+    </div>
+
+    <!-- JAVIER -->
+    <div class="emp-card javier">
+      <div class="emp-rank">4️⃣</div>
+      <div class="emp-name">Javier Barrionuevo</div>
+      <div class="emp-role">Barbero · Crecimiento</div>
+      <div class="emp-total javier">5.520 €</div>
+      <div class="emp-sub">Yeasy cobrado · Ene–4May ✅</div>
+      <div class="emp-months">
+        <div class="emp-month-row">
+          <div class="emp-month-label">ENE</div>
+          <div class="emp-month-bar"><div class="emp-month-fill javier" style="width:70%"></div></div>
+          <div class="emp-month-amt">1.218 €</div>
+          <div class="emp-month-trend">—</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">FEB</div>
+          <div class="emp-month-bar"><div class="emp-month-fill javier" style="width:58%"></div></div>
+          <div class="emp-month-amt">1.007 €</div>
+          <div class="emp-month-trend trend-dn">−17,3%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">MAR</div>
+          <div class="emp-month-bar"><div class="emp-month-fill javier" style="width:88%"></div></div>
+          <div class="emp-month-amt">1.528 €</div>
+          <div class="emp-month-trend trend-up">+51,7%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">ABR</div>
+          <div class="emp-month-bar"><div class="emp-month-fill javier" style="width:100%"></div></div>
+          <div class="emp-month-amt">1.731 €</div>
+          <div class="emp-month-trend trend-up">+13,3%</div>
+        </div>
+        <div class="emp-month-row">
+          <div class="emp-month-label">4 MAY</div>
+          <div class="emp-month-bar"><div class="emp-month-fill javier" style="width:2%"></div></div>
+          <div class="emp-month-amt">36 €</div>
+          <div class="emp-month-trend trend-new">+día</div>
+        </div>
+      </div>
+      <div class="emp-note">Factura al negocio: <strong>~68%</strong> de lo generado · 3.736€ en facturas Ene–Abr</div>
+    </div>
+
+  </div>
+
+  <!-- CHART -->
+  <div class="section">
+    <div class="section-title">Generación mensual por barbero (Yeasy cobrado)</div>
+    <div class="chart-section">
+      <div class="chart-title">Facturación Yeasy por mes — Ene a 4 Mayo 2026</div>
+      <div class="grouped-bars" id="grouped-chart"></div>
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background:var(--gerard)"></span>Gerard Chao</span>
+        <span><span class="legend-dot" style="background:var(--ivan)"></span>Ivan Contreras</span>
+        <span><span class="legend-dot" style="background:var(--caja)"></span>Gerard Caja</span>
+        <span><span class="legend-dot" style="background:var(--javier)"></span>Javier Barrionuevo</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLA COMPARATIVA -->
+  <div class="section">
+    <div class="section-title">Comparativa generación Yeasy — Ene a 4 Mayo 2026</div>
+    <div class="table-wrap"><table>
+      <thead>
+        <tr>
+          <th>Barbero</th>
+          <th class="right">Enero</th>
+          <th class="right">Febrero</th>
+          <th class="right">Marzo</th>
+          <th class="right">Abril</th>
+          <th class="right">4 Mayo</th>
+          <th class="right">TOTAL</th>
+          <th class="right">Media/mes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:var(--gerard)">Gerard Chao</strong> <span class="badge yeasy">fundador</span></td>
+          <td class="right">2.630 €</td>
+          <td class="right">2.519 €</td>
+          <td class="right">3.040 €</td>
+          <td class="right">3.540 €</td>
+          <td class="right">79 €</td>
+          <td class="right gold">11.808 €</td>
+          <td class="right" style="color:var(--t2)">2.957 €</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--ivan)">Ivan Contreras</strong></td>
+          <td class="right">2.694 €</td>
+          <td class="right">2.627 €</td>
+          <td class="right">3.183 €</td>
+          <td class="right">3.089 €</td>
+          <td class="right dim">libre</td>
+          <td class="right gold">11.610 €</td>
+          <td class="right" style="color:var(--t2)">2.903 €</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--caja)">Gerard Caja</strong></td>
+          <td class="right">1.532 €</td>
+          <td class="right">1.499 €</td>
+          <td class="right">1.711 €</td>
+          <td class="right">1.685 €</td>
+          <td class="right">50 €</td>
+          <td class="right gold">6.477 €</td>
+          <td class="right" style="color:var(--t2)">1.619 €</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--javier)">Javier Barrionuevo</strong></td>
+          <td class="right">1.218 €</td>
+          <td class="right">1.007 €</td>
+          <td class="right">1.528 €</td>
+          <td class="right">1.731 €</td>
+          <td class="right">36 €</td>
+          <td class="right gold">5.520 €</td>
+          <td class="right" style="color:var(--t2)">1.380 €</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="total-row">
+          <td><strong>TOTAL EQUIPO</strong></td>
+          <td class="right gold">8.074 €</td>
+          <td class="right gold">7.652 €</td>
+          <td class="right gold">9.462 €</td>
+          <td class="right gold">10.045 €</td>
+          <td class="right gold">165 €</td>
+          <td class="right gold">35.398 €</td>
+          <td class="right gold">8.860 €</td>
+        </tr>
+      </tfoot>
+    </table></div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="section">
+    <div class="section-title">Análisis & puntos clave</div>
+    <div class="insights-grid">
+
+      <div class="insight-card good">
+        <div class="insight-icon">👑</div>
+        <div class="insight-title">Gerard & Ivan — prácticamente empatados</div>
+        <div class="insight-body">Los dos generan casi lo mismo: Gerard <strong>11.808€</strong> vs Ivan <strong>11.610€</strong>. Diferencia de solo 198€ en 4 meses. Ambos son el motor del negocio y llevan un ritmo muy similar.</div>
+      </div>
+
+      <div class="insight-card good">
+        <div class="insight-icon">📈</div>
+        <div class="insight-title">Javier — el mayor crecimiento</div>
+        <div class="insight-body">Pasó de <strong>1.218€ en enero</strong> a <strong>1.731€ en abril</strong>, un +42% en 4 meses. Si mantiene este ritmo, superará a Caja antes de verano. El que más ha crecido del equipo en porcentaje.</div>
+      </div>
+
+      <div class="insight-card warn">
+        <div class="insight-icon">⚠️</div>
+        <div class="insight-title">915€ pendientes de cobrar (Gerard)</div>
+        <div class="insight-body">En Yeasy hay <strong>52 citas en estado "Pendiente"</strong> de enero-febrero sin marcar como realizadas ni cobradas. Principalmente febrero (690€). Cerrarlas limpiaría los datos y recuperaría esos ingresos.</div>
+      </div>
+
+      <div class="insight-card warn">
+        <div class="insight-icon">📉</div>
+        <div class="insight-title">Febrero malo para todos</div>
+        <div class="insight-body">El mes más flojo del año para el equipo completo. Gerard −4,2%, Ivan −2,5%, Caja −2,2%, Javier −17,3%. El equipo generó <strong>7.652€</strong> vs 8.074€ en enero. Pendiente de ver si se repite en 2027.</div>
+      </div>
+
+      <div class="insight-card info">
+        <div class="insight-icon">🚀</div>
+        <div class="insight-title">Abril — máximo histórico del equipo</div>
+        <div class="insight-body">Con <strong>10.045€ generados entre los 4</strong>, abril fue el mejor mes. Gerard marcó su récord (3.540€). Javier también marcó su máximo (1.731€). Solo Ivan bajó ligeramente respecto a marzo.</div>
+      </div>
+
+      <div class="insight-card info">
+        <div class="insight-icon">💡</div>
+        <div class="insight-title">Modelo de compensación</div>
+        <div class="insight-body">Los trabajadores facturan al negocio entre el <strong>54% y 68%</strong> de lo que generan en Yeasy. Gerard cobra nómina fija (1.700€/mes) independientemente de su generación — asume el riesgo como propietario.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- REUNIÓN DE EQUIPO -->
+  <div class="section">
+    <div class="section-title">Reunión de equipo</div>
+    <div class="meeting-header">
+      <div class="meeting-date">Mayo 2026</div>
+      <div class="meeting-sub">Notas para la próxima reunión · edita esto antes de cada sesión</div>
+    </div>
+    <div class="meeting-grid">
+      <div class="meeting-col pos">
+        <div class="meeting-col-title">Lo que va bien</div>
+        <ul class="meeting-list">
+          <li><strong>Abril fue el mejor mes</strong> — 10.045€ generados entre los 4. El equipo está en su mejor momento.</li>
+          <li><strong>Javier está en racha</strong> — +42% desde enero. El que más crece del equipo.</li>
+          <li><strong>Gerard y Ivan casi empatados</strong> — los dos generan ~11.700€ en 4 meses. Dos motores fuertes.</li>
+          <li><strong>Caja muy constante</strong> — estable entre 1.499€ y 1.711€, sin grandes bajadas.</li>
+        </ul>
+      </div>
+      <div class="meeting-col imp">
+        <div class="meeting-col-title">A trabajar</div>
+        <ul class="meeting-list">
+          <li><strong>Citas pendientes en Yeasy</strong> — 52 citas de enero-febrero sin cerrar. Marcarlas como realizadas para tener los datos limpios.</li>
+          <li><strong>Febrero punto débil</strong> — todos bajan en febrero. Pensar en acciones para activar ese mes.</li>
+          <li><strong>Javier superar a Caja</strong> — si mantiene el ritmo, lo conseguirá antes de julio. Fijar ese objetivo.</li>
+          <li>Ivan bajó en abril tras su récord de marzo — hablar con él, ver si es ajuste puntual.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Actualizado por Claude · 5 may 2026 · Yeasy cobrado (citas realizadas)</span>
+    <span>Datos Yeasy API · Ene–Abr completo + 4 mayo parcial</span>
+    <span>Facturas autónomos (coste negocio) en Gastos & P&L</span>
+  </div>
+
+</main>
+</div>
+
+<script>
+const empData = [
+  {m:'Ene', gerard:2630, ivan:2694, caja:1532, javier:1218},
+  {m:'Feb', gerard:2519, ivan:2627, caja:1499, javier:1007},
+  {m:'Mar', gerard:3040, ivan:3183, caja:1711, javier:1528},
+  {m:'Abr', gerard:3540, ivan:3089, caja:1685, javier:1731},
+  {m:'4 May', gerard:79,  ivan:0,    caja:50,   javier:36},
+];
+const maxVal = Math.max(...empData.map(d => Math.max(d.gerard, d.ivan, d.caja, d.javier)));
+const chart = document.getElementById('grouped-chart');
+
+empData.forEach(d => {
+  const grp = document.createElement('div');
+  grp.className = 'month-group';
+  const bars = document.createElement('div');
+  bars.className = 'month-bars';
+
+  [
+    ['gerard', d.gerard, 'var(--gerard)'],
+    ['ivan',   d.ivan,   'var(--ivan)'],
+    ['caja',   d.caja,   'var(--caja)'],
+    ['javier', d.javier, 'var(--javier)']
+  ].forEach(([name, val, color]) => {
+    const b = document.createElement('div');
+    b.className = 'bar-emp';
+    b.style.cssText = `height:${val > 0 ? Math.max(2, Math.round((val/maxVal)*115)) : 0}px;background:${color};opacity:.85`;
+    b.title = `${name}: ${val.toLocaleString('es')}€`;
+    bars.appendChild(b);
+  });
+
+  const lbl = document.createElement('div');
+  lbl.className = 'month-lbl';
+  lbl.textContent = d.m;
+  grp.appendChild(bars);
+  grp.appendChild(lbl);
+  chart.appendChild(grp);
+});
+</script>
+</body>
+</html>
