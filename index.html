@@ -69,9 +69,7 @@
       flex-shrink: 0;
     }
     .sb-logo {
-      height: 22px;
-      filter: brightness(0) invert(1);
-      opacity: .5;
+      height: 32px;
       display: block;
       margin-bottom: 10px;
     }
@@ -587,11 +585,11 @@
       <div class="sb-section">The Crew Academy</div>
       <div class="sb-item" data-view="academia"><span class="sb-icon">◈</span>Academia</div>
       <div class="sb-item" data-view="roots"><span class="sb-icon">◈</span>ROOTS Ebook</div>
-      <div class="sb-item" data-view="crewcard"><span class="sb-icon">◈</span>Crew Member Card</div>
 
       <div class="sb-section">Proyectos</div>
       <div class="sb-item" data-view="barberlab"><span class="sb-icon">◈</span>BarberLab<span class="sb-badge">DEV</span></div>
       <div class="sb-item" data-view="chaos"><span class="sb-icon">◈</span>CHAOS Hair<span class="sb-badge">NEW</span></div>
+      <div class="sb-item" data-view="crewcard"><span class="sb-icon">◈</span>Crew Member Card</div>
 
       <div class="sb-section">Herramientas</div>
       <div class="sb-item" data-view="docs"><span class="sb-icon">◈</span>Docs & Informes</div>
@@ -967,11 +965,11 @@ const V = {
     }
   },
 
-  crewcard: { sec:'The Crew Academy', pg:'Crew Member Card',
+  crewcard: { sec:'Proyectos', pg:'Crew Member Card',
     html() {
       return `
 <div class="pg-hd">
-  <span class="pg-tag">The Crew Academy · Fidelización</span>
+  <span class="pg-tag">Proyectos · Fidelización</span>
   <h1 class="pg-title">Crew <em>Member Card</em></h1>
   <p class="pg-sub">Quiz de barbería → Apple Wallet / Google Wallet · Passcreator API</p>
 </div>
