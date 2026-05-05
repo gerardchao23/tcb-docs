@@ -32,6 +32,8 @@
       --sw:   228px;
       --th:   56px;
       --font: 'Montserrat', sans-serif;
+      --glow: rgba(201,168,76,.18);
+      --glow2: rgba(201,168,76,.08);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
@@ -460,6 +462,105 @@
       .content { padding: 20px 16px 52px; }
       .topbar { padding: 0 16px; }
     }
+
+    /* ── ANIMATIONS ─────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes barGrow {
+      from { transform: scaleY(0); transform-origin: bottom; }
+      to   { transform: scaleY(1); transform-origin: bottom; }
+    }
+    @keyframes dotPulse {
+      0%,100% { box-shadow: 0 0 0 2px rgba(127,174,122,.18); }
+      50%      { box-shadow: 0 0 0 5px rgba(127,174,122,.28); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+
+    /* ── PAGE TRANSITION ─────────────────────────────────────── */
+    .content { animation: fadeUp .24s cubic-bezier(.22,1,.36,1) both; }
+
+    /* ── KPI STAGGER ─────────────────────────────────────────── */
+    .kpi:nth-child(1) { animation: fadeUp .32s .04s both; }
+    .kpi:nth-child(2) { animation: fadeUp .32s .09s both; }
+    .kpi:nth-child(3) { animation: fadeUp .32s .14s both; }
+    .kpi:nth-child(4) { animation: fadeUp .32s .19s both; }
+    .kpi:nth-child(5) { animation: fadeUp .32s .24s both; }
+
+    /* ── GLOW ON NUMBERS ─────────────────────────────────────── */
+    .kpi-val       { text-shadow: 0 0 28px var(--glow); }
+    .kpi-val.w     { text-shadow: none; }
+    .kpi-val.g     { text-shadow: 0 0 28px rgba(127,174,122,.22); }
+    .emp-total     { text-shadow: 0 0 24px rgba(201,168,76,.18); }
+
+    /* ── TOPBAR GOLD ACCENT ──────────────────────────────────── */
+    .topbar { position: relative; }
+    .topbar::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 220px; height: 1px;
+      background: linear-gradient(90deg, rgba(201,168,76,.5) 0%, transparent 100%);
+    }
+
+    /* ── SIDEBAR ACTIVE GRADIENT ─────────────────────────────── */
+    .sb-item.active {
+      background: linear-gradient(90deg, rgba(201,168,76,.1) 0%, transparent 80%);
+    }
+    .sb-item { transition: color .15s, background .2s, transform .1s; }
+    .sb-item:hover { padding-left: 22px; }
+    .sb-item.active:hover { padding-left: 20px; }
+
+    /* ── CARD LIFTS ──────────────────────────────────────────── */
+    .card  { transition: background .2s, border-color .2s, transform .18s; }
+    .card:hover  { border-color: var(--gb); transform: translateY(-2px); box-shadow: 0 4px 24px rgba(0,0,0,.4); }
+    .kpi   { transition: background .2s, transform .15s; }
+    .kpi:hover   { transform: translateY(-1px); }
+    .qa    { transition: background .2s, border-color .2s, transform .15s; }
+    .qa:hover    { transform: translateY(-3px); box-shadow: 0 6px 28px rgba(0,0,0,.5); border-color: var(--gb); }
+    .pj    { transition: background .2s, border-color .2s, transform .15s; }
+    .pj:hover    { border-color: var(--gb); transform: translateY(-2px); box-shadow: 0 4px 24px rgba(0,0,0,.4); }
+    .dl    { transition: background .2s, border-color .2s, transform .12s; }
+    .dl:hover    { transform: translateY(-1px); box-shadow: 0 3px 16px rgba(0,0,0,.35); }
+    .emp   { transition: background .2s, border-color .2s, transform .15s; }
+    .emp:hover   { border-color: var(--gb); transform: translateY(-1px); }
+
+    /* ── LIVE BADGE PULSE ────────────────────────────────────── */
+    .badge.live { box-shadow: 0 0 10px rgba(127,174,122,.2); }
+    .bdot       { animation: dotPulse 2.5s ease-in-out infinite; }
+
+    /* ── TOPBAR DOT PULSE ────────────────────────────────────── */
+    .tb-dot { animation: dotPulse 2.5s ease-in-out infinite; }
+
+    /* ── CHART BAR ANIMATION ─────────────────────────────────── */
+    .chart-anim .br { animation: barGrow .45s cubic-bezier(.34,1.4,.64,1) both; }
+    .chart-anim .bc:nth-child(1) .br { animation-delay: .05s; }
+    .chart-anim .bc:nth-child(2) .br { animation-delay: .12s; }
+    .chart-anim .bc:nth-child(3) .br { animation-delay: .19s; }
+    .chart-anim .bc:nth-child(4) .br { animation-delay: .26s; }
+
+    /* ── GOLD SHIMMER ON BRAND ───────────────────────────────── */
+    .sb-name {
+      background: linear-gradient(90deg, var(--gold) 0%, #e8c96a 50%, var(--gold) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 4s linear infinite;
+    }
+
+    /* ── TABLE ROW HOVER ─────────────────────────────────────── */
+    tbody tr { transition: background .12s; }
+
+    /* ── ACTIVITY DOT STAGGER ────────────────────────────────── */
+    .act-item:nth-child(1) { animation: fadeUp .3s .05s both; }
+    .act-item:nth-child(2) { animation: fadeUp .3s .10s both; }
+    .act-item:nth-child(3) { animation: fadeUp .3s .15s both; }
+    .act-item:nth-child(4) { animation: fadeUp .3s .20s both; }
+    .act-item:nth-child(5) { animation: fadeUp .3s .25s both; }
   </style>
 </head>
 <body>
@@ -571,6 +672,7 @@ function buildChart(id, monthly) {
   const el=document.getElementById(id); if(!el) return;
   const max=Math.max(...monthly.map(r=>r.y+r.b));
   el.innerHTML='';
+  el.classList.add('chart-anim');
   monthly.forEach(({m,y,b})=>{
     const total=y+b;
     const col=document.createElement('div');
@@ -1049,6 +1151,9 @@ function go(id) {
   document.getElementById('tb-pg').textContent  = view.pg;
 
   const content = document.getElementById('content');
+  content.style.animation = 'none';
+  content.offsetHeight;
+  content.style.animation = '';
   content.innerHTML = view.html();
   content.scrollTop = 0;
 
