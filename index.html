@@ -10,30 +10,30 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:   #080808;
-      --surf: #0d0d0d;
-      --s2:   #111111;
-      --s3:   #161616;
+      --bg:   #ECEDF2;
+      --surf: #FFFFFF;
+      --s2:   #F6F7FA;
+      --s3:   #F2F3F7;
       --gold: #C9A84C;
-      --ga:   rgba(201,168,76,.09);
-      --gb:   rgba(201,168,76,.20);
-      --gc:   rgba(201,168,76,.05);
-      --t1:   #f0ede6;
-      --t2:   rgba(240,237,230,.55);
-      --t3:   rgba(240,237,230,.24);
-      --t4:   rgba(240,237,230,.10);
-      --ln:   rgba(240,237,230,.07);
-      --ln2:  rgba(240,237,230,.04);
-      --grn:  #7FAE7A;
-      --red:  #C47068;
-      --blu:  #7090A8;
-      --orn:  #C4622D;
+      --ga:   rgba(201,168,76,.08);
+      --gb:   rgba(201,168,76,.18);
+      --gc:   rgba(201,168,76,.04);
+      --t1:   #111111;
+      --t2:   rgba(17,17,17,.60);
+      --t3:   rgba(17,17,17,.38);
+      --t4:   rgba(17,17,17,.28);
+      --ln:   rgba(0,0,0,.07);
+      --ln2:  rgba(0,0,0,.04);
+      --grn:  #2E7A2A;
+      --red:  #B03030;
+      --blu:  #2A5E8A;
+      --orn:  #B84820;
       --r:    4px;
       --sw:   228px;
       --th:   56px;
       --font: 'Montserrat', sans-serif;
-      --glow: rgba(201,168,76,.18);
-      --glow2: rgba(201,168,76,.08);
+      --glow: rgba(201,168,76,.10);
+      --glow2: rgba(201,168,76,.05);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
@@ -105,7 +105,7 @@
       user-select: none;
       text-decoration: none;
     }
-    .sb-item:hover { color: var(--t1); background: rgba(240,237,230,.025); }
+    .sb-item:hover { color: var(--t1); background: rgba(0,0,0,.04); }
     .sb-item.active { color: var(--gold); border-left-color: var(--gold); background: var(--ga); }
     .sb-icon { font-size: 10px; opacity: .55; width: 14px; text-align: center; flex-shrink: 0; }
     .sb-item.active .sb-icon { opacity: 1; }
@@ -114,7 +114,7 @@
       font-size: 7px;
       font-weight: 800;
       letter-spacing: .1em;
-      color: var(--bg);
+      color: #111111;
       background: var(--gold);
       border-radius: 2px;
       padding: 2px 5px;
@@ -288,7 +288,7 @@
       vertical-align: middle;
     }
     tbody tr:last-child td { border-bottom: none; }
-    tbody tr:hover td { background: rgba(240,237,230,.015); }
+    tbody tr:hover td { background: rgba(0,0,0,.025); }
     .r { text-align: right; font-variant-numeric: tabular-nums; }
     .au { color: var(--gold); font-weight: 700; }
     .ag { color: var(--grn); font-weight: 600; }
@@ -490,10 +490,10 @@
     .kpi:nth-child(5) { animation: fadeUp .32s .24s both; }
 
     /* ── GLOW ON NUMBERS ─────────────────────────────────────── */
-    .kpi-val       { text-shadow: 0 0 28px var(--glow); }
+    .kpi-val       { text-shadow: none; }
     .kpi-val.w     { text-shadow: none; }
-    .kpi-val.g     { text-shadow: 0 0 28px rgba(127,174,122,.22); }
-    .emp-total     { text-shadow: 0 0 24px rgba(201,168,76,.18); }
+    .kpi-val.g     { text-shadow: none; }
+    .emp-total     { text-shadow: none; }
 
     /* ── TOPBAR GOLD ACCENT ──────────────────────────────────── */
     .topbar { position: relative; }
@@ -502,7 +502,7 @@
       position: absolute;
       bottom: 0; left: 0;
       width: 220px; height: 1px;
-      background: linear-gradient(90deg, rgba(201,168,76,.5) 0%, transparent 100%);
+      background: linear-gradient(90deg, rgba(201,168,76,.35) 0%, transparent 100%);
     }
 
     /* ── SIDEBAR ACTIVE GRADIENT ─────────────────────────────── */
@@ -514,17 +514,17 @@
     .sb-item.active:hover { padding-left: 20px; }
 
     /* ── CARD LIFTS ──────────────────────────────────────────── */
-    .card  { transition: background .2s, border-color .2s, transform .18s; }
-    .card:hover  { border-color: var(--gb); transform: translateY(-2px); box-shadow: 0 4px 24px rgba(0,0,0,.4); }
+    .card  { transition: background .2s, border-color .2s, transform .18s; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    .card:hover  { border-color: var(--gb); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.09); }
     .kpi   { transition: background .2s, transform .15s; }
     .kpi:hover   { transform: translateY(-1px); }
-    .qa    { transition: background .2s, border-color .2s, transform .15s; }
-    .qa:hover    { transform: translateY(-3px); box-shadow: 0 6px 28px rgba(0,0,0,.5); border-color: var(--gb); }
-    .pj    { transition: background .2s, border-color .2s, transform .15s; }
-    .pj:hover    { border-color: var(--gb); transform: translateY(-2px); box-shadow: 0 4px 24px rgba(0,0,0,.4); }
-    .dl    { transition: background .2s, border-color .2s, transform .12s; }
-    .dl:hover    { transform: translateY(-1px); box-shadow: 0 3px 16px rgba(0,0,0,.35); }
-    .emp   { transition: background .2s, border-color .2s, transform .15s; }
+    .qa    { transition: background .2s, border-color .2s, transform .15s; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    .qa:hover    { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.10); border-color: var(--gb); }
+    .pj    { transition: background .2s, border-color .2s, transform .15s; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    .pj:hover    { border-color: var(--gb); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.09); }
+    .dl    { transition: background .2s, border-color .2s, transform .12s; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+    .dl:hover    { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,.08); }
+    .emp   { transition: background .2s, border-color .2s, transform .15s; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
     .emp:hover   { border-color: var(--gb); transform: translateY(-1px); }
 
     /* ── LIVE BADGE PULSE ────────────────────────────────────── */
@@ -569,7 +569,7 @@
     <div class="sb-brand">
       <img src="https://www.thecrewacademy.es/cdn/shop/files/Diseno_sin_titulo_27.png?height=120&v=1773863841" alt="TCB" class="sb-logo">
       <div class="sb-name">The Crew</div>
-      <div class="sb-sub">Panel · Sabadell</div>
+      <div class="sb-sub">PANEL</div>
     </div>
 
     <nav class="sb-nav">
