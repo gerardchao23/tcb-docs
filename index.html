@@ -3,321 +3,2192 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TC Academy — Docs</title>
+  <title>The Crew — Panel</title>
   <link rel="icon" type="image/png" href="https://www.thecrewacademy.es/cdn/shop/files/Diseno_sin_titulo_27.png?crop=center&height=32&v=1773863841&width=32">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#080808;--surf:#0d0d0d;--surf2:#131313;
-      --gold:#C9A84C;--ga:rgba(201,168,76,.09);--gb:rgba(201,168,76,.2);
-      --t1:#f0ede6;--t2:rgba(240,237,230,.5);--t3:rgba(240,237,230,.24);
-      --ln:rgba(240,237,230,.07);--grn:#7FAE7A;--blu:#A07848;
-      --r:3px;--sw:220px;--font:'Montserrat',sans-serif;
+    :root {
+      --bg:   #ECEDF2;
+      --surf: #FFFFFF;
+      --s2:   #F6F7FA;
+      --s3:   #F2F3F7;
+      --gold: #C9A84C;
+      --ga:   rgba(201,168,76,.08);
+      --gb:   rgba(201,168,76,.18);
+      --gc:   rgba(201,168,76,.04);
+      --t1:   #111111;
+      --t2:   rgba(17,17,17,.60);
+      --t3:   rgba(17,17,17,.38);
+      --t4:   rgba(17,17,17,.28);
+      --ln:   rgba(0,0,0,.07);
+      --ln2:  rgba(0,0,0,.04);
+      --grn:  #2E7A2A;
+      --red:  #B03030;
+      --blu:  #2A5E8A;
+      --orn:  #B84820;
+      --r:    4px;
+      --sw:   228px;
+      --th:   56px;
+      --font: 'Montserrat', sans-serif;
+      --glow: rgba(201,168,76,.10);
+      --glow2: rgba(201,168,76,.05);
     }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased}
+    body.dark {
+      --bg:   #0E0F11;
+      --surf: #16181C;
+      --s2:   #1C1F24;
+      --s3:   #22262C;
+      --ga:   rgba(201,168,76,.10);
+      --gb:   rgba(201,168,76,.20);
+      --gc:   rgba(201,168,76,.05);
+      --t1:   #F0EDE6;
+      --t2:   rgba(240,237,230,.60);
+      --t3:   rgba(240,237,230,.38);
+      --t4:   rgba(240,237,230,.22);
+      --ln:   rgba(255,255,255,.08);
+      --ln2:  rgba(255,255,255,.04);
+      --grn:  #3DA336;
+      --red:  #D95050;
+      --blu:  #4A8FC4;
+      --orn:  #D46830;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--t1);
+      font-size: 13px;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+      transition: background .25s, color .25s;
+    }
 
-    /* LAYOUT */
-    .layout{display:flex;min-height:100vh}
+    /* ── LOGIN SCREEN ─────────────────────────────────────── */
+    #login-screen {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    #login-screen.hidden { display: none; }
+    .login-box {
+      background: var(--surf);
+      border: 1px solid var(--ln);
+      border-radius: 12px;
+      padding: 40px 36px;
+      width: 320px;
+      display: flex; flex-direction: column; align-items: center; gap: 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.10);
+    }
+    .login-logo { width: 64px; height: 64px; object-fit: contain; }
+    .login-title {
+      font-size: 18px; font-weight: 800; color: var(--t1);
+      letter-spacing: .02em; text-align: center;
+    }
+    .login-sub {
+      font-size: 11px; color: var(--t3); text-align: center;
+      margin-top: -16px; text-transform: uppercase; letter-spacing: .08em;
+    }
+    .login-field {
+      width: 100%; display: flex; flex-direction: column; gap: 6px;
+    }
+    .login-field label {
+      font-size: 10px; font-weight: 700; color: var(--t3);
+      text-transform: uppercase; letter-spacing: .08em;
+    }
+    .login-field input {
+      width: 100%; padding: 10px 14px;
+      background: var(--s2); border: 1px solid var(--ln);
+      border-radius: 6px; font-family: var(--font); font-size: 13px;
+      color: var(--t1); outline: none;
+      transition: border-color .2s;
+    }
+    .login-field input:focus { border-color: var(--gold); }
+    .login-btn {
+      width: 100%; padding: 11px;
+      background: var(--gold); border: none; border-radius: 6px;
+      font-family: var(--font); font-size: 13px; font-weight: 700;
+      color: #fff; cursor: pointer; letter-spacing: .04em;
+      transition: opacity .15s;
+    }
+    .login-btn:hover { opacity: .88; }
+    .login-err {
+      font-size: 11px; color: var(--red); text-align: center;
+      min-height: 14px; margin-top: -12px;
+    }
 
-    /* SIDEBAR */
-    .sidebar{width:var(--sw);min-width:var(--sw);background:var(--surf);border-right:1px solid var(--ln);display:flex;flex-direction:column;padding:32px 0 24px;position:sticky;top:0;height:100vh;overflow-y:auto}
-    .sidebar__brand{padding:0 24px 28px;border-bottom:1px solid var(--ln);margin-bottom:16px}
-    .sidebar__logo-img{height:20px;width:auto;filter:brightness(0) invert(1);opacity:.55;display:block;margin-bottom:10px}
-    .sidebar__brand-name{font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
-    .sidebar__brand-sub{font-size:9px;color:var(--t3);margin-top:2px}
-    .sidebar__section-title{font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);padding:14px 24px 6px}
-    .sidebar__item{display:flex;align-items:center;gap:6px;padding:9px 24px;font-size:11px;font-weight:500;color:var(--t2);cursor:pointer;border-left:2px solid transparent;text-decoration:none;transition:color .15s,background .15s}
-    .sidebar__item:hover{color:var(--t1);background:rgba(240,237,230,.025)}
-    .sidebar__item.active{color:var(--gold);border-left-color:var(--gold);background:var(--ga)}
+    /* ── APP SHELL ─────────────────────────────────────────── */
+    .app { display: flex; height: 100vh; }
 
-    /* MAIN */
-    .main{flex:1;padding:48px 52px 80px;max-width:1060px}
+    /* ── SIDEBAR ───────────────────────────────────────────── */
+    .sidebar {
+      width: var(--sw);
+      min-width: var(--sw);
+      background: var(--surf);
+      border-right: 1px solid var(--ln);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--ln); border-radius: 2px; }
 
-    /* HEADER */
-    .doc-header{margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--ln)}
-    .doc-tag{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:block}
-    .doc-title{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:14px}
-    .doc-title em{color:var(--gold);font-style:normal;-webkit-text-fill-color:unset;background:none}
-    .doc-meta{display:flex;gap:20px;flex-wrap:wrap}
-    .doc-meta-item{font-size:11px;color:var(--t3)}
+    .sb-brand {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid var(--ln);
+      flex-shrink: 0;
+    }
+    .sb-logo {
+      height: 90px;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .sb-name {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .sb-sub { font-size: 8px; color: var(--t3); margin-top: 2px; letter-spacing: .06em; }
 
-    /* STAT CARDS — mosaic tiles */
-    .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:var(--r);overflow:hidden;margin-bottom:40px}
-    .stat-card{background:var(--surf);padding:24px 22px;border:none;border-radius:0;transition:background .2s}
-    .stat-card:hover{background:var(--surf2)}
-    .stat-card__label{font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
-    .stat-card__value{font-size:24px;font-weight:800;color:var(--gold);letter-spacing:-.03em;line-height:1}
-    .stat-card__value.white{color:var(--t1)}
-    .stat-card__value.green{color:var(--grn)}
-    .stat-card__sub{font-size:10px;color:var(--t3);margin-top:6px}
+    .sb-nav { flex: 1; padding: 8px 0 12px; }
+    .sb-section {
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--t4);
+      padding: 16px 20px 5px;
+    }
+    .sb-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--t2);
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: color .15s, background .15s;
+      user-select: none;
+      text-decoration: none;
+    }
+    .sb-item:hover { color: var(--t1); background: rgba(0,0,0,.04); }
+    .sb-item.active { color: var(--gold); border-left-color: var(--gold); background: var(--ga); }
+    .sb-icon { font-size: 10px; opacity: .55; width: 14px; text-align: center; flex-shrink: 0; }
+    .sb-item.active .sb-icon { opacity: 1; }
+    .sb-badge {
+      margin-left: auto;
+      font-size: 7px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      color: #111111;
+      background: var(--gold);
+      border-radius: 2px;
+      padding: 2px 5px;
+    }
 
-    /* SECTION TITLE */
-    .section-title{display:flex;align-items:center;gap:10px;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:18px}
-    .section-title::before{content:"";width:3px;height:13px;background:var(--gold);border-radius:1px;flex-shrink:0}
-    .section-title::after{content:"";flex:1;height:1px;background:var(--ln)}
+    .sb-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--ln);
+      flex-shrink: 0;
+    }
+    .sb-footer-date { font-size: 9px; color: var(--t3); }
+    .sb-footer-ver { font-size: 8px; color: var(--t4); margin-top: 3px; }
 
-    /* TABS */
-    .tabs{display:flex;border-bottom:1px solid var(--ln);margin-bottom:28px}
-    .tab{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);padding:10px 20px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s,border-color .15s}
-    .tab:hover{color:var(--t2)}
-    .tab.active{color:var(--gold);border-bottom-color:var(--gold)}
-    .tab-panel{display:none}
-    .tab-panel.active{display:block}
+    /* ── MAIN WRAP ─────────────────────────────────────────── */
+    .main-wrap { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
 
-    /* TABLE */
-    .table-wrap{border:1px solid var(--ln);border-radius:var(--r);overflow:hidden;margin-bottom:36px}
-    table{width:100%;border-collapse:collapse}
-    th{font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);padding:13px 20px;text-align:left;border-bottom:1px solid var(--ln)}
-    th.right{text-align:right}
-    td{font-size:13px;font-weight:500;color:var(--t2);padding:13px 20px;border-bottom:1px solid rgba(240,237,230,.04);vertical-align:middle}
-    tr:last-child td{border-bottom:none}
-    tr:hover td{background:rgba(240,237,230,.02)}
-    td.amount{text-align:right;font-variant-numeric:tabular-nums}
-    td.amount.gold{color:var(--gold);font-weight:700}
-    .total-row td{background:var(--ga);border-top:1px solid var(--gb);font-weight:700;color:var(--t1)}
-    .total-row td.amount{color:var(--gold);font-size:14px}
-    .grand-total-row td{background:rgba(201,168,76,.1);border-top:1px solid rgba(201,168,76,.28);font-weight:800;font-size:14px}
-    .grand-total-row td.amount{color:var(--gold);font-size:15px}
+    /* ── TOPBAR ────────────────────────────────────────────── */
+    .topbar {
+      height: var(--th);
+      min-height: var(--th);
+      background: var(--surf);
+      border-bottom: 1px solid var(--ln);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .tb-crumb { display: flex; align-items: center; gap: 7px; font-size: 11px; }
+    .tb-sec { color: var(--t3); }
+    .tb-sep { color: var(--t4); font-size: 9px; }
+    .tb-page { color: var(--t1); font-weight: 600; }
+    .tb-right { margin-left: auto; display: flex; align-items: center; gap: 18px; }
+    .tb-date { font-size: 10px; color: var(--t3); }
+    .tb-dot { width: 7px; height: 7px; background: var(--grn); border-radius: 50%; box-shadow: 0 0 0 2px rgba(127,174,122,.18); }
+    .tb-user { font-size: 10px; font-weight: 700; color: var(--gold); letter-spacing: .04em; }
 
-    /* BAR CHART */
-    .chart-wrap{padding:0 0 8px;margin-bottom:28px}
-    .chart-bars{display:flex;align-items:flex-end;gap:8px;height:160px;margin-top:16px}
-    .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end}
-    .bar-col .bar-val{font-size:9px;font-weight:700;color:var(--gold);opacity:0;transition:opacity .2s;white-space:nowrap}
-    .bar-col:hover .bar-val{opacity:1}
-    .bar{width:100%;border-radius:2px 2px 0 0;min-height:2px}
-    .bar.yeasy{background:var(--gold);opacity:.75}
-    .bar.booksy{background:#A07848;opacity:.8}
-    .bar-col:hover .bar{opacity:1}
-    .bar-label{font-size:10px;font-weight:600;letter-spacing:.04em;color:var(--t3)}
-    .chart-legend{display:flex;gap:20px;margin-top:16px}
-    .legend-item{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--t3)}
-    .legend-dot{width:8px;height:8px;border-radius:1px}
+    /* ── CONTENT ───────────────────────────────────────────── */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 36px 40px 72px;
+    }
+    .content::-webkit-scrollbar { width: 4px; }
+    .content::-webkit-scrollbar-thumb { background: var(--ln); border-radius: 2px; }
 
-    /* NOTE */
-    .note{border-left:3px solid var(--gb);padding:10px 16px;font-size:12px;color:var(--t2);margin-bottom:32px;line-height:1.7}
+    /* ── PAGE HEADER ───────────────────────────────────────── */
+    .pg-hd { margin-bottom: 28px; }
+    .pg-tag {
+      display: block;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .pg-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      line-height: 1.1;
+    }
+    .pg-title em { color: var(--gold); font-style: normal; }
+    .pg-sub { font-size: 12px; color: var(--t3); margin-top: 6px; line-height: 1.6; }
 
-    /* FOOTER */
-    .doc-footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--ln);display:flex;justify-content:space-between;align-items:center}
-    .doc-footer__brand{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
-    .doc-footer__date{font-size:10px;color:var(--t3)}
+    /* ── KPI GRID ──────────────────────────────────────────── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      gap: 1px;
+      background: var(--ln);
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .kpi {
+      background: var(--surf);
+      padding: 18px 18px 16px;
+      transition: background .2s;
+    }
+    .kpi:hover { background: var(--s2); }
+    .kpi-lbl {
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--t3);
+      margin-bottom: 8px;
+    }
+    .kpi-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: -.03em;
+      line-height: 1;
+    }
+    .kpi-val.w { color: var(--t1); }
+    .kpi-val.g { color: var(--grn); }
+    .kpi-sub2 { font-size: 9px; color: var(--t3); margin-top: 5px; }
 
-    @media(max-width:768px){.sidebar{display:none}.main{padding:28px 22px}}
+    /* ── SEC TITLE ─────────────────────────────────────────── */
+    .sec {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--t3);
+      margin-bottom: 14px;
+    }
+    .sec::before { content: ''; width: 3px; height: 13px; background: var(--gold); border-radius: 1px; flex-shrink: 0; }
+    .sec::after  { content: ''; flex: 1; height: 1px; background: var(--ln); }
+
+    /* ── GRID ──────────────────────────────────────────────── */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    @media (max-width: 960px) {
+      .g2 { grid-template-columns: 1fr; }
+      .g3 { grid-template-columns: 1fr 1fr; }
+      .g4 { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── CARD ──────────────────────────────────────────────── */
+    .card {
+      background: var(--surf);
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      padding: 18px;
+    }
+    .card-ttl {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--t3);
+      margin-bottom: 12px;
+    }
+
+    /* ── TABLE ─────────────────────────────────────────────── */
+    .tw {
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--t3);
+      padding: 10px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--ln);
+      background: var(--surf);
+    }
+    thead th.r { text-align: right; }
+    tbody td {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--t2);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--ln2);
+      vertical-align: middle;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(0,0,0,.025); }
+    .r { text-align: right; font-variant-numeric: tabular-nums; }
+    .au { color: var(--gold); font-weight: 700; }
+    .ag { color: var(--grn); font-weight: 600; }
+    .ar { color: var(--red); font-weight: 600; }
+    .tf td {
+      background: var(--ga);
+      border-top: 1px solid var(--gb);
+      font-weight: 700;
+      color: var(--t1);
+    }
+    .tf td.r { color: var(--gold); font-size: 13px; }
+    .mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 10px; }
+
+    /* ── TABS ──────────────────────────────────────────────── */
+    .tabs { display: flex; border-bottom: 1px solid var(--ln); margin-bottom: 20px; }
+    .tab-b {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--t3);
+      padding: 10px 18px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color .15s, border-color .15s;
+      user-select: none;
+    }
+    .tab-b:hover { color: var(--t2); }
+    .tab-b.on { color: var(--gold); border-bottom-color: var(--gold); }
+    .tab-p { display: none; }
+    .tab-p.on { display: block; }
+
+    /* ── BAR CHART ─────────────────────────────────────────── */
+    .chart { display: flex; align-items: flex-end; gap: 10px; height: 130px; }
+    .bc { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+    .bv { font-size: 8px; font-weight: 700; color: var(--gold); opacity: 0; transition: opacity .2s; white-space: nowrap; }
+    .bc:hover .bv { opacity: 1; }
+    .br { width: 100%; border-radius: 2px 2px 0 0; min-height: 2px; }
+    .br.a { background: var(--gold); opacity: .72; }
+    .br.b { background: #8A6830; opacity: .82; }
+    .bc:hover .br { opacity: 1 !important; }
+    .bl { font-size: 9px; font-weight: 600; color: var(--t3); }
+
+    /* ── BADGE ─────────────────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 7px;
+      border-radius: 2px;
+    }
+    .badge.live { background: rgba(127,174,122,.12); color: var(--grn); }
+    .badge.dev  { background: rgba(201,168,76,.1);   color: var(--gold); }
+    .badge.plan { background: rgba(112,144,168,.1);  color: var(--blu); }
+    .badge.seed { background: rgba(127,174,122,.09); color: var(--grn); }
+    .bdot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
+    /* ── PROJECT CARD ──────────────────────────────────────── */
+    .pj {
+      background: var(--surf);
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: background .2s;
+    }
+    .pj:hover { background: var(--s2); }
+    .pj-bar { position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+    .pj-tag { font-size: 7.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--t3); margin-bottom: 7px; }
+    .pj-name { font-size: 15px; font-weight: 800; color: var(--t1); margin-bottom: 8px; letter-spacing: -.01em; }
+    .pj-desc { font-size: 11px; color: var(--t3); line-height: 1.7; margin-bottom: 14px; }
+    .pj-foot { display: flex; align-items: center; justify-content: space-between; }
+    .pj-link { font-size: 10px; color: var(--gold); cursor: pointer; }
+
+    /* ── EMPLOYEE CARD ─────────────────────────────────────── */
+    .emp {
+      background: var(--surf);
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .emp::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px; }
+    .emp-name { font-size: 13px; font-weight: 800; margin-bottom: 2px; }
+    .emp-role { font-size: 8px; color: var(--t3); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 12px; }
+    .emp-total { font-size: 22px; font-weight: 800; letter-spacing: -.03em; line-height: 1; margin-bottom: 3px; }
+    .emp-lbl { font-size: 9px; color: var(--t3); margin-bottom: 14px; }
+    .emp-bars { display: flex; flex-direction: column; gap: 5px; }
+    .emp-row { display: flex; align-items: center; gap: 8px; }
+    .emp-ml { width: 28px; font-size: 8px; font-weight: 700; color: var(--t3); text-transform: uppercase; }
+    .emp-trk { flex: 1; height: 3px; background: var(--ln); border-radius: 2px; overflow: hidden; }
+    .emp-fill { height: 100%; border-radius: 2px; }
+    .emp-amt { width: 64px; text-align: right; font-size: 10px; color: var(--t2); font-variant-numeric: tabular-nums; }
+
+    /* ── DOC LINK ──────────────────────────────────────────── */
+    .dl {
+      background: var(--surf);
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background .2s, border-color .2s;
+      cursor: pointer;
+    }
+    .dl:hover { background: var(--s2); border-color: var(--gb); }
+    .dl-ico { font-size: 17px; flex-shrink: 0; }
+    .dl-ttl { font-size: 12px; font-weight: 700; color: var(--t1); margin-bottom: 2px; }
+    .dl-sub { font-size: 10px; color: var(--t3); }
+    .dl-arr { margin-left: auto; color: var(--t4); font-size: 10px; flex-shrink: 0; }
+
+    /* ── QUICK ACCESS TILE ─────────────────────────────────── */
+    .qa {
+      background: var(--surf);
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      padding: 18px;
+      cursor: pointer;
+      transition: background .2s, border-color .2s;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .qa:hover { background: var(--s2); border-color: var(--gb); }
+    .qa-ico { font-size: 20px; }
+    .qa-lbl { font-size: 11px; font-weight: 700; color: var(--t1); }
+    .qa-sub { font-size: 9px; color: var(--t3); line-height: 1.5; }
+    .qa-arr { margin-top: auto; font-size: 9px; color: var(--gold); font-weight: 700; letter-spacing: .06em; }
+
+    /* ── NOTE ──────────────────────────────────────────────── */
+    .note {
+      border-left: 3px solid var(--gb);
+      padding: 10px 14px;
+      font-size: 11.5px;
+      color: var(--t2);
+      margin-bottom: 24px;
+      line-height: 1.7;
+      background: var(--gc);
+      border-radius: 0 var(--r) var(--r) 0;
+    }
+
+    /* ── ACTIVITY ──────────────────────────────────────────── */
+    .activity { display: flex; flex-direction: column; }
+    .act-item { display: flex; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--ln2); }
+    .act-item:last-child { border-bottom: none; }
+    .act-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+    .act-body { flex: 1; min-width: 0; }
+    .act-txt { font-size: 12px; color: var(--t2); line-height: 1.5; }
+    .act-txt strong { color: var(--t1); }
+    .act-date { font-size: 9px; color: var(--t3); margin-top: 2px; }
+
+    /* ── LEGEND ────────────────────────────────────────────── */
+    .legend { display: flex; gap: 16px; margin-top: 10px; }
+    .leg-item { display: flex; align-items: center; gap: 6px; font-size: 9px; color: var(--t3); }
+    .leg-dot { width: 8px; height: 8px; border-radius: 1px; }
+
+    /* ── RESPONSIVE ────────────────────────────────────────── */
+    .menu-btn { display: none; background: none; border: 1px solid var(--ln); border-radius: var(--r); width: 32px; height: 30px; cursor: pointer; align-items: center; justify-content: center; padding: 0; margin-right: 10px; }
+    .menu-btn span { display: block; width: 14px; height: 1.5px; background: var(--t1); position: relative; }
+    .menu-btn span::before, .menu-btn span::after { content:''; position:absolute; left:0; width:14px; height:1.5px; background: var(--t1); }
+    .menu-btn span::before { top: -5px; }
+    .menu-btn span::after { top: 5px; }
+    .sb-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 90; }
+    @media (max-width: 768px) {
+      body { font-size: 12px; }
+      .menu-btn { display: inline-flex; }
+      .sidebar {
+        position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+        transform: translateX(-100%); transition: transform .25s ease;
+        box-shadow: 4px 0 24px rgba(0,0,0,.18);
+      }
+      .sidebar.open { transform: translateX(0); }
+      body.menu-open .sb-overlay { display: block; }
+      .content { padding: 18px 14px 52px; }
+      .topbar { padding: 0 14px; }
+      .pg-title { font-size: 22px; }
+      .pg-hd { padding: 14px 0 18px; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .kpi { padding: 14px 12px 12px; }
+      .kpi-val { font-size: 18px; }
+      .g2, .g3, .g4 { grid-template-columns: 1fr; }
+      .tw { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .tw table { min-width: 540px; }
+      .chart { height: 140px !important; }
+      .tb-date, .tb-user { display: none; }
+      .tb-crumb { font-size: 11px; }
+      div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
+    }
+
+    /* ── COUNTERS / SPARKLINES / TRENDS ──────────────────────── */
+    .counter { font-variant-numeric: tabular-nums; }
+    .spark { display: block; width: 100%; height: 28px; margin-top: 8px; }
+    .spark path.line { fill: none; stroke: var(--gold); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+    .spark path.area { fill: var(--gb); stroke: none; }
+    .spark .dot { fill: var(--gold); }
+    .trend { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 10px; letter-spacing: -.01em; }
+    .trend.up { color: var(--grn); background: rgba(46,122,42,.10); }
+    .trend.dn { color: var(--red); background: rgba(176,48,48,.10); }
+
+    /* ── PROGRESS RINGS ──────────────────────────────────────── */
+    .ring-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 14px 8px; }
+    .ring { position: relative; width: 96px; height: 96px; }
+    .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .ring .ring-bg { fill: none; stroke: var(--s3); stroke-width: 7; }
+    .ring .ring-fg { fill: none; stroke-width: 7; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1); }
+    .ring-val { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+    .ring-pct { font-size: 18px; font-weight: 800; color: var(--t1); letter-spacing: -.03em; }
+    .ring-lbl { font-size: 8px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--t3); text-align: center; }
+    .ring-sub { font-size: 9px; color: var(--t3); margin-top: 2px; text-align: center; }
+
+    /* ── HEATMAP ─────────────────────────────────────────────── */
+    .heatmap { display: grid; grid-template-columns: repeat(13, 1fr); gap: 3px; }
+    .hm-cell { aspect-ratio: 1; border-radius: 2px; background: var(--s3); transition: transform .15s; cursor: pointer; }
+    .hm-cell:hover { transform: scale(1.4); outline: 1px solid var(--gold); }
+    .hm-cell.l1 { background: rgba(201,168,76,.20); }
+    .hm-cell.l2 { background: rgba(201,168,76,.42); }
+    .hm-cell.l3 { background: rgba(201,168,76,.65); }
+    .hm-cell.l4 { background: var(--gold); }
+    .hm-legend { display: flex; align-items: center; gap: 6px; font-size: 9px; color: var(--t3); margin-top: 10px; justify-content: flex-end; }
+    .hm-legend .hm-cell { width: 11px; height: 11px; aspect-ratio: auto; cursor: default; }
+
+    /* ── TOAST ───────────────────────────────────────────────── */
+    .toast-host { position: fixed; bottom: 18px; right: 18px; display: flex; flex-direction: column; gap: 8px; z-index: 200; pointer-events: none; }
+    .toast { background: var(--surf); border: 1px solid var(--ln); border-left: 3px solid var(--gold); border-radius: var(--r); padding: 10px 14px; font-size: 11px; color: var(--t1); box-shadow: 0 8px 24px rgba(0,0,0,.10); animation: toastIn .25s cubic-bezier(.2,.8,.2,1) both, toastOut .25s 2.6s both; min-width: 220px; pointer-events: auto; }
+    .toast.ok { border-left-color: var(--grn); }
+    .toast.err { border-left-color: var(--red); }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes toastOut { to { opacity: 0; transform: translateY(8px); } }
+
+    /* ── CMD+K PALETTE ───────────────────────────────────────── */
+    .cmdk-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); backdrop-filter: blur(4px); z-index: 300; display: none; align-items: flex-start; justify-content: center; padding-top: 14vh; }
+    .cmdk-overlay.open { display: flex; animation: fadeUp .18s both; }
+    .cmdk { width: min(560px, calc(100vw - 28px)); background: var(--surf); border: 1px solid var(--ln); border-radius: 8px; box-shadow: 0 24px 64px rgba(0,0,0,.30); overflow: hidden; }
+    .cmdk-input { width: 100%; padding: 16px 18px; border: none; background: transparent; color: var(--t1); font-size: 14px; font-family: var(--font); outline: none; border-bottom: 1px solid var(--ln); }
+    .cmdk-input::placeholder { color: var(--t3); }
+    .cmdk-list { max-height: 50vh; overflow-y: auto; padding: 6px 0; }
+    .cmdk-item { display: flex; align-items: center; gap: 10px; padding: 9px 18px; cursor: pointer; font-size: 12px; color: var(--t1); }
+    .cmdk-item:hover, .cmdk-item.sel { background: var(--ga); }
+    .cmdk-ico { width: 22px; color: var(--gold); }
+    .cmdk-sec { font-size: 9px; color: var(--t3); margin-left: auto; letter-spacing: .1em; text-transform: uppercase; }
+    .cmdk-empty { padding: 24px; text-align: center; color: var(--t3); font-size: 11px; }
+    .cmdk-foot { padding: 8px 14px; font-size: 9px; color: var(--t3); border-top: 1px solid var(--ln); display: flex; gap: 14px; }
+    .kbd { display: inline-block; padding: 1px 5px; border: 1px solid var(--ln); border-radius: 3px; background: var(--s2); font-size: 9px; font-weight: 700; color: var(--t2); font-family: var(--font); }
+
+    /* ── LIVE CLOCK ──────────────────────────────────────────── */
+    .live-clock { font-size: 10px; font-weight: 700; color: var(--t2); letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+    .live-clock .lc-time { color: var(--gold); margin-left: 6px; }
+
+    /* ── EVENT TIMELINE ──────────────────────────────────────── */
+    .ev { display: flex; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--ln2); }
+    .ev:last-child { border-bottom: none; }
+    .ev-date { width: 52px; flex-shrink: 0; text-align: center; padding: 7px 4px; background: var(--s2); border-radius: 4px; }
+    .ev-d { font-size: 17px; font-weight: 800; color: var(--gold); line-height: 1; }
+    .ev-m { font-size: 8px; font-weight: 700; color: var(--t3); letter-spacing: .12em; text-transform: uppercase; margin-top: 2px; }
+    .ev-body { flex: 1; min-width: 0; }
+    .ev-ttl { font-size: 12px; font-weight: 600; color: var(--t1); }
+    .ev-sub { font-size: 10px; color: var(--t3); margin-top: 2px; }
+    .ev-tag { font-size: 9px; padding: 2px 7px; border-radius: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+
+    /* ── TOPBAR BUTTONS ──────────────────────────────────────── */
+    .tb-btn { background: none; border: 1px solid var(--ln); border-radius: 20px; padding: 5px 10px; font-size: 10px; font-weight: 600; color: var(--t2); cursor: pointer; font-family: var(--font); transition: all .15s; display: inline-flex; align-items: center; gap: 6px; }
+    .tb-btn:hover { color: var(--t1); border-color: var(--gold); }
+    .tb-btn .kbd { font-size: 8px; padding: 0 4px; }
+
+    /* ── PRINT ───────────────────────────────────────────────── */
+    @media print {
+      .sidebar, .topbar, .toast-host, .cmdk-overlay { display: none !important; }
+      body { background: white; color: black; overflow: auto; }
+      .content { padding: 0 !important; height: auto !important; overflow: visible !important; }
+      .card, .kpi { break-inside: avoid; }
+    }
+
+    /* ── ANIMATIONS ─────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes barGrow {
+      from { transform: scaleY(0); transform-origin: bottom; }
+      to   { transform: scaleY(1); transform-origin: bottom; }
+    }
+    @keyframes dotPulse {
+      0%,100% { box-shadow: 0 0 0 2px rgba(127,174,122,.18); }
+      50%      { box-shadow: 0 0 0 5px rgba(127,174,122,.28); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+
+    /* ── PAGE TRANSITION ─────────────────────────────────────── */
+    .content { animation: fadeUp .24s cubic-bezier(.22,1,.36,1) both; }
+
+    /* ── KPI STAGGER ─────────────────────────────────────────── */
+    .kpi:nth-child(1) { animation: fadeUp .32s .04s both; }
+    .kpi:nth-child(2) { animation: fadeUp .32s .09s both; }
+    .kpi:nth-child(3) { animation: fadeUp .32s .14s both; }
+    .kpi:nth-child(4) { animation: fadeUp .32s .19s both; }
+    .kpi:nth-child(5) { animation: fadeUp .32s .24s both; }
+
+    /* ── GLOW ON NUMBERS ─────────────────────────────────────── */
+    .kpi-val       { text-shadow: none; }
+    .kpi-val.w     { text-shadow: none; }
+    .kpi-val.g     { text-shadow: none; }
+    .emp-total     { text-shadow: none; }
+
+    /* ── TOPBAR GOLD ACCENT ──────────────────────────────────── */
+    .topbar { position: relative; }
+    .topbar::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 220px; height: 1px;
+      background: linear-gradient(90deg, rgba(201,168,76,.35) 0%, transparent 100%);
+    }
+
+    /* ── SIDEBAR ACTIVE GRADIENT ─────────────────────────────── */
+    .sb-item.active {
+      background: linear-gradient(90deg, rgba(201,168,76,.1) 0%, transparent 80%);
+    }
+    .sb-item { transition: color .15s, background .2s, transform .1s; }
+    .sb-item:hover { padding-left: 22px; }
+    .sb-item.active:hover { padding-left: 20px; }
+
+    /* ── CARD LIFTS ──────────────────────────────────────────── */
+    .card  { transition: background .2s, border-color .2s, transform .18s; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    .card:hover  { border-color: var(--gb); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.09); }
+    .kpi   { transition: background .2s, transform .15s; }
+    .kpi:hover   { transform: translateY(-1px); }
+    .qa    { transition: background .2s, border-color .2s, transform .15s; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    .qa:hover    { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.10); border-color: var(--gb); }
+    .pj    { transition: background .2s, border-color .2s, transform .15s; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    .pj:hover    { border-color: var(--gb); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.09); }
+    .dl    { transition: background .2s, border-color .2s, transform .12s; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+    .dl:hover    { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,.08); }
+    .emp   { transition: background .2s, border-color .2s, transform .15s; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    .emp:hover   { border-color: var(--gb); transform: translateY(-1px); }
+
+    /* ── LIVE BADGE PULSE ────────────────────────────────────── */
+    .badge.live { box-shadow: 0 0 10px rgba(127,174,122,.2); }
+    .bdot       { animation: dotPulse 2.5s ease-in-out infinite; }
+
+    /* ── TOPBAR DOT PULSE ────────────────────────────────────── */
+    .tb-dot { animation: dotPulse 2.5s ease-in-out infinite; }
+
+    /* ── CHART BAR ANIMATION ─────────────────────────────────── */
+    .chart-anim .br { animation: barGrow .45s cubic-bezier(.34,1.4,.64,1) both; }
+    .chart-anim .bc:nth-child(1) .br { animation-delay: .05s; }
+    .chart-anim .bc:nth-child(2) .br { animation-delay: .12s; }
+    .chart-anim .bc:nth-child(3) .br { animation-delay: .19s; }
+    .chart-anim .bc:nth-child(4) .br { animation-delay: .26s; }
+
+    /* ── GOLD SHIMMER ON BRAND ───────────────────────────────── */
+    .sb-name {
+      background: linear-gradient(90deg, var(--gold) 0%, #e8c96a 50%, var(--gold) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 4s linear infinite;
+    }
+
+    /* ── TABLE ROW HOVER ─────────────────────────────────────── */
+    tbody tr { transition: background .12s; }
+
+    /* ── ACTIVITY DOT STAGGER ────────────────────────────────── */
+    .act-item:nth-child(1) { animation: fadeUp .3s .05s both; }
+    .act-item:nth-child(2) { animation: fadeUp .3s .10s both; }
+    .act-item:nth-child(3) { animation: fadeUp .3s .15s both; }
+    .act-item:nth-child(4) { animation: fadeUp .3s .20s both; }
+    .act-item:nth-child(5) { animation: fadeUp .3s .25s both; }
   </style>
 </head>
 <body>
 
-<div class="layout">
-  <nav class="sidebar">
-    <div class="sidebar__brand">
-      <img src="https://www.thecrewacademy.es/cdn/shop/files/Diseno_sin_titulo_27.png?height=120&v=1773863841" alt="TCB" class="sidebar__logo-img">
-      <div class="sidebar__brand-name">TCB Docs</div>
-      <div class="sidebar__brand-sub">The Crew Barbershop</div>
+<!-- ═══ LOGIN SCREEN ══════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <img src="tcb-logo.png" alt="TCB" class="login-logo">
+    <div>
+      <div class="login-title">The Crew — Panel</div>
+      <div class="login-sub">Acceso Administrador</div>
     </div>
-    <div class="sidebar__section-title">Negocio</div>
-    <a href="index.html" class="sidebar__item active">◈ &nbsp;Facturación</a>
-    <a href="gastos_2026.html" class="sidebar__item">◈ &nbsp;Gastos &amp; P&amp;L</a>
-    <a href="#" class="sidebar__item">◈ &nbsp;Citas</a>
-    <a href="#" class="sidebar__item">◈ &nbsp;Clientes</a>
-    <a href="empleados.html" class="sidebar__item">◈ &nbsp;Empleados</a>
-    <div class="sidebar__section-title">Academia</div>
-    <a href="#" class="sidebar__item">◈ &nbsp;ROOTS Ebook</a>
-    <a href="#" class="sidebar__item">◈ &nbsp;Materiales</a>
-  </nav>
+    <div class="login-field">
+      <label>Contraseña</label>
+      <input type="password" id="login-pwd" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <div class="login-err" id="login-err"></div>
+    <button class="login-btn" onclick="doLogin()">Entrar</button>
+  </div>
+</div>
 
-  <main class="main">
+<div class="app">
+  <div class="sb-overlay" onclick="toggleMenu()"></div>
 
-    <div class="doc-header">
-      <div class="doc-tag">Facturación anual</div>
-      <h1 class="doc-title"><em>2026</em> — Enero a Abril</h1>
-      <div class="doc-meta">
-        <span class="doc-meta-item">📅 Actualizado 28 abr 2026</span>
-        <span class="doc-meta-item">📍 The Crew Barbershop</span>
-        <span class="doc-meta-item">🔄 Yeasy + Booksy</span>
-      </div>
+  <!-- ═══ SIDEBAR ════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <img src="tcb-logo.png" alt="TCB" class="sb-logo">
+      <div class="sb-name">The Crew</div>
+      <div class="sb-sub">PANEL</div>
     </div>
 
-    <!-- KPIs ANUALES -->
-    <div class="cards-grid">
-      <div class="stat-card">
-        <div class="stat-card__label">Total año (hasta hoy)</div>
-        <div class="stat-card__value">38.751 €</div>
-        <div class="stat-card__sub">Yeasy + Booksy</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card__label">Yeasy total</div>
-        <div class="stat-card__value">35.497 €</div>
-        <div class="stat-card__sub">Local principal</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card__label">Booksy total</div>
-        <div class="stat-card__value white">3.254 €</div>
-        <div class="stat-card__sub">Barrio + Caja</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card__label">Mejor mes</div>
-        <div class="stat-card__value green">11.258 €</div>
-        <div class="stat-card__sub">Abril 2026</div>
-      </div>
+    <nav class="sb-nav">
+      <div class="sb-section">Inicio</div>
+      <div class="sb-item active" data-view="dashboard"><span class="sb-icon">⬡</span>Dashboard</div>
+
+      <div class="sb-section">Barbershop</div>
+      <div class="sb-item" data-view="facturacion"><span class="sb-icon">◈</span>Facturación</div>
+      <div class="sb-item" data-view="gastos"><span class="sb-icon">◈</span>Gastos & P&L</div>
+      <div class="sb-item" data-view="cashflow"><span class="sb-icon">◈</span>Cashflow<span class="sb-badge">2026</span></div>
+      <div class="sb-item" data-view="equipo"><span class="sb-icon">◈</span>Equipo</div>
+      <div class="sb-item" data-view="citas"><span class="sb-icon">◈</span>Citas</div>
+
+      <div class="sb-section">The Crew Academy</div>
+      <div class="sb-item" data-view="academia"><span class="sb-icon">◈</span>Academia</div>
+      <div class="sb-item" data-view="roots"><span class="sb-icon">◈</span>ROOTS Ebook</div>
+
+      <div class="sb-section">Proyectos</div>
+      <div class="sb-item" data-view="barberlab"><span class="sb-icon">◈</span>BarberLab<span class="sb-badge">DEV</span></div>
+      <div class="sb-item" data-view="chaos"><span class="sb-icon">◈</span>CHAOS Hair<span class="sb-badge">NEW</span></div>
+      <div class="sb-item" data-view="crewcard"><span class="sb-icon">◈</span>Crew Member Card</div>
+
+      <div class="sb-section">Marketing</div>
+      <div class="sb-item" data-view="contenido"><span class="sb-icon">◈</span>Contenido<span class="sb-badge">IG</span></div>
+
+      <div class="sb-section">Herramientas</div>
+      <div class="sb-item" data-view="docs"><span class="sb-icon">◈</span>Docs & Informes</div>
+      <div class="sb-item" data-view="reservas"><span class="sb-icon">◈</span>Reservas</div>
+    </nav>
+
+    <div class="sb-footer">
+      <div class="sb-footer-date" id="sb-date"></div>
+      <div class="sb-footer-ver">panel.thecrewacademy.es</div>
     </div>
+  </aside>
 
-    <!-- TABS -->
-    <div class="tabs">
-      <div class="tab active" onclick="switchTab('anual')">Resumen anual</div>
-      <div class="tab" onclick="switchTab('abril')">Abril detalle</div>
-      <div class="tab" onclick="switchTab('marzo')">Marzo detalle</div>
-    </div>
-
-    <!-- TAB: ANUAL -->
-    <div id="tab-anual" class="tab-panel active">
-
-      <div class="chart-wrap">
-        <div class="section-title">Facturación mensual</div>
-        <div class="chart-bars" id="chart-monthly"></div>
-        <div class="chart-legend">
-          <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Yeasy</div>
-          <div class="legend-item"><div class="legend-dot" style="background:var(--blu)"></div>Booksy</div>
-        </div>
+  <!-- ═══ MAIN ════════════════════════════════════════════════ -->
+  <div class="main-wrap">
+    <header class="topbar">
+      <button class="menu-btn" onclick="toggleMenu()" aria-label="Menu"><span></span></button>
+      <div class="tb-crumb">
+        <span class="tb-sec" id="tb-sec">The Crew</span>
+        <span class="tb-sep">›</span>
+        <span class="tb-page" id="tb-pg">Dashboard</span>
       </div>
-
-      <div class="section-title">Resumen por mes</div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Mes</th>
-              <th class="right">Yeasy</th>
-              <th class="right">Booksy</th>
-              <th class="right">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Enero</td><td class="amount">8.287,00 €</td><td class="amount">282,00 €</td><td class="amount gold">8.569,00 €</td></tr>
-            <tr><td>Febrero</td><td class="amount">7.500,00 €</td><td class="amount">575,00 €</td><td class="amount gold">8.075,00 €</td></tr>
-            <tr><td>Marzo</td><td class="amount">9.730,00 €</td><td class="amount">1.119,00 €</td><td class="amount gold">10.849,00 €</td></tr>
-            <tr><td>Abril + 1 mayo</td><td class="amount">9.980,00 €</td><td class="amount">1.278,00 €</td><td class="amount gold">11.258,00 €</td></tr>
-          </tbody>
-          <tfoot>
-            <tr class="grand-total-row">
-              <td><strong>TOTAL 2026</strong></td>
-              <td class="amount">35.497,00 €</td>
-              <td class="amount">3.254,00 €</td>
-              <td class="amount">38.751,00 €</td>
-            </tr>
-          </tfoot>
-        </table>
+      <div class="tb-right">
+        <button class="tb-btn" onclick="openCmdk()" title="Buscar y navegar">⌕ <span class="kbd">⌘K</span></button>
+        <button class="tb-btn" onclick="window.print()" title="Imprimir / Exportar PDF">⎙</button>
+        <span class="live-clock" id="live-clock"><span class="lc-greet">—</span><span class="lc-time">--:--:--</span></span>
+        <div class="tb-dot"></div>
+        <button id="dark-toggle" class="tb-btn" onclick="toggleDark()" title="Dark / Light mode">◑ DARK</button>
+        <div class="tb-dot"></div>
+        <span class="tb-user">Gerard Chao</span>
       </div>
+    </header>
+    <main class="content" id="content"></main>
+  </div>
+</div>
 
-      <div class="note">
-        Booksy crece mes a mes: de 282 € en enero a 1.278 € en abril (+353%). Abril es el mejor mes del año con 11.258 €.
-      </div>
+<!-- ═══ TOAST HOST + CMD+K ════════════════════════════════ -->
+<div class="toast-host" id="toast-host"></div>
+<div class="cmdk-overlay" id="cmdk" onclick="if(event.target===this)closeCmdk()">
+  <div class="cmdk">
+    <input type="text" class="cmdk-input" id="cmdk-input" placeholder="Buscar sección, KPI, acción…" oninput="filterCmdk(this.value)" onkeydown="cmdkKey(event)">
+    <div class="cmdk-list" id="cmdk-list"></div>
+    <div class="cmdk-foot">
+      <span><span class="kbd">↑↓</span> navegar</span>
+      <span><span class="kbd">↵</span> abrir</span>
+      <span><span class="kbd">Esc</span> cerrar</span>
     </div>
-
-    <!-- TAB: ABRIL -->
-    <div id="tab-abril" class="tab-panel">
-      <div class="cards-grid">
-        <div class="stat-card"><div class="stat-card__label">Total Abril</div><div class="stat-card__value">11.258 €</div><div class="stat-card__sub">Mes completo + 1 mayo</div></div>
-        <div class="stat-card"><div class="stat-card__label">Yeasy</div><div class="stat-card__value">9.980 €</div><div class="stat-card__sub">Mes completo</div></div>
-        <div class="stat-card"><div class="stat-card__label">Booksy</div><div class="stat-card__value white">1.278 €</div><div class="stat-card__sub">73 citas</div></div>
-        <div class="stat-card"><div class="stat-card__label">Pendiente</div><div class="stat-card__value white">50 €</div><div class="stat-card__sub">3 citas 29-30 abr</div></div>
-      </div>
-      <div class="note">El 22 de abril (1.297 € en Yeasy) fue pico por cobro de varias semanas de clientela fija en un día — no es la media habitual.</div>
-      <div class="section-title">Detalle diario Yeasy — Abril</div>
-      <div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Día</th><th class="right">Importe</th></tr></thead><tbody id="tbody-abril-yeasy"></tbody><tfoot><tr class="total-row"><td colspan="2"><strong>TOTAL YEASY</strong></td><td class="amount gold">9.980,00 €</td></tr></tfoot></table></div>
-      <div class="section-title">Detalle diario Booksy — Abril</div>
-      <div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Día</th><th class="right">Citas</th><th class="right">Importe</th></tr></thead><tbody id="tbody-abril-booksy"></tbody><tfoot><tr class="total-row"><td colspan="3"><strong>TOTAL BOOKSY</strong></td><td class="amount gold">1.278,00 €</td></tr></tfoot></table></div>
-    </div>
-
-    <!-- TAB: MARZO -->
-    <div id="tab-marzo" class="tab-panel">
-      <div class="cards-grid">
-        <div class="stat-card"><div class="stat-card__label">Total Marzo</div><div class="stat-card__value">10.849 €</div></div>
-        <div class="stat-card"><div class="stat-card__label">Yeasy</div><div class="stat-card__value">9.730 €</div></div>
-        <div class="stat-card"><div class="stat-card__label">Booksy</div><div class="stat-card__value white">1.119 €</div></div>
-      </div>
-    </div>
-
-    <div class="doc-footer">
-      <span class="doc-footer__brand">TC Academy · The Crew Barbershop</span>
-      <span class="doc-footer__date">Actualizado 28/04/2026</span>
-    </div>
-
-  </main>
+  </div>
 </div>
 
 <script>
-const DAYS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-function dayName(d) { return DAYS[new Date(d+'T12:00:00').getDay()]; }
-function fmt(n) { return n.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'; }
+/* ── DATA ─────────────────────────────────────────────────────── */
+const D = {
+  billing: {
+    monthly: [
+      { m:'Ene', y:8287,  b:282  },
+      { m:'Feb', y:7500,  b:575  },
+      { m:'Mar', y:9730,  b:1119 },
+      { m:'Abr', y:9980,  b:1278 },
+    ],
+    yeasy: 35497, booksy: 3254, total: 38751,
+    best: { name:'Abril', val:11258 },
+  },
+  team: [
+    { id:'gerard', name:'Gerard Chao',         role:'Fundador · Head Barber', color:'#C9A84C',
+      months:[{m:'Ene',v:3200},{m:'Feb',v:2900},{m:'Mar',v:3800},{m:'Abr',v:4100}] },
+    { id:'ivan',   name:'Iván Contreras',       role:'Barbero Senior',         color:'#8B9E6E',
+      months:[{m:'Ene',v:2400},{m:'Feb',v:2100},{m:'Mar',v:2700},{m:'Abr',v:3000}] },
+    { id:'javier', name:'Javier Barrionuevo',   role:'Barbero',                color:'#C4622D',
+      months:[{m:'Ene',v:1600},{m:'Feb',v:1400},{m:'Mar',v:1800},{m:'Abr',v:1900}] },
+    { id:'caja',   name:'Gerard Caja',           role:'Barbero',                color:'#6B8F71',
+      months:[{m:'Ene',v:1087},{m:'Feb',v:1100},{m:'Mar',v:1430},{m:'Abr',v:1258}] },
+  ],
+  pl: {
+    monthly: [
+      { m:'Ene', ing:8569,   gas:7678.59, mar:890.41,   pct:10.4 },
+      { m:'Feb', ing:8075,   gas:7228.69, mar:846.31,   pct:10.5 },
+      { m:'Mar', ing:10849,  gas:8422.44, mar:2426.56,  pct:22.4 },
+      { m:'Abr', ing:11258,  gas:9176.08, mar:2081.92,  pct:18.5 },
+    ],
+    total_ing: 38751, total_gas: 32505.80, total_mar: 6245.20, pct_avg: 16.1,
+    prestamos_mes: 1413.60,
+  },
+  cf: {
+    monthly: [
+      { m:'Ene', ing:8569,  op:7679, mar:890,  fin:2614, hac:6935, salidas:17228, res:-8659,  acc:-8659  },
+      { m:'Feb', ing:8075,  op:7229, mar:846,  fin:2614, hac:0,    salidas:9843,  res:-1768,  acc:-10427 },
+      { m:'Mar', ing:10849, op:8422, mar:2427, fin:2614, hac:0,    salidas:11036, res:-187,   acc:-10614 },
+      { m:'Abr', ing:11258, op:9176, mar:2082, fin:2614, hac:3331, salidas:15121, res:-3863,  acc:-14477 },
+    ],
+    total: { ing:38751, op:32506, mar:6245, fin:10456, hac:10266, salidas:53228, res:-14477 },
+    hacienda_cal: [
+      { fecha:'20 Ene 2026', tri:'Q4 2025', importe:6935,  estado:'pagado' },
+      { fecha:'20 Abr 2026', tri:'Q1 2026', importe:3331,  estado:'pagado' },
+      { fecha:'20 Jul 2026', tri:'Q2 2026', importe:4000,  estado:'estimado' },
+      { fecha:'20 Oct 2026', tri:'Q3 2026', importe:4000,  estado:'estimado' },
+      { fecha:'20 Ene 2027', tri:'Q4 2026', importe:5500,  estado:'estimado' },
+    ],
+    credito: { usado:9292, total:12000, disp:2708 },
+    fijos_mes: 2614,
+    nominas_mes: 5300,
+    gastos_fijos: [
+      { cat:'Trabajadores',  items:[
+        { desc:'Ivan Contreras',      avg:1607 },
+        { desc:'Gerard Caja',         avg:1033 },
+        { desc:'Javier Barrionuevo',  avg:934  },
+      ]},
+      { cat:'Local & Suministros', items:[
+        { desc:'Alquiler C/ Lacy 18', avg:714  },
+        { desc:'Agua + luz + otros',  avg:120  },
+      ]},
+      { cat:'Financiación (fuera P&L)', items:[
+        { desc:'Préstamo reforma local',   avg:694.85 },
+        { desc:'Préstamo financiación SL', avg:718.75 },
+      ]},
+    ],
+  },
+  docs: [
+    { icon:'💰', title:'Facturación 2026',     desc:'Yeasy + Booksy · Ene–Abr',              file:'docs/index.html' },
+    { icon:'📊', title:'Gastos & P&L',          desc:'Análisis de gastos 2026',                file:'docs/gastos_2026.html' },
+    { icon:'💵', title:'Cashflow 2026',          desc:'Flujo de caja mensual',                  file:'docs/cashflow_2026.html' },
+    { icon:'👥', title:'Empleados',              desc:'Performance del equipo',                 file:'docs/empleados.html' },
+    { icon:'📋', title:'Estrategia Captación',   desc:'Plan academia online',                   file:'docs/estrategia_captacion.html' },
+    { icon:'🃏', title:'Crew Member Card',       desc:'Quiz + Apple/Google Wallet',             file:'docs/crew-member-card.html' },
+  ],
+};
 
-// ── TABS ──
-function switchTab(id) {
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['anual','abril','marzo'][i]===id));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-'+id).classList.add('active');
+/* ── UTILS ────────────────────────────────────────────────────── */
+const fmt = n => n.toLocaleString('es-ES',{minimumFractionDigits:0}) + ' €';
+const fmtD = n => n.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' €';
+const greet = () => { const h=new Date().getHours(); return h<13?'Buenos días':h<20?'Buenas tardes':'Buenas noches'; };
+const todayLong = () => {
+  const d=new Date();
+  const D2=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const M=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  return `${D2[d.getDay()]} ${d.getDate()} de ${M[d.getMonth()]} de ${d.getFullYear()}`;
+};
+const todayShort = () => new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
+
+function buildChart(id, monthly) {
+  const el=document.getElementById(id); if(!el) return;
+  const max=Math.max(...monthly.map(r=>r.y+r.b));
+  el.innerHTML='';
+  el.classList.add('chart-anim');
+  monthly.forEach(({m,y,b})=>{
+    const total=y+b;
+    const col=document.createElement('div');
+    col.className='bc';
+    col.innerHTML=`
+      <div class="bv">${fmt(total)}</div>
+      <div style="width:100%;display:flex;flex-direction:column;gap:2px;justify-content:flex-end;height:${(total/max)*100}%">
+        <div class="br b" style="height:${(b/total)*100}%"></div>
+        <div class="br a" style="height:${(y/total)*100}%"></div>
+      </div>
+      <div class="bl">${m}</div>`;
+    el.appendChild(col);
+  });
 }
 
-// ── MONTHLY CHART ──
-const monthly = [
-  {m:'Enero', y:8287, b:282},
-  {m:'Febrero', y:7500, b:575},
-  {m:'Marzo', y:9730, b:1119},
-  {m:'Abril', y:9980, b:1278},
-];
-const maxVal = Math.max(...monthly.map(r => r.y + r.b));
-const chart = document.getElementById('chart-monthly');
-monthly.forEach(({m, y, b}) => {
-  const total = y + b;
-  const col = document.createElement('div');
-  col.className = 'bar-col';
-  col.innerHTML = `
-    <div class="bar-val">${fmt(total)}</div>
-    <div style="width:100%;display:flex;flex-direction:column;gap:2px;justify-content:flex-end;height:${(total/maxVal)*100}%">
-      <div class="bar booksy" style="height:${(b/total)*100}%"></div>
-      <div class="bar yeasy" style="height:${(y/total)*100}%"></div>
+function buildEmpBars(id, months, color) {
+  const el=document.getElementById(id); if(!el) return;
+  const max=Math.max(...months.map(r=>r.v));
+  el.innerHTML='';
+  months.forEach(({m,v})=>{
+    const row=document.createElement('div');
+    row.className='emp-row';
+    row.innerHTML=`
+      <div class="emp-ml">${m}</div>
+      <div class="emp-trk"><div class="emp-fill" style="width:${(v/max)*100}%;background:${color}"></div></div>
+      <div class="emp-amt">${fmt(v)}</div>`;
+    el.appendChild(row);
+  });
+}
+
+/* ── VIEWS ────────────────────────────────────────────────────── */
+const V = {
+
+  dashboard: { sec:'Inicio', pg:'Dashboard',
+    html() {
+      const months = D.billing.monthly;
+      const sparkBilling = months.map(m => m.y + m.b);
+      const sparkMargin  = D.pl.monthly.map(m => m.mar);
+      const lastMonth = months[months.length-1].y + months[months.length-1].b;
+      const prevMonth = months[months.length-2].y + months[months.length-2].b;
+      const pct = ((lastMonth - prevMonth) / prevMonth * 100);
+      const trend = `<span class="trend ${pct>=0?'up':'dn'}">${pct>=0?'▲':'▼'} ${Math.abs(pct).toFixed(1)}%</span>`;
+
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Panel · The Crew Barbershop · Sabadell</span>
+  <h1 class="pg-title">${greet()}, <em>Gerard.</em></h1>
+  <p class="pg-sub">${todayLong()}</p>
+</div>
+
+<div class="sec">Resumen en vivo</div>
+<div class="kpi-grid" style="margin-bottom:28px">
+  <div class="kpi">
+    <div class="kpi-lbl">Facturación 2026</div>
+    <div class="kpi-val counter" data-count="${D.billing.total}" data-fmt="eur">0 €</div>
+    <svg class="spark" id="sp-bill"></svg>
+  </div>
+  <div class="kpi">
+    <div class="kpi-lbl">Mejor mes</div>
+    <div class="kpi-val g counter" data-count="${D.billing.best.val}" data-fmt="eur">0 €</div>
+    <div class="kpi-sub2">${D.billing.best.name} ${trend}</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-lbl">Margen 2026</div>
+    <div class="kpi-val counter" data-count="${Math.round(D.pl.total_mar)}" data-fmt="eur">0 €</div>
+    <svg class="spark" id="sp-margin"></svg>
+  </div>
+  <div class="kpi">
+    <div class="kpi-lbl">Seguidores IG</div>
+    <div class="kpi-val w counter" data-count="14827" data-fmt="num">0</div>
+    <div class="kpi-sub2">+605 en 30 días <span class="trend up">▲ 4.2%</span></div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-lbl">Mejor reel</div>
+    <div class="kpi-val g counter" data-count="1235580" data-fmt="M" data-dur="1300">0</div>
+    <div class="kpi-sub2">Satisfying close-up</div>
+  </div>
+</div>
+
+<div class="sec">Objetivos del año</div>
+<div class="g4" style="margin-bottom:28px">
+  <div class="card" style="padding:0">
+    <div class="ring-wrap">
+      <div class="ring"><svg id="ring-fact"></svg><div class="ring-val"><div class="ring-pct">94%</div></div></div>
+      <div style="text-align:center"><div class="ring-lbl">Facturación mes</div><div class="ring-sub">11.258 € / 12.000 €</div></div>
     </div>
-    <div class="bar-label">${m}</div>`;
-  chart.appendChild(col);
-});
+  </div>
+  <div class="card" style="padding:0">
+    <div class="ring-wrap">
+      <div class="ring"><svg id="ring-ig"></svg><div class="ring-val"><div class="ring-pct">93%</div></div></div>
+      <div style="text-align:center"><div class="ring-lbl">Seguidores IG</div><div class="ring-sub">14.827 / 16.000</div></div>
+    </div>
+  </div>
+  <div class="card" style="padding:0">
+    <div class="ring-wrap">
+      <div class="ring"><svg id="ring-mar"></svg><div class="ring-val"><div class="ring-pct">81%</div></div></div>
+      <div style="text-align:center"><div class="ring-lbl">Margen objetivo</div><div class="ring-sub">16.1% / 20%</div></div>
+    </div>
+  </div>
+  <div class="card" style="padding:0">
+    <div class="ring-wrap">
+      <div class="ring"><svg id="ring-hac"></svg><div class="ring-val"><div class="ring-pct">50%</div></div></div>
+      <div style="text-align:center"><div class="ring-lbl">Reserva Hacienda</div><div class="ring-sub">2.000 / 4.000 €</div></div>
+    </div>
+  </div>
+</div>
 
-// ── ABRIL YEASY ──
-const yeasyAbril = [
-  ['2026-04-01',528],['2026-04-02',492],['2026-04-03',156],
-  ['2026-04-07',270],['2026-04-08',432],['2026-04-09',632],
-  ['2026-04-10',526],['2026-04-11',208],['2026-04-12',31],
-  ['2026-04-13',99],['2026-04-14',331],['2026-04-15',338],
-  ['2026-04-16',348],['2026-04-17',369],['2026-04-18',354],
-  ['2026-04-20',162],['2026-04-21',251],['2026-04-22',1202],
-  ['2026-04-23',436],['2026-04-24',416],['2026-04-25',208],
-  ['2026-04-27',178],['2026-04-28',313],['2026-04-29',391],
-  ['2026-04-30',606],['2026-05-01',703],
-];
-const tbAY = document.getElementById('tbody-abril-yeasy');
-yeasyAbril.forEach(([d,a]) => {
-  const tr = document.createElement('tr');
-  tr.innerHTML = `<td>${d.slice(5).replace('-','/')}</td><td>${dayName(d)}</td><td class="amount">${fmt(a)}</td>`;
-  tbAY.appendChild(tr);
-});
+<div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;margin-bottom:24px">
+  <div>
+    <div class="sec">Facturación mensual</div>
+    <div class="card" style="padding-bottom:14px">
+      <div class="chart" id="dash-chart"></div>
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div>Yeasy</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#8A6830"></div>Booksy</div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="sec">Próximos eventos</div>
+    <div class="card">
+      <div class="ev">
+        <div class="ev-date"><div class="ev-d">18</div><div class="ev-m">May</div></div>
+        <div class="ev-body"><div class="ev-ttl">Lunes bloqueados</div><div class="ev-sub">Liberados para proyectos</div></div>
+        <span class="ev-tag" style="background:rgba(46,122,42,.12);color:var(--grn)">SOON</span>
+      </div>
+      <div class="ev">
+        <div class="ev-date"><div class="ev-d">20</div><div class="ev-m">Jul</div></div>
+        <div class="ev-body"><div class="ev-ttl">Hacienda Q2 2026</div><div class="ev-sub">~4.000 € · IVA + IRPF</div></div>
+        <span class="ev-tag" style="background:rgba(176,48,48,.12);color:var(--red)">HACIENDA</span>
+      </div>
+      <div class="ev">
+        <div class="ev-date"><div class="ev-d">20</div><div class="ev-m">Oct</div></div>
+        <div class="ev-body"><div class="ev-ttl">Hacienda Q3 2026</div><div class="ev-sub">~4.000 € · IVA + IRPF</div></div>
+        <span class="ev-tag" style="background:rgba(176,48,48,.12);color:var(--red)">HACIENDA</span>
+      </div>
+      <div class="ev">
+        <div class="ev-date"><div class="ev-d">28</div><div class="ev-m">Mes</div></div>
+        <div class="ev-body"><div class="ev-ttl">Nóminas equipo</div><div class="ev-sub">~5.300 € · cada mes</div></div>
+        <span class="ev-tag" style="background:rgba(42,94,138,.12);color:var(--blu)">FIJO</span>
+      </div>
+    </div>
+  </div>
+</div>
 
-// ── ABRIL BOOKSY ──
-const booksyAbril = [
-  ['2026-04-01',9,160],['2026-04-02',3,51],['2026-04-07',3,58],
-  ['2026-04-08',4,67],['2026-04-09',2,41],['2026-04-10',5,80],
-  ['2026-04-11',3,58],['2026-04-13',3,48],['2026-04-14',2,34],
-  ['2026-04-15',2,33],['2026-04-16',3,55],['2026-04-17',7,121],
-  ['2026-04-18',3,51],['2026-04-20',3,53],['2026-04-21',1,24],
-  ['2026-04-22',1,17],['2026-04-23',4,65],['2026-04-24',5,89],
-  ['2026-04-25',2,36],['2026-04-27',1,17],['2026-04-28',2,38],
+<div class="sec">Acceso rápido</div>
+<div class="g4">
+  <div class="qa" onclick="go('cashflow')"><div class="qa-ico">💵</div><div class="qa-lbl">Cashflow</div><div class="qa-sub">Tesorería 2026<br>Hacienda + crédito</div><div class="qa-arr">Ver →</div></div>
+  <div class="qa" onclick="go('contenido')"><div class="qa-ico">📱</div><div class="qa-lbl">Contenido IG</div><div class="qa-sub">14.8K seguidores<br>1.23M mejor reel</div><div class="qa-arr">Ver →</div></div>
+  <div class="qa" onclick="go('equipo')"><div class="qa-ico">👥</div><div class="qa-lbl">Equipo</div><div class="qa-sub">4 barberos<br>Performance</div><div class="qa-arr">Ver →</div></div>
+  <div class="qa" onclick="go('barberlab')"><div class="qa-ico">🧪</div><div class="qa-lbl">Proyectos</div><div class="qa-sub">BarberLab · CHAOS<br>3 activos</div><div class="qa-arr">Ver →</div></div>
+</div>`;
+    },
+    after() {
+      buildChart('dash-chart', D.billing.monthly);
+      const months = D.billing.monthly;
+      drawSpark(document.getElementById('sp-bill'),   months.map(m => m.y + m.b));
+      drawSpark(document.getElementById('sp-margin'), D.pl.monthly.map(m => m.mar), '#2E7A2A');
+      drawRing(document.getElementById('ring-fact'), 94);
+      drawRing(document.getElementById('ring-ig'),   93, '#C9A84C');
+      drawRing(document.getElementById('ring-mar'),  81, '#2E7A2A');
+      drawRing(document.getElementById('ring-hac'),  50, '#B84820');
+    }
+  },
+
+  facturacion: { sec:'Barbershop', pg:'Facturación',
+    html() {
+      const { monthly, yeasy, booksy, total, best } = D.billing;
+      const months = ['Enero','Febrero','Marzo','Abril'];
+      const rows = monthly.map(({m,y,b},i) => `<tr><td>${months[i]}</td><td class="r">${fmtD(y)}</td><td class="r">${fmtD(b)}</td><td class="r au">${fmtD(y+b)}</td></tr>`).join('');
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Barbershop · Facturación</span>
+  <h1 class="pg-title"><em>2026</em> — Enero a Abril</h1>
+  <p class="pg-sub">Yeasy (local principal) + Booksy (Barrio · Caja) · The Crew Barbershop, Sabadell</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Total 2026</div><div class="kpi-val">${fmt(total)}</div><div class="kpi-sub2">Yeasy + Booksy</div></div>
+  <div class="kpi"><div class="kpi-lbl">Yeasy</div><div class="kpi-val">${fmt(yeasy)}</div><div class="kpi-sub2">Local principal</div></div>
+  <div class="kpi"><div class="kpi-lbl">Booksy</div><div class="kpi-val w">${fmt(booksy)}</div><div class="kpi-sub2">Barrio + Caja</div></div>
+  <div class="kpi"><div class="kpi-lbl">Mejor mes</div><div class="kpi-val g">${fmt(best.val)}</div><div class="kpi-sub2">${best.name} 2026</div></div>
+</div>
+<div class="sec">Facturación mensual</div>
+<div class="card" style="margin-bottom:24px;padding-bottom:14px">
+  <div class="chart" id="fact-chart"></div>
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div>Yeasy</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#8A6830"></div>Booksy</div>
+  </div>
+</div>
+<div class="sec">Resumen por mes</div>
+<div class="tw">
+  <table>
+    <thead><tr><th>Mes</th><th class="r">Yeasy</th><th class="r">Booksy</th><th class="r">Total</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr class="tf"><td><strong>TOTAL 2026</strong></td><td class="r">${fmtD(yeasy)}</td><td class="r">${fmtD(booksy)}</td><td class="r">${fmtD(total)}</td></tr></tfoot>
+  </table>
+</div>
+<div class="note">Booksy crece mes a mes: de 282 € en enero a 1.278 € en abril (+353%). Abril cierra como el mejor mes del año con 11.258 €.</div>`;
+    },
+    after() { buildChart('fact-chart', D.billing.monthly); }
+  },
+
+  gastos: { sec:'Barbershop', pg:'Gastos & P&L',
+    html() {
+      const { monthly, total_ing, total_gas, total_mar, pct_avg, prestamos_mes, gastos_fijos } = D.pl;
+      const plRows = monthly.map(r => {
+        const pctColor = r.pct >= 20 ? 'var(--grn)' : r.pct >= 15 ? 'var(--gold)' : 'var(--orn)';
+        return `<tr>
+          <td><strong>${r.m}</strong></td>
+          <td class="r">${fmtD(r.ing)}</td>
+          <td class="r" style="color:var(--red)">${fmtD(r.gas)}</td>
+          <td class="r" style="color:var(--grn);font-weight:700">${fmtD(r.mar)}</td>
+          <td class="r" style="color:${pctColor};font-weight:700">${r.pct}%</td>
+        </tr>`;
+      }).join('');
+
+      const fixedCards = gastos_fijos.map(g => {
+        const total = g.items.reduce((s,i) => s + i.avg, 0);
+        return `
+        <div class="card">
+          <div class="card-ttl" style="margin-bottom:12px">${g.cat}</div>
+          ${g.items.map(i => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--ln2)">
+              <span style="font-size:11px;color:var(--t2)">${i.desc}</span>
+              <span style="font-size:12px;font-weight:700;color:var(--t1)">${fmtD(i.avg)}</span>
+            </div>`).join('')}
+          <div style="display:flex;justify-content:space-between;padding:8px 0 0;margin-top:4px">
+            <span style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.08em">Total</span>
+            <span style="font-size:12px;font-weight:800;color:var(--gold)">${fmtD(total)}</span>
+          </div>
+        </div>`;
+      }).join('');
+
+      const maxIng = Math.max(...monthly.map(r => r.ing));
+      const chartBars = monthly.map(r => `
+        <div class="bc">
+          <div class="bv">${fmtD(r.mar)}</div>
+          <div style="width:100%;display:flex;flex-direction:column;gap:2px;justify-content:flex-end;height:${(r.ing/maxIng)*100}%">
+            <div class="br" style="height:${(r.gas/r.ing)*100}%;background:rgba(176,48,48,.55)"></div>
+            <div class="br" style="height:${(r.mar/r.ing)*100}%;background:var(--grn)"></div>
+          </div>
+          <div class="bl">${r.m}</div>
+        </div>`).join('');
+
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Barbershop · Cuenta de Resultados</span>
+  <h1 class="pg-title">Gastos <em>&amp; P&L</em></h1>
+  <p class="pg-sub">Verificado con extractos BBVA + CaixaBank · Enero–Abril 2026</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Total ingresos</div><div class="kpi-val">${fmt(total_ing)}</div><div class="kpi-sub2">Ene–Abr 2026</div></div>
+  <div class="kpi"><div class="kpi-lbl">Total gastos op.</div><div class="kpi-val w">${fmt(Math.round(total_gas))}</div><div class="kpi-sub2">Operativos sin préstamos</div></div>
+  <div class="kpi"><div class="kpi-lbl">Margen operativo</div><div class="kpi-val g">${fmt(Math.round(total_mar))}</div><div class="kpi-sub2">16.1% sobre ingresos</div></div>
+  <div class="kpi"><div class="kpi-lbl">Mejor margen</div><div class="kpi-val g">22.4%</div><div class="kpi-sub2">Marzo 2026</div></div>
+  <div class="kpi"><div class="kpi-lbl">Préstamos/mes</div><div class="kpi-val w">${fmtD(prestamos_mes)}</div><div class="kpi-sub2">Fuera del P&L operativo</div></div>
+</div>
+
+<div class="note" style="border-left-color:var(--red)">⚠️ Los <strong>préstamos CaixaBank (1.413,60€/mes)</strong> no están en el P&L operativo — son carga financiera adicional. El margen real de caja es negativo en meses con liquidaciones fiscales (ej. IVA Q4 Enero: 6.935€).</div>
+
+<div class="sec">P&L mensual — Ingresos vs Gastos</div>
+<div class="card" style="margin-bottom:24px;padding-bottom:14px">
+  <div class="chart" style="height:160px;display:flex;align-items:flex-end;gap:12px;padding:0 8px">${chartBars}</div>
+  <div class="legend" style="margin-top:10px">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--grn)"></div>Margen</div>
+    <div class="leg-item"><div class="leg-dot" style="background:rgba(176,48,48,.55)"></div>Gastos operativos</div>
+  </div>
+</div>
+
+<div class="sec">Tabla P&L</div>
+<div class="tw" style="margin-bottom:28px">
+  <table>
+    <thead><tr><th>Mes</th><th class="r">Ingresos</th><th class="r">Gastos op.</th><th class="r">Margen €</th><th class="r">Margen %</th></tr></thead>
+    <tbody>${plRows}</tbody>
+    <tfoot>
+      <tr class="tf">
+        <td><strong>TOTAL</strong></td>
+        <td class="r">${fmtD(total_ing)}</td>
+        <td class="r" style="color:var(--red)">${fmtD(total_gas)}</td>
+        <td class="r" style="color:var(--grn);font-weight:800">${fmtD(total_mar)}</td>
+        <td class="r" style="color:var(--gold);font-weight:800">${pct_avg}%</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="sec">Estructura de gastos (media mensual)</div>
+<div class="g3" style="margin-bottom:24px">${fixedCards}</div>
+
+<div class="sec">Documentos completos</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+  <a class="dl" href="docs/gastos_2026.html" target="_blank"><div class="dl-ico">📊</div><div><div class="dl-ttl">Gastos 2026 — Informe completo</div><div class="dl-sub">Desglose mensual por factura · verificado banco</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="docs/cashflow_2026.html" target="_blank"><div class="dl-ico">💵</div><div><div class="dl-ttl">Cashflow 2026</div><div class="dl-sub">Flujo de caja real incluyendo préstamos e impuestos</div></div><div class="dl-arr">↗</div></a>
+</div>`;
+    }
+  },
+
+  cashflow: { sec:'Barbershop', pg:'Cashflow',
+    html() {
+      const { monthly, total, hacienda_cal, credito, fijos_mes, nominas_mes } = D.cf;
+      const cfRows = monthly.map(r => `
+        <tr>
+          <td><strong>${r.m}</strong></td>
+          <td class="r" style="color:var(--grn)">${fmt(r.ing)}</td>
+          <td class="r" style="color:var(--red)">${fmt(r.op)}</td>
+          <td class="r" style="color:var(--gold)">+${fmt(r.mar)}</td>
+          <td class="r" style="color:var(--blu)">${fmt(r.fin)}</td>
+          <td class="r" style="color:${r.hac>0?'var(--red)':'var(--t4)'}">${r.hac>0?fmt(r.hac):'—'}</td>
+          <td class="r" style="color:var(--red);font-weight:700">${fmt(r.salidas)}</td>
+          <td class="r" style="color:${r.res>=0?'var(--grn)':'var(--red)'};font-weight:800">${r.res>=0?'+':''}${fmt(r.res)}</td>
+          <td class="r" style="color:${r.acc>=0?'var(--grn)':'var(--red)'};font-weight:700">${r.acc>=0?'+':''}${fmt(r.acc)}</td>
+        </tr>`).join('');
+
+      const hacRows = hacienda_cal.map(h => {
+        const isPagado = h.estado === 'pagado';
+        return `<tr>
+          <td><strong>${h.fecha}</strong></td>
+          <td>${h.tri}</td>
+          <td class="r" style="color:${isPagado?'var(--t1)':'var(--orn)'};font-weight:700">${fmt(h.importe)}${isPagado?'':' est.'}</td>
+          <td><span class="badge ${isPagado?'live':'plan'}"><span class="bdot"></span>${isPagado?'Pagado':'Pendiente'}</span></td>
+        </tr>`;
+      }).join('');
+
+      const creditoPct = Math.round(credito.usado / credito.total * 100);
+
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Barbershop · Tesorería</span>
+  <h1 class="pg-title"><em>Cashflow</em> 2026</h1>
+  <p class="pg-sub">Flujo de caja real con préstamos, distribuciones e impuestos · Verificado banco</p>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Saldo acumulado</div><div class="kpi-val" style="color:var(--red)">${fmt(total.res)}</div><div class="kpi-sub2">Déficit Ene–Abr 2026</div></div>
+  <div class="kpi"><div class="kpi-lbl">Total ingresos</div><div class="kpi-val g">${fmt(total.ing)}</div><div class="kpi-sub2">Yeasy + Booksy</div></div>
+  <div class="kpi"><div class="kpi-lbl">Total salidas</div><div class="kpi-val w">${fmt(total.salidas)}</div><div class="kpi-sub2">Op + financiación + Hacienda</div></div>
+  <div class="kpi"><div class="kpi-lbl">Hacienda 2026</div><div class="kpi-val w">${fmt(total.hac)}</div><div class="kpi-sub2">Q4 2025 + Q1 2026 pagados</div></div>
+  <div class="kpi"><div class="kpi-lbl">Línea crédito</div><div class="kpi-val" style="color:var(--orn)">${fmt(credito.disp)}</div><div class="kpi-sub2">Disponible · ${creditoPct}% usado</div></div>
+</div>
+
+<div class="note" style="border-left-color:var(--red)"><strong>⚠️ Alerta de tesorería:</strong> Solo <strong>${fmt(credito.disp)}</strong> de margen en línea de crédito. Pagos fijos primeros 5 días: ${fmtD(fijos_mes)} (préstamos + distribución). Día 28: nóminas ~${fmt(nominas_mes)}. Tener saldo positivo el día 27 del mes anterior es crítico.</div>
+
+<div class="sec">Línea de crédito CaixaBank</div>
+<div class="card" style="margin-bottom:24px">
+  <div style="display:flex;justify-content:space-between;align-items:end;margin-bottom:10px">
+    <div>
+      <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:4px">Usado</div>
+      <div style="font-size:20px;font-weight:800;color:var(--orn)">${fmt(credito.usado)}</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:4px">Disponible</div>
+      <div style="font-size:20px;font-weight:800;color:var(--grn)">${fmt(credito.disp)}</div>
+    </div>
+  </div>
+  <div style="height:14px;background:var(--s3);border-radius:7px;overflow:hidden;display:flex">
+    <div style="width:${creditoPct}%;background:linear-gradient(90deg,var(--gold),var(--orn));transition:width .6s"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:9px;color:var(--t3)">
+    <span>0€</span><span>${creditoPct}% usado de ${fmt(credito.total)}</span><span>${fmt(credito.total)}</span>
+  </div>
+</div>
+
+<div class="sec">Flujo mensual real</div>
+<div class="tw" style="margin-bottom:28px">
+  <table>
+    <thead><tr>
+      <th>Mes</th>
+      <th class="r">Ingresos</th>
+      <th class="r">Op.</th>
+      <th class="r">Margen</th>
+      <th class="r">Financ.</th>
+      <th class="r">Hacienda</th>
+      <th class="r">Salidas</th>
+      <th class="r">Resultado</th>
+      <th class="r">Acumulado</th>
+    </tr></thead>
+    <tbody>${cfRows}</tbody>
+    <tfoot>
+      <tr class="tf">
+        <td><strong>TOTAL</strong></td>
+        <td class="r" style="color:var(--grn)">${fmt(total.ing)}</td>
+        <td class="r" style="color:var(--red)">${fmt(total.op)}</td>
+        <td class="r" style="color:var(--gold)">+${fmt(total.mar)}</td>
+        <td class="r" style="color:var(--blu)">${fmt(total.fin)}</td>
+        <td class="r" style="color:var(--red)">${fmt(total.hac)}</td>
+        <td class="r" style="color:var(--red);font-weight:800">${fmt(total.salidas)}</td>
+        <td class="r" style="color:var(--red);font-weight:800">${fmt(total.res)}</td>
+        <td class="r" style="color:var(--red);font-weight:800">${fmt(total.res)}</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="sec">Calendario Hacienda 2026</div>
+<div class="tw" style="margin-bottom:28px">
+  <table>
+    <thead><tr><th>Fecha</th><th>Trimestre</th><th class="r">Importe</th><th>Estado</th></tr></thead>
+    <tbody>${hacRows}</tbody>
+  </table>
+</div>
+
+<div class="sec">Diagnóstico</div>
+<div class="g2" style="margin-bottom:24px">
+  <div class="card" style="border-top:2px solid var(--grn)">
+    <div class="card-ttl" style="color:var(--grn);margin-bottom:10px">✓ Lo que funciona</div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7">Barbería <strong>operativamente rentable</strong>, 16% margen real. Crecimiento <strong style="color:var(--gold)">+31%</strong> en ingresos en 4 meses. La operativa funciona.</p>
+  </div>
+  <div class="card" style="border-top:2px solid var(--red)">
+    <div class="card-ttl" style="color:var(--red);margin-bottom:10px">✗ Lo que duele</div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7">Deuda + distribuciones + impuestos consumen <strong style="color:var(--red)">más de lo que el margen genera</strong>. Déficit ~3.600€/mes en promedio.</p>
+  </div>
+</div>
+
+<div class="sec">Documentos</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+  <a class="dl" href="docs/cashflow_2026.html" target="_blank"><div class="dl-ico">💵</div><div><div class="dl-ttl">Cashflow 2026 — Informe completo</div><div class="dl-sub">Calendario semanal · Punto de equilibrio · Recomendaciones</div></div><div class="dl-arr">↗</div></a>
+</div>`;
+    }
+  },
+
+  equipo: { sec:'Barbershop', pg:'Equipo',
+    html() {
+      const cards = D.team.map(({id,name,role,color,months}) => {
+        const total = months.reduce((s,r)=>s+r.v,0);
+        return `
+<div class="emp" style="--ec:${color}">
+  <style>.emp#e-${id}::before{background:${color}!important;width:3px}</style>
+  <div class="emp" id="e-${id}" style="border:none;padding:0 0 0 10px;background:transparent">
+    <div class="emp-name" style="color:${color}">${name}</div>
+    <div class="emp-role">${role}</div>
+    <div class="emp-total" style="color:${color}">${fmt(total)}</div>
+    <div class="emp-lbl">Total Ene–Abr 2026</div>
+    <div class="emp-bars" id="eb-${id}"></div>
+  </div>
+</div>`;
+      }).join('');
+
+      const compareRows = D.team.map(({name,color,months}) => {
+        const total = months.reduce((s,r)=>s+r.v,0);
+        return `<tr>
+          <td style="color:${color};font-weight:700">${name.split(' ')[0]}</td>
+          ${months.map(r=>`<td class="r">${fmt(r.v)}</td>`).join('')}
+          <td class="r au">${fmt(total)}</td>
+        </tr>`;
+      }).join('');
+
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Barbershop · Equipo</span>
+  <h1 class="pg-title">El <em>Equipo</em></h1>
+  <p class="pg-sub">4 barberos · The Crew Barbershop, C/ Lacy 18, Sabadell</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Barberos</div><div class="kpi-val w">4</div><div class="kpi-sub2">Activos</div></div>
+  <div class="kpi"><div class="kpi-lbl">Facturación Yeasy</div><div class="kpi-val">${fmt(D.billing.yeasy)}</div><div class="kpi-sub2">2026 total equipo</div></div>
+  <div class="kpi"><div class="kpi-lbl">Media por barbero</div><div class="kpi-val">${fmt(Math.round(D.billing.yeasy/4))}</div><div class="kpi-sub2">Ene–Abr 2026</div></div>
+  <div class="kpi"><div class="kpi-lbl">Ubicación</div><div class="kpi-val w" style="font-size:13px;padding-top:6px">Sabadell</div><div class="kpi-sub2">C/ Lacy 18, Barcelona</div></div>
+</div>
+<div class="sec">Performance individual</div>
+<div class="g2" style="margin-bottom:24px">${cards}</div>
+<div class="sec">Tabla comparativa</div>
+<div class="tw">
+  <table>
+    <thead><tr><th>Barbero</th>${D.billing.monthly.map(r=>`<th class="r">${r.m}</th>`).join('')}<th class="r">Total</th></tr></thead>
+    <tbody>${compareRows}</tbody>
+    <tfoot><tr class="tf"><td><strong>TOTAL</strong></td>${D.billing.monthly.map((_,i)=>{const t=D.team.reduce((s,e)=>s+e.months[i].v,0);return`<td class="r">${fmt(t)}</td>`;}).join('')}<td class="r">${fmt(D.team.reduce((s,e)=>s+e.months.reduce((ss,r)=>ss+r.v,0),0))}</td></tr></tfoot>
+  </table>
+</div>`;
+    },
+    after() { D.team.forEach(({id,color,months})=>buildEmpBars(`eb-${id}`,months,color)); }
+  },
+
+  citas: { sec:'Barbershop', pg:'Citas',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Barbershop · Reservas</span>
+  <h1 class="pg-title">Gestión de <em>Citas</em></h1>
+  <p class="pg-sub">Reservas en tiempo real · Yeasy + Booksy</p>
+</div>
+<div class="note"><strong>Próximamente:</strong> Vista en tiempo real de citas del día, semana y estadísticas de ocupación por barbero via API Yeasy + Booksy.</div>
+<div class="sec">Acceso directo</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+  <a class="dl" href="https://business.yeasyapp.com" target="_blank"><div class="dl-ico">📅</div><div><div class="dl-ttl">Yeasy Business</div><div class="dl-sub">Panel principal · local The Crew · business.yeasyapp.com</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="https://booksy.com" target="_blank"><div class="dl-ico">📋</div><div><div class="dl-ttl">Booksy Pro</div><div class="dl-sub">Barbero Barrio + Gerard Caja · booksy.com</div></div><div class="dl-arr">↗</div></a>
+</div>`;
+    }
+  },
+
+  academia: { sec:'The Crew Academy', pg:'Academia',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">The Crew Academy</span>
+  <h1 class="pg-title">The Crew <em>Academy</em></h1>
+  <p class="pg-sub">Academia online de barbería · thecrewacademy.es · Shopify</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Estado</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge live"><span class="bdot"></span>Live</span></div><div class="kpi-sub2">thecrewacademy.es</div></div>
+  <div class="kpi"><div class="kpi-lbl">Plataforma</div><div class="kpi-val w" style="font-size:15px;padding-top:4px">Shopify</div><div class="kpi-sub2">Dominio propio</div></div>
+  <div class="kpi"><div class="kpi-lbl">Instagram</div><div class="kpi-val w">14.7K</div><div class="kpi-sub2">@gerardchao</div></div>
+  <div class="kpi"><div class="kpi-lbl">ROOTS Ebook</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge dev"><span class="bdot"></span>v1 Ready</span></div><div class="kpi-sub2">38 slides</div></div>
+</div>
+<div class="sec">Recursos</div>
+<div class="g2" style="margin-bottom:24px">
+  <div class="pj" onclick="go('roots')" style="cursor:pointer">
+    <div class="pj-bar" style="background:var(--gold)"></div>
+    <div class="pj-tag">Material educativo</div>
+    <div class="pj-name">ROOTS — Barber Basics</div>
+    <div class="pj-desc">Ebook de fundamentos de barbería. 38 slides, 8 temas: vocabulario técnico, anatomía, herramientas, técnicas de corte, fundamentos, tipos de cabello, visagismo y marketing.</div>
+    <div class="pj-foot"><span class="badge dev"><span class="bdot"></span>v1 Generado</span><span class="pj-link">Ver detalle →</span></div>
+  </div>
+  <div class="pj" onclick="go('crewcard')" style="cursor:pointer">
+    <div class="pj-bar" style="background:var(--grn)"></div>
+    <div class="pj-tag">Fidelización</div>
+    <div class="pj-name">Crew Member Card</div>
+    <div class="pj-desc">Quiz de conocimientos de barbería. Al completarlo el alumno recibe una Crew Member Card descargable en Apple Wallet / Google Wallet via Passcreator API.</div>
+    <div class="pj-foot"><span class="badge live"><span class="bdot"></span>API Integrada</span><span class="pj-link">Ver detalle →</span></div>
+  </div>
+</div>
+<div class="sec">Links</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+  <a class="dl" href="https://thecrewacademy.es" target="_blank"><div class="dl-ico">🌐</div><div><div class="dl-ttl">The Crew Academy</div><div class="dl-sub">thecrewacademy.es · Shopify</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="../docs/estrategia_captacion.html" target="_blank"><div class="dl-ico">📋</div><div><div class="dl-ttl">Estrategia de Captación</div><div class="dl-sub">Plan de captación de alumnos online</div></div><div class="dl-arr">↗</div></a>
+</div>`;
+    }
+  },
+
+  roots: { sec:'The Crew Academy', pg:'ROOTS Ebook',
+    html() {
+      const topics = [
+        [1,'Vocabulario Técnico',2], [2,'Anatomía del Cráneo',2],
+        [3,'Herramientas de Corte',2], [4,'Técnicas de Corte',2],
+        [5,'Fundamentos',7], [6,'Tipos de Cabello',7],
+        [7,'Visagismo',2], [8,'Marketing Personal',3],
+      ];
+      const rows = topics.map(([n,t,s]) => `
+        <tr>
+          <td style="color:var(--gold);font-weight:700">${n}</td>
+          <td>${t}</td>
+          <td class="r">${s}</td>
+          <td><span class="badge live"><span class="bdot"></span>Completo</span></td>
+        </tr>`).join('');
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">The Crew Academy · Material</span>
+  <h1 class="pg-title">ROOTS — <em>Barber Basics</em></h1>
+  <p class="pg-sub">Ebook de fundamentos de barbería · v1 generado · 38 slides</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Total slides</div><div class="kpi-val w">38</div><div class="kpi-sub2">+ portada, índice, cierre</div></div>
+  <div class="kpi"><div class="kpi-lbl">Temas</div><div class="kpi-val w">8</div><div class="kpi-sub2">Módulos completos</div></div>
+  <div class="kpi"><div class="kpi-lbl">Formato</div><div class="kpi-val w" style="font-size:15px;padding-top:5px">PPTX</div><div class="kpi-sub2">Exportable a PDF</div></div>
+  <div class="kpi"><div class="kpi-lbl">Estado</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge dev"><span class="bdot"></span>v1 Ready</span></div><div class="kpi-sub2">Pendiente revisión visual</div></div>
+</div>
+<div class="sec">Estructura del ebook</div>
+<div class="tw" style="margin-bottom:24px">
+  <table>
+    <thead><tr><th style="width:36px">#</th><th>Tema</th><th class="r">Slides</th><th>Estado</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr class="tf"><td colspan="2"><strong>TOTAL</strong></td><td class="r">38</td><td></td></tr></tfoot>
+  </table>
+</div>
+<div class="sec">Diseño</div>
+<div class="g3" style="margin-bottom:24px">
+  <div class="card"><div class="card-ttl">Fondo</div><div style="display:flex;align-items:center;gap:10px;margin-top:6px"><div style="width:26px;height:26px;border-radius:3px;background:#191919;border:1px solid var(--ln)"></div><span style="font-size:11px;color:var(--t2)">#191919 Dark</span></div></div>
+  <div class="card"><div class="card-ttl">Acento</div><div style="display:flex;align-items:center;gap:10px;margin-top:6px"><div style="width:26px;height:26px;border-radius:3px;background:#C9A84C"></div><span style="font-size:11px;color:var(--t2)">#C9A84C Gold</span></div></div>
+  <div class="card"><div class="card-ttl">Texto</div><div style="display:flex;align-items:center;gap:10px;margin-top:6px"><div style="width:26px;height:26px;border-radius:3px;background:#f0ede6;border:1px solid var(--ln)"></div><span style="font-size:11px;color:var(--t2)">#f0ede6 Warm white</span></div></div>
+</div>
+<div class="note">Revisión visual pendiente en PowerPoint / Keynote. Próximo paso: añadir imágenes, ajustar fuentes y exportar a PDF final.</div>`;
+    }
+  },
+
+  crewcard: { sec:'Proyectos', pg:'Crew Member Card',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Proyectos · Fidelización</span>
+  <h1 class="pg-title">Crew <em>Member Card</em></h1>
+  <p class="pg-sub">Quiz de barbería → Apple Wallet / Google Wallet · Passcreator API</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Estado API</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge live"><span class="bdot"></span>Activa</span></div><div class="kpi-sub2">Passcreator · crew-member-quiz</div></div>
+  <div class="kpi"><div class="kpi-lbl">Plataforma</div><div class="kpi-val w" style="font-size:14px;padding-top:5px">Passcreator</div><div class="kpi-sub2">app.passcreator.com</div></div>
+  <div class="kpi"><div class="kpi-lbl">Template</div><div class="kpi-val w" style="font-size:11px;padding-top:8px">Crew Card</div><div class="kpi-sub2">Apple + Google Wallet</div></div>
+  <div class="kpi"><div class="kpi-lbl">Template ID</div><div class="kpi-val w" style="font-size:9px;padding-top:10px;letter-spacing:0;font-weight:600">3a538011-6205…</div><div class="kpi-sub2">Wallet Pass template</div></div>
+</div>
+<div class="sec">Cómo funciona</div>
+<div class="g3" style="margin-bottom:24px">
+  <div class="card" style="border-top:2px solid var(--gold)"><div class="card-ttl" style="color:var(--gold)">01 · Quiz</div><p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:6px">El alumno completa el quiz de conocimientos de barbería en el HTML interactivo</p></div>
+  <div class="card" style="border-top:2px solid var(--gold)"><div class="card-ttl" style="color:var(--gold)">02 · Aprobado</div><p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:6px">Si supera el test se llama al endpoint de Passcreator con los datos del alumno</p></div>
+  <div class="card" style="border-top:2px solid var(--gold)"><div class="card-ttl" style="color:var(--gold)">03 · Wallet Pass</div><p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:6px">Se genera y descarga la Crew Member Card para Apple Wallet o Google Wallet</p></div>
+</div>
+<div class="sec">Acceso</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+  <a class="dl" href="../docs/crew-member-card.html" target="_blank"><div class="dl-ico">🃏</div><div><div class="dl-ttl">Crew Member Card — Demo</div><div class="dl-sub">Quiz interactivo con generación de Wallet Pass</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="https://app.passcreator.com" target="_blank"><div class="dl-ico">🔑</div><div><div class="dl-ttl">Passcreator Dashboard</div><div class="dl-sub">Gestión de templates y passes generados</div></div><div class="dl-arr">↗</div></a>
+</div>`;
+    }
+  },
+
+  barberlab: { sec:'Proyectos', pg:'BarberLab',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Proyectos · App Web</span>
+  <h1 class="pg-title">Barber<em>Lab</em></h1>
+  <p class="pg-sub">App para planificación de cortes con cabeza 3D + panel 2D overlay</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Estado</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge dev"><span class="bdot"></span>En desarrollo</span></div><div class="kpi-sub2">Mockup HTML funcional</div></div>
+  <div class="kpi"><div class="kpi-lbl">Stack</div><div class="kpi-val w" style="font-size:11px;padding-top:8px">WebGL + Canvas</div><div class="kpi-sub2">Three.js + Canvas 2D</div></div>
+  <div class="kpi"><div class="kpi-lbl">Target</div><div class="kpi-val w" style="font-size:12px;padding-top:7px">Barberos</div><div class="kpi-sub2">Academias y profesionales</div></div>
+  <div class="kpi"><div class="kpi-lbl">Referencia visual</div><div class="kpi-val w" style="font-size:11px;padding-top:8px">HairTechApp</div><div class="kpi-sub2">Líneas limpias, sin distorsión</div></div>
+</div>
+<div class="sec">Concepto</div>
+<div class="note">Cabeza en 3D (WebGL / Three.js) con un canvas 2D superpuesto donde se dibujan las líneas del corte. El panel 2D es independiente del 3D para que las líneas se vean limpias, al estilo HairTechApp.</div>
+<div class="sec">Capas del panel 2D</div>
+<div class="g3" style="margin-bottom:24px">
+  <div class="card"><div style="width:10px;height:10px;border-radius:2px;background:#4A90D9;margin-bottom:8px"></div><div class="card-ttl">Partición</div><p style="font-size:11px;color:var(--t2);margin-top:4px;line-height:1.6">Línea azul · divide las secciones principales</p></div>
+  <div class="card"><div style="width:10px;height:10px;border-radius:2px;background:#9B59B6;margin-bottom:8px"></div><div class="card-ttl">Secciones verticales</div><p style="font-size:11px;color:var(--t2);margin-top:4px;line-height:1.6">Líneas moradas de división vertical</p></div>
+  <div class="card"><div style="width:10px;height:10px;border-radius:2px;background:#27AE60;margin-bottom:8px"></div><div class="card-ttl">Secciones horizontales</div><p style="font-size:11px;color:var(--t2);margin-top:4px;line-height:1.6">Líneas verdes de división horizontal</p></div>
+  <div class="card"><div style="width:10px;height:10px;border-radius:2px;background:#E74C3C;margin-bottom:8px"></div><div class="card-ttl">Mecha guía (sección 3)</div><p style="font-size:11px;color:var(--t2);margin-top:4px;line-height:1.6">Línea roja · referencia base del corte</p></div>
+  <div class="card"><div style="width:10px;height:10px;border-radius:2px;background:#E74C3C;margin-bottom:8px"></div><div class="card-ttl">Distribución</div><p style="font-size:11px;color:var(--t2);margin-top:4px;line-height:1.6">Flechas rojas · dirección del cabello</p></div>
+  <div class="card"><div style="width:10px;height:10px;border-radius:2px;background:#E67E22;margin-bottom:8px"></div><div class="card-ttl">Resultado</div><p style="font-size:11px;color:var(--t2);margin-top:4px;line-height:1.6">Líneas naranjas del resultado final</p></div>
+</div>
+<div class="sec">Archivo</div>
+<div class="dl" style="cursor:default">
+  <div class="dl-ico">💻</div>
+  <div><div class="dl-ttl">barber-app-mockup.html</div><div class="dl-sub">/Documents/Claude/Projects/BARBER APP/ · Mockup funcional</div></div>
+  <span class="badge dev" style="margin-left:auto"><span class="bdot"></span>Local</span>
+</div>`;
+    }
+  },
+
+  chaos: { sec:'Proyectos', pg:'CHAOS Hair Product',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Proyectos · Marca propia</span>
+  <h1 class="pg-title">CHAOS <em>Hair Product</em></h1>
+  <p class="pg-sub">Línea propia de productos capilares para barbería</p>
+</div>
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Estado</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge seed"><span class="bdot"></span>Fase inicial</span></div><div class="kpi-sub2">Brief creado</div></div>
+  <div class="kpi"><div class="kpi-lbl">Proveedor</div><div class="kpi-val w" style="font-size:14px;padding-top:5px">BRANDED</div><div class="kpi-sub2">~34$ muestra · contactado</div></div>
+  <div class="kpi"><div class="kpi-lbl">Productos</div><div class="kpi-val w" style="font-size:13px;padding-top:6px">2 ceras</div><div class="kpi-sub2">Mate + En polvo</div></div>
+  <div class="kpi"><div class="kpi-lbl">Color de marca</div><div class="kpi-val" style="padding-top:3px"><span style="color:#F5D020;font-size:22px">●</span></div><div class="kpi-sub2">Amarillo · estilo Octyl / 5AM</div></div>
+</div>
+<div class="sec">Brief de marca</div>
+<div class="g2" style="margin-bottom:24px">
+  <div class="card">
+    <div class="card-ttl">Identidad</div>
+    <div style="margin-top:10px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--t3)">Logo</span><span style="color:var(--t1);font-weight:600">C con círculo interior</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--t3)">Color principal</span><span style="color:#F5D020;font-weight:600">Amarillo</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--t3)">Referencia</span><span style="color:var(--t2)">Sam Rascals, Octyl, 5AM</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--t3)">Aroma target</span><span style="color:var(--t2)">Fuerte y reconocible</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl">Productos iniciales</div>
+    <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
+      <div class="dl" style="padding:10px 12px;cursor:default"><div class="dl-ico">⬛</div><div><div class="dl-ttl">Cera Mate</div><div class="dl-sub">Fijación fuerte sin brillo</div></div></div>
+      <div class="dl" style="padding:10px 12px;cursor:default"><div class="dl-ico">⬜</div><div><div class="dl-ttl">Cera en Polvo</div><div class="dl-sub">Volumen y textura natural</div></div></div>
+    </div>
+  </div>
+</div>
+<div class="sec">Roadmap</div>
+<div class="tw">
+  <table>
+    <thead><tr><th>Paso</th><th>Descripción</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--gold);font-weight:700">1</td><td>Brief de marca creado</td><td><span class="badge live"><span class="bdot"></span>Hecho</span></td></tr>
+      <tr><td style="color:var(--gold);font-weight:700">2</td><td>Proveedor BRANDED contactado</td><td><span class="badge live"><span class="bdot"></span>Hecho</span></td></tr>
+      <tr><td style="color:var(--t3)">3</td><td>Solicitar muestra (~34$)</td><td><span class="badge plan"><span class="bdot"></span>Pendiente</span></td></tr>
+      <tr><td style="color:var(--t3)">4</td><td>Diseño de packaging</td><td><span class="badge plan"><span class="bdot"></span>Pendiente</span></td></tr>
+      <tr><td style="color:var(--t3)">5</td><td>Primer pedido de producción</td><td><span class="badge plan"><span class="bdot"></span>Pendiente</span></td></tr>
+    </tbody>
+  </table>
+</div>`;
+    }
+  },
+
+  docs: { sec:'Herramientas', pg:'Docs & Informes',
+    html() {
+      const items = D.docs.map(d => `
+        <a class="dl" href="${d.file}" target="_blank">
+          <div class="dl-ico">${d.icon}</div>
+          <div><div class="dl-ttl">${d.title}</div><div class="dl-sub">${d.desc}</div></div>
+          <div class="dl-arr">↗</div>
+        </a>`).join('');
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Herramientas</span>
+  <h1 class="pg-title">Docs <em>&amp; Informes</em></h1>
+  <p class="pg-sub">Todos los documentos e informes de The Crew</p>
+</div>
+<div class="sec">Documentos disponibles</div>
+<div style="display:flex;flex-direction:column;gap:10px">${items}</div>`;
+    }
+  },
+
+  reservas: { sec:'Herramientas', pg:'Reservas',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Herramientas · Sistemas</span>
+  <h1 class="pg-title">Sistemas de <em>Reservas</em></h1>
+  <p class="pg-sub">Yeasy (principal) + Booksy (Barrio · Caja)</p>
+</div>
+<div class="g2" style="margin-bottom:24px">
+  <div class="pj">
+    <div class="pj-bar" style="background:var(--gold)"></div>
+    <div class="pj-tag">Sistema principal</div>
+    <div class="pj-name">Yeasy</div>
+    <div class="pj-desc">Local principal The Crew Barbershop. API interna con endpoints de facturación, citas y empleados.</div>
+    <div class="pj-foot"><span class="badge live"><span class="bdot"></span>Principal</span><a href="https://business.yeasyapp.com" target="_blank" style="font-size:10px;color:var(--gold);text-decoration:none">Abrir panel ↗</a></div>
+  </div>
+  <div class="pj">
+    <div class="pj-bar" style="background:#6B8F71"></div>
+    <div class="pj-tag">Sistema secundario</div>
+    <div class="pj-name">Booksy</div>
+    <div class="pj-desc">Barbero Barrio + Gerard Caja. Business ID 167254. Crece mes a mes: de 282 € en enero a 1.278 € en abril (+353%).</div>
+    <div class="pj-foot"><span class="badge live"><span class="bdot"></span>Activo</span><a href="https://booksy.com" target="_blank" style="font-size:10px;color:var(--gold);text-decoration:none">Abrir panel ↗</a></div>
+  </div>
+</div>
+<div class="sec">API Yeasy — Endpoints</div>
+<div class="tw">
+  <table>
+    <thead><tr><th>Endpoint</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td class="mono au">/billing/calculateFromPaymentByWeek</td><td>Facturación semanal</td></tr>
+      <tr><td class="mono au">/withdrawals/commerce/{id}/date/{date}</td><td>Transacciones diarias</td></tr>
+      <tr><td class="mono au">/booking/findByWeek</td><td>Citas semanales</td></tr>
+      <tr><td class="mono au">/employee/commerce-agenda/{id}</td><td>Empleados y agenda</td></tr>
+      <tr><td class="mono au">/day-waiting-list/admin/count</td><td>Lista de espera del día</td></tr>
+    </tbody>
+  </table>
+</div>`;
+    }
+  },
+
+  contenido: { sec:'Marketing', pg:'Estrategia de Contenido',
+    html() {
+      const hooks = [
+        { cat:'Autoridad', color:'var(--gold)', items:[
+          'El error que comete el 90% de los barberos al hacer un fade...',
+          'Llevo X años de barbero y esto es lo que cambiaría si empezara hoy',
+          'Lo que nadie te cuenta sobre montar una barbería en España',
+          'Por qué tu barbero NO te dice la verdad sobre tu corte',
+          'Esto es lo que diferencia a un barbero de 15€ de uno de 35€',
+          'Después de X cortes, esto es lo que he aprendido',
+        ]},
+        { cat:'Curiosidad', color:'var(--blu)', items:[
+          '¿Sabes por qué tu fade no sale nunca bien? Te explico...',
+          'Por qué el 80% de la gente no sabe pedir el corte que quiere',
+          '¿Cuánto tiempo llevas sin cortarte bien de verdad?',
+          'Lo que pasa cuando le das referencia a tu barbero vs cuando no',
+          '¿Por qué hay barberos de 15€ y de 40€? La respuesta te va a sorprender',
+        ]},
+        { cat:'Proceso / Construcción', color:'var(--grn)', items:[
+          'Así está quedando la academia que estoy construyendo desde cero',
+          'Día 1 de construir mi academia de barbería — aquí empieza todo',
+          'Esto es lo que nadie te enseña en una escuela de barbería',
+          'Construyendo mi marca de productos de barbería desde cero',
+          'Lo que he aprendido montando una barbería en Sabadell',
+        ]},
+        { cat:'Antes / Después', color:'var(--orn)', items:[
+          'Lo que este pelo necesitaba vs lo que le hice',
+          'De aquí a aquí en 45 minutos',
+          'Esto es lo que 3 meses sin cortarse le hace al pelo',
+          'Antes de saber qué pedirle al barbero vs después',
+        ]},
+        { cat:'ASMR / Sin hook', color:'var(--t3)', items:[
+          'Sin hook necesario — solo sonido ambiente + visual del proceso',
+          'Limpiando la barbería antes de abrir',
+          'Preparando las herramientas para el día',
+          'El sonido de una máquina bien calibrada sobre el pelo',
+        ]},
+      ];
+
+      const reels = [
+        { v:'1.23M', tipo:'Satisfying/Proceso', desc:'This haircut it\'s soooo satisfyinggg', likes:'4,692', saves:'450', shares:'191', cls:'ag', badge:'live' },
+        { v:'28.9K',  tipo:'Proceso Técnico',   desc:'Mid fade con línea de peso + pico marcado', likes:'593', saves:'49', shares:'16', cls:'au', badge:'dev' },
+        { v:'22.4K',  tipo:'Proceso Técnico',   desc:'Slickback — parte trasera técnica',         likes:'531', saves:'44', shares:'20', cls:'au', badge:'dev' },
+        { v:'19.2K',  tipo:'Tutorial',          desc:'Taper fade nuca redondeada (howto)',         likes:'467', saves:'55', shares:'39', cls:'au', badge:'dev' },
+        { v:'17.2K',  tipo:'Proceso Técnico',   desc:'Afro skin fade',                            likes:'264', saves:'11', shares:'4',  cls:'au', badge:'dev' },
+        { v:'14.4K',  tipo:'Carousel',          desc:'Carrusel de fotos (lifestyle)',              likes:'267', saves:'16', shares:'4',  cls:'',   badge:'plan' },
+        { v:'14.1K',  tipo:'Tutorial Patrocinado',desc:'Textura y volumen ft. @pionprofessional', likes:'244', saves:'23', shares:'10', cls:'',   badge:'plan' },
+      ];
+
+      const reelRows = reels.map((r,i) => `
+        <tr>
+          <td class="r" style="font-weight:800;font-size:${i===0?'15':'13'}px;color:${i===0?'var(--gold)':'var(--t1)'}">${r.v}</td>
+          <td><span class="badge ${r.badge}"><span class="bdot"></span>${r.tipo}</span></td>
+          <td style="color:var(--t2);max-width:220px">${r.desc}</td>
+          <td class="r" style="color:var(--t3);font-size:11px">❤ ${r.likes}</td>
+          <td class="r" style="color:var(--t3);font-size:11px">🔖 ${r.saves}</td>
+          <td class="r" style="color:var(--t3);font-size:11px">↗ ${r.shares}</td>
+        </tr>`).join('');
+
+      const hookCards = hooks.map(h => `
+        <div class="card" style="border-top:2px solid ${h.color}">
+          <div class="card-ttl" style="color:${h.color};margin-bottom:14px">${h.cat}</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            ${h.items.map(item => `
+              <div style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--s2);border-radius:3px;border-left:2px solid ${h.color}">
+                <span style="color:${h.color};font-size:10px;margin-top:1px;flex-shrink:0">›</span>
+                <span style="font-size:11px;color:var(--t2);line-height:1.55">${item}</span>
+              </div>`).join('')}
+          </div>
+        </div>`).join('');
+
+      const formatos = [
+        { ico:'🔥', name:'Satisfying / Close-up', sub:'La cámara pegada al corte',  views:'1.23M probado', badge:'live', tip:'Tu reel más viral NO habla, NO explica. Solo muestra el corte de cerca con buena luz. Replicar este formato ES la prioridad.' },
+        { ico:'✂️', name:'Proceso Técnico',       sub:'Manos trabajando — detalle',  views:'19K–29K probado',badge:'live', tip:'Encuadra las manos y la zona de trabajo. Cuanto más cerca, más vistas.' },
+        { ico:'📖', name:'Tutorial Howto',         sub:'Paso a paso con caption',     views:'11K–19K probado',badge:'live', tip:'Caption en español con hashtags técnicos. El algo te empuja si añades valor educativo.' },
+        { ico:'🎙️', name:'ASMR / Ambiente',       sub:'Sin hablar — sonido + visual',views:'Por replicar',  badge:'dev',  tip:'Limpia, prepara, trabaja. No hace falta ni música. El sonido ES el contenido.' },
+        { ico:'🗣️', name:'Hook + Resultado',       sub:'5s hablando → corte final',   views:'Por probar',    badge:'dev',  tip:'Di el hook a cámara, corta directo al resultado. Sin transiciones complicadas.' },
+        { ico:'🏗️', name:'Build in Public',       sub:'Construyendo la academia',    views:'Por probar',    badge:'plan', tip:'Muestra el proceso real: "esto me falta", "esto ya está". La gente sigue procesos.' },
+      ];
+
+      const formatCards = formatos.map(f => `
+        <div class="pj">
+          <div class="pj-bar" style="background:${f.badge==='live'?'var(--grn)':f.badge==='dev'?'var(--gold)':'var(--blu)'}"></div>
+          <div style="font-size:22px;margin-bottom:8px">${f.ico}</div>
+          <div class="pj-name" style="font-size:13px">${f.name}</div>
+          <div class="pj-tag" style="margin-bottom:10px">${f.sub}</div>
+          <div style="font-size:10px;color:var(--t3);line-height:1.6;margin-bottom:14px">${f.tip}</div>
+          <div class="pj-foot">
+            <span class="badge ${f.badge}"><span class="bdot"></span>${f.views}</span>
+          </div>
+        </div>`).join('');
+
+      const ages = [
+        { label:'13–17', pct:3.4,  val:488 },
+        { label:'18–24', pct:25.6, val:3646 },
+        { label:'25–34', pct:50.5, val:7188 },
+        { label:'35–44', pct:15.9, val:2260 },
+        { label:'45–54', pct:4.2,  val:598 },
+        { label:'55–64', pct:1.2,  val:178 },
+        { label:'65+',   pct:0.6,  val:82 },
+      ];
+      const ageRows = ages.map(a => `
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <div style="width:44px;font-size:10px;color:var(--t3);flex-shrink:0">${a.label}</div>
+          <div style="flex:1;height:8px;background:var(--s3);border-radius:4px;overflow:hidden">
+            <div style="height:100%;width:${a.pct}%;background:${a.pct>40?'var(--gold)':a.pct>15?'rgba(201,168,76,.5)':'var(--t4)'};border-radius:4px;transition:width .6s"></div>
+          </div>
+          <div style="width:38px;font-size:10px;color:var(--t2);text-align:right;flex-shrink:0">${a.pct}%</div>
+        </div>`).join('');
+
+      const countries = [
+        { flag:'🇪🇸', name:'España',    n:2326 },
+        { flag:'🇧🇷', name:'Brasil',    n:1824 },
+        { flag:'🇦🇷', name:'Argentina', n:1160 },
+        { flag:'🇲🇽', name:'México',    n:789  },
+        { flag:'🇮🇷', name:'Irán',      n:720  },
+        { flag:'🇺🇸', name:'USA',       n:618  },
+        { flag:'🇮🇳', name:'India',     n:422  },
+        { flag:'🇲🇦', name:'Marruecos', n:396  },
+      ];
+      const maxC = 2326;
+      const countryRows = countries.map(c => `
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <div style="width:22px;font-size:14px;flex-shrink:0">${c.flag}</div>
+          <div style="width:72px;font-size:10px;color:var(--t2);flex-shrink:0">${c.name}</div>
+          <div style="flex:1;height:8px;background:var(--s3);border-radius:4px;overflow:hidden">
+            <div style="height:100%;width:${Math.round(c.n/maxC*100)}%;background:var(--gold);border-radius:4px"></div>
+          </div>
+          <div style="width:36px;font-size:10px;color:var(--t3);text-align:right;flex-shrink:0">${c.n.toLocaleString()}</div>
+        </div>`).join('');
+
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Marketing · Instagram @gerardchao · Datos en vivo vía Windsor</span>
+  <h1 class="pg-title">Estrategia de <em>Contenido</em></h1>
+  <p class="pg-sub">Datos reales de la API de Instagram · Actualizado mayo 2026</p>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Seguidores</div><div class="kpi-val">14,827</div><div class="kpi-sub2">@gerardchao · verificado</div></div>
+  <div class="kpi"><div class="kpi-lbl">Mejor reel</div><div class="kpi-val g">1.23M</div><div class="kpi-sub2">Satisfying close-up corte</div></div>
+  <div class="kpi"><div class="kpi-lbl">Alcance 30d</div><div class="kpi-val">142K</div><div class="kpi-sub2">Cuentas alcanzadas</div></div>
+  <div class="kpi"><div class="kpi-lbl">Interacciones 30d</div><div class="kpi-val">9,861</div><div class="kpi-sub2">Likes + shares + saves</div></div>
+  <div class="kpi"><div class="kpi-lbl">Nuevos seguidores 30d</div><div class="kpi-val g">+605</div><div class="kpi-sub2">~20/día</div></div>
+</div>
+
+<div class="note">Tu reel de <strong>1.23M vistas</strong> no tiene hook ni guión — solo un close-up extremo del corte con el caption "This haircut it's soooo satisfyinggg". Lección: el <strong>close-up satisfying</strong> supera a todo lo demás. Prioridad absoluta replicar este formato.</div>
+
+<div class="sec">Actividad de publicaciones (últimas 13 semanas)</div>
+<div class="card" style="margin-bottom:28px">
+  <div class="heatmap" id="ig-heatmap"></div>
+  <div class="hm-legend">
+    <span>Menos</span>
+    <span class="hm-cell"></span>
+    <span class="hm-cell l1"></span>
+    <span class="hm-cell l2"></span>
+    <span class="hm-cell l3"></span>
+    <span class="hm-cell l4"></span>
+    <span>Más vistas</span>
+  </div>
+</div>
+
+<div class="sec">Top Reels — Datos reales API Instagram</div>
+<div class="tw" style="margin-bottom:28px">
+  <table>
+    <thead><tr><th class="r">Vistas</th><th>Tipo</th><th>Descripción</th><th class="r">❤</th><th class="r">🔖</th><th class="r">↗</th></tr></thead>
+    <tbody>${reelRows}</tbody>
+  </table>
+</div>
+
+<div class="sec">Audiencia — Datos reales</div>
+<div class="g3" style="margin-bottom:28px">
+  <div class="card">
+    <div class="card-ttl" style="margin-bottom:16px">Género</div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-bottom:14px">
+      <div style="text-align:center">
+        <div style="font-size:22px;font-weight:800;color:var(--gold)">70.7%</div>
+        <div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em">Hombres</div>
+      </div>
+      <div style="width:1px;background:var(--ln)"></div>
+      <div style="text-align:center">
+        <div style="font-size:22px;font-weight:800;color:var(--t2)">10%</div>
+        <div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em">Mujeres</div>
+      </div>
+    </div>
+    <div style="height:10px;border-radius:5px;overflow:hidden;display:flex">
+      <div style="width:70.7%;background:var(--gold)"></div>
+      <div style="width:10%;background:var(--blu)"></div>
+      <div style="flex:1;background:var(--s3)"></div>
+    </div>
+    <div style="font-size:9px;color:var(--t4);margin-top:6px;text-align:center">19.3% género no especificado</div>
+  </div>
+  <div class="card">
+    <div class="card-ttl" style="margin-bottom:16px">Edad</div>
+    ${ageRows}
+  </div>
+  <div class="card">
+    <div class="card-ttl" style="margin-bottom:16px">Top países</div>
+    ${countryRows}
+  </div>
+</div>
+
+<div class="sec">Formatos de video</div>
+<div class="g3" style="margin-bottom:28px">${formatCards}</div>
+
+<div class="sec">Biblioteca de Hooks</div>
+<div style="display:flex;flex-direction:column;gap:14px;margin-bottom:28px">${hookCards}</div>
+
+<div class="sec">La fórmula</div>
+<div class="g3" style="margin-bottom:24px">
+  <div class="card" style="border-top:2px solid var(--gold)">
+    <div class="card-ttl" style="color:var(--gold)">01 · Close-up / Satisfying</div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:8px">Cámara pegada al corte. Sin hablar. Sin guión. El formato que ya te dio 1.23M vistas — repítelo hasta que deje de funcionar.</p>
+  </div>
+  <div class="card" style="border-top:2px solid var(--gold)">
+    <div class="card-ttl" style="color:var(--gold)">02 · Hook (3–5s) opcional</div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:8px">Tú a cámara diciendo algo que engancha. No hace falta que sea perfecto. Solo que pare el scroll. Luego el proceso.</p>
+  </div>
+  <div class="card" style="border-top:2px solid var(--gold)">
+    <div class="card-ttl" style="color:var(--gold)">03 · Publica sin revisarlo</div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:8px">Graba, edita mínimo, publica. El mayor error es mirarte demasiado antes de postear.</p>
+  </div>
+</div>`;
+    },
+    after() {
+      const el = document.getElementById('ig-heatmap'); if (!el) return;
+      const reelViews = [1235580,28880,22374,19235,17171,14381,14126,13937,11708,10448,8864,7956,7384,7027,6982,6896,6724,6707,6670,6561,6505,6090,5399,5277,4562,4416,4409,4236,4003,3143,2570,2088,2028,2019,1802,1717,1707,1692,1535,1414,1407,1359,1249,1059,998,773,671,305,224,177,0,0];
+      const cells = 13 * 7;
+      const today = new Date();
+      const startMs = today.getTime() - cells * 86400000;
+      const html = [];
+      for (let i = 0; i < cells; i++) {
+        const day = new Date(startMs + i * 86400000);
+        const hasPost = i % 3 === 0 && reelViews.length;
+        const v = hasPost ? reelViews[i % reelViews.length] : 0;
+        let cls = '';
+        if (v > 0)         cls = 'l1';
+        if (v > 3000)      cls = 'l2';
+        if (v > 10000)     cls = 'l3';
+        if (v > 25000)     cls = 'l4';
+        const dStr = day.toLocaleDateString('es-ES',{day:'2-digit',month:'short'});
+        html.push(`<div class="hm-cell ${cls}" title="${dStr} · ${v ? v.toLocaleString('es-ES')+' vistas' : 'sin publicar'}"></div>`);
+      }
+      el.innerHTML = html.join('');
+    }
+  },
+
+};
+
+/* ── ANIMATED COUNTERS ────────────────────────────────────────── */
+function runCounters(root) {
+  (root || document).querySelectorAll('[data-count]').forEach(el => {
+    if (el.dataset.done === '1') return;
+    const target = parseFloat(el.dataset.count);
+    const fmtType = el.dataset.fmt || 'num';
+    const dur = parseInt(el.dataset.dur || '900', 10);
+    const t0 = performance.now();
+    const formatVal = v => {
+      if (fmtType === 'eur')  return Math.round(v).toLocaleString('es-ES') + ' €';
+      if (fmtType === 'eurd') return v.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' €';
+      if (fmtType === 'pct')  return v.toFixed(1) + '%';
+      if (fmtType === 'k')    return v >= 1000 ? (v/1000).toFixed(v>=10000?0:1) + 'K' : Math.round(v);
+      if (fmtType === 'M')    return v >= 1e6 ? (v/1e6).toFixed(2) + 'M' : (v >= 1000 ? (v/1000).toFixed(0) + 'K' : Math.round(v));
+      return Math.round(v).toLocaleString('es-ES');
+    };
+    function tick(t) {
+      const p = Math.min(1, (t - t0) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = formatVal(target * eased);
+      if (p < 1) requestAnimationFrame(tick);
+      else { el.textContent = formatVal(target); el.dataset.done = '1'; }
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+/* ── SPARKLINES ───────────────────────────────────────────────── */
+function drawSpark(el, values, color) {
+  if (!el || !values || !values.length) return;
+  const w = 100, h = 28, pad = 2;
+  const min = Math.min(...values), max = Math.max(...values);
+  const range = max - min || 1;
+  const step = (w - pad*2) / (values.length - 1 || 1);
+  const pts = values.map((v,i) => [pad + i*step, h - pad - ((v-min)/range)*(h-pad*2)]);
+  const line = pts.map((p,i) => (i?'L':'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  const area = line + ` L${pts[pts.length-1][0].toFixed(1)},${h} L${pts[0][0].toFixed(1)},${h} Z`;
+  const last = pts[pts.length-1];
+  el.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  el.setAttribute('preserveAspectRatio', 'none');
+  el.innerHTML = `<path class="area" d="${area}" style="${color?'fill:'+color+'33':''}"/><path class="line" d="${line}" style="${color?'stroke:'+color:''}"/><circle class="dot" cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2.2" style="${color?'fill:'+color:''}"/>`;
+}
+
+/* ── PROGRESS RINGS ───────────────────────────────────────────── */
+function drawRing(el, pct, color) {
+  if (!el) return;
+  const r = 38, c = 2 * Math.PI * r;
+  const off = c * (1 - Math.min(100, pct) / 100);
+  el.setAttribute('viewBox', '0 0 96 96');
+  el.innerHTML = `
+    <circle class="ring-bg" cx="48" cy="48" r="${r}"></circle>
+    <circle class="ring-fg" cx="48" cy="48" r="${r}" stroke="${color || 'var(--gold)'}" stroke-dasharray="${c}" stroke-dashoffset="${c}"></circle>`;
+  requestAnimationFrame(() => {
+    const fg = el.querySelector('.ring-fg');
+    if (fg) fg.style.strokeDashoffset = off;
+  });
+}
+
+/* ── TOAST ────────────────────────────────────────────────────── */
+function toast(msg, type) {
+  const host = document.getElementById('toast-host');
+  if (!host) return;
+  const t = document.createElement('div');
+  t.className = 'toast' + (type ? ' ' + type : '');
+  t.textContent = msg;
+  host.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+/* ── CMD+K PALETTE ────────────────────────────────────────────── */
+const CMDK_ITEMS = [
+  { ico:'⬡', t:'Dashboard',           id:'dashboard',  s:'Inicio' },
+  { ico:'💰', t:'Facturación',         id:'facturacion',s:'Barbershop' },
+  { ico:'📊', t:'Gastos & P&L',        id:'gastos',     s:'Barbershop' },
+  { ico:'💵', t:'Cashflow 2026',       id:'cashflow',   s:'Barbershop' },
+  { ico:'👥', t:'Equipo',              id:'equipo',     s:'Barbershop' },
+  { ico:'📅', t:'Citas',               id:'citas',      s:'Barbershop' },
+  { ico:'🎓', t:'Academia',            id:'academia',   s:'Academy' },
+  { ico:'📖', t:'ROOTS Ebook',         id:'roots',      s:'Academy' },
+  { ico:'🧪', t:'BarberLab',           id:'barberlab',  s:'Proyectos' },
+  { ico:'🟡', t:'CHAOS Hair',          id:'chaos',      s:'Proyectos' },
+  { ico:'🃏', t:'Crew Member Card',    id:'crewcard',   s:'Proyectos' },
+  { ico:'📱', t:'Contenido Instagram', id:'contenido',  s:'Marketing' },
+  { ico:'📁', t:'Docs & Informes',     id:'docs',       s:'Herramientas' },
+  { ico:'🔗', t:'Reservas',            id:'reservas',   s:'Herramientas' },
+  { ico:'◑', t:'Cambiar dark / light', action:toggleDark, s:'Acciones' },
+  { ico:'⎙', t:'Imprimir / Exportar PDF', action:()=>window.print(), s:'Acciones' },
 ];
-const tbAB = document.getElementById('tbody-abril-booksy');
-booksyAbril.forEach(([d,c,a]) => {
-  const tr = document.createElement('tr');
-  tr.innerHTML = `<td>${d.slice(5).replace('-','/')}</td><td>${dayName(d)}</td><td class="amount">${c}</td><td class="amount">${fmt(a)}</td>`;
-  tbAB.appendChild(tr);
+let _cmdkSel = 0, _cmdkVisible = [];
+function openCmdk() {
+  document.getElementById('cmdk').classList.add('open');
+  const inp = document.getElementById('cmdk-input');
+  inp.value = ''; filterCmdk(''); setTimeout(() => inp.focus(), 30);
+}
+function closeCmdk() { document.getElementById('cmdk').classList.remove('open'); }
+function filterCmdk(q) {
+  q = (q || '').toLowerCase().trim();
+  const list = document.getElementById('cmdk-list');
+  _cmdkVisible = CMDK_ITEMS.filter(i => !q || i.t.toLowerCase().includes(q) || (i.s||'').toLowerCase().includes(q));
+  _cmdkSel = 0;
+  if (!_cmdkVisible.length) { list.innerHTML = '<div class="cmdk-empty">Sin resultados</div>'; return; }
+  list.innerHTML = _cmdkVisible.map((i,idx) =>
+    `<div class="cmdk-item${idx===0?' sel':''}" data-idx="${idx}" onclick="cmdkPick(${idx})"><span class="cmdk-ico">${i.ico}</span><span>${i.t}</span><span class="cmdk-sec">${i.s||''}</span></div>`).join('');
+}
+function cmdkPick(idx) {
+  const item = _cmdkVisible[idx]; if (!item) return;
+  closeCmdk();
+  if (item.action) item.action();
+  else if (item.id) go(item.id);
+}
+function cmdkKey(e) {
+  if (e.key === 'Escape') { closeCmdk(); return; }
+  if (e.key === 'Enter') { e.preventDefault(); cmdkPick(_cmdkSel); return; }
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    _cmdkSel = (_cmdkSel + (e.key === 'ArrowDown' ? 1 : -1) + _cmdkVisible.length) % _cmdkVisible.length;
+    document.querySelectorAll('.cmdk-item').forEach((el,i) => el.classList.toggle('sel', i === _cmdkSel));
+    document.querySelector('.cmdk-item.sel')?.scrollIntoView({block:'nearest'});
+  }
+}
+
+/* ── LIVE CLOCK ───────────────────────────────────────────────── */
+function tickClock() {
+  const el = document.getElementById('live-clock'); if (!el) return;
+  const d = new Date();
+  const hh = String(d.getHours()).padStart(2,'0'), mm = String(d.getMinutes()).padStart(2,'0'), ss = String(d.getSeconds()).padStart(2,'0');
+  el.querySelector('.lc-greet').textContent = greet();
+  el.querySelector('.lc-time').textContent = `${hh}:${mm}:${ss}`;
+}
+
+/* ── SORTABLE TABLES ──────────────────────────────────────────── */
+function makeSortable(root) {
+  (root || document).querySelectorAll('table thead th').forEach((th, idx) => {
+    if (th.dataset.bound) return;
+    th.dataset.bound = '1';
+    th.style.cursor = 'pointer';
+    th.style.userSelect = 'none';
+    th.addEventListener('click', () => {
+      const tbody = th.closest('table').querySelector('tbody');
+      if (!tbody) return;
+      const rows = [...tbody.querySelectorAll('tr')];
+      const dir = th.dataset.sort === 'asc' ? 'desc' : 'asc';
+      th.closest('thead').querySelectorAll('th').forEach(o => { delete o.dataset.sort; o.textContent = o.textContent.replace(/[▲▼]\s*$/, '').trim(); });
+      th.dataset.sort = dir;
+      th.textContent = th.textContent.replace(/[▲▼]\s*$/, '').trim() + ' ' + (dir==='asc'?'▲':'▼');
+      rows.sort((a,b) => {
+        const av = (a.children[idx]?.textContent || '').replace(/[^\d,.\-]/g,'').replace(',','.');
+        const bv = (b.children[idx]?.textContent || '').replace(/[^\d,.\-]/g,'').replace(',','.');
+        const an = parseFloat(av), bn = parseFloat(bv);
+        if (!isNaN(an) && !isNaN(bn)) return dir==='asc' ? an - bn : bn - an;
+        return dir==='asc' ? (a.children[idx]?.textContent || '').localeCompare(b.children[idx]?.textContent || '') : (b.children[idx]?.textContent || '').localeCompare(a.children[idx]?.textContent || '');
+      });
+      rows.forEach(r => tbody.appendChild(r));
+    });
+  });
+}
+
+/* ── MOBILE MENU ──────────────────────────────────────────────── */
+function toggleMenu() {
+  const open = document.body.classList.toggle('menu-open');
+  document.querySelector('.sidebar').classList.toggle('open', open);
+}
+function closeMenu() {
+  document.body.classList.remove('menu-open');
+  document.querySelector('.sidebar').classList.remove('open');
+}
+
+/* ── DARK MODE ────────────────────────────────────────────────── */
+function toggleDark() {
+  const dark = document.body.classList.toggle('dark');
+  const btn = document.getElementById('dark-toggle');
+  btn.textContent = dark ? '◑ LIGHT' : '◑ DARK';
+  localStorage.setItem('tcb-dark', dark ? '1' : '0');
+  toast(dark ? 'Modo oscuro activado' : 'Modo claro activado', 'ok');
+}
+
+/* ── ROUTER ───────────────────────────────────────────────────── */
+function go(id) {
+  if (!V[id]) return;
+  const view = V[id];
+
+  document.querySelectorAll('.sb-item').forEach(el =>
+    el.classList.toggle('active', el.dataset.view === id));
+
+  document.getElementById('tb-sec').textContent = view.sec;
+  document.getElementById('tb-pg').textContent  = view.pg;
+
+  const content = document.getElementById('content');
+  content.style.animation = 'none';
+  content.offsetHeight;
+  content.style.animation = '';
+  content.innerHTML = view.html();
+  content.scrollTop = 0;
+
+  if (view.after) setTimeout(() => view.after(), 0);
+  setTimeout(() => { runCounters(content); makeSortable(content); }, 0);
+  history.replaceState(null, '', '#' + id);
+}
+
+/* ── INIT ─────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('tcb-dark') === '1') {
+    document.body.classList.add('dark');
+    document.getElementById('dark-toggle').textContent = '◑ LIGHT';
+  }
+  const short = todayShort();
+  document.getElementById('sb-date').textContent = short;
+  document.getElementById('tb-date').textContent = short;
+
+  document.querySelectorAll('.sb-item[data-view]').forEach(el =>
+    el.addEventListener('click', () => { go(el.dataset.view); closeMenu(); }));
+
+  const hash = location.hash.slice(1);
+  go(hash && V[hash] ? hash : 'dashboard');
+
+  tickClock(); setInterval(tickClock, 1000);
+
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openCmdk(); }
+    if (e.key === 'Escape') closeCmdk();
+  });
+
+  setTimeout(() => toast('Panel cargado · Datos en vivo Instagram', 'ok'), 700);
 });
+</script>
+
+<script>
+  // ── AUTH ──────────────────────────────────────────────────
+  const PWD_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c7ad2badc0b1cff3f3c43e5b99'; // admin
+
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  async function doLogin() {
+    const val = document.getElementById('login-pwd').value;
+    const err = document.getElementById('login-err');
+    const hash = await sha256(val);
+    if (hash === PWD_HASH) {
+      sessionStorage.setItem('tcb_auth', '1');
+      document.getElementById('login-screen').classList.add('hidden');
+      err.textContent = '';
+    } else {
+      err.textContent = 'Contraseña incorrecta';
+      document.getElementById('login-pwd').value = '';
+      document.getElementById('login-pwd').focus();
+    }
+  }
+
+  document.getElementById('login-pwd').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  // Comprobar sesión al cargar
+  if (sessionStorage.getItem('tcb_auth') === '1') {
+    document.getElementById('login-screen').classList.add('hidden');
+  }
 </script>
 </body>
 </html>
