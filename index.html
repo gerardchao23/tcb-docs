@@ -2159,7 +2159,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <script>
   // ── AUTH ──────────────────────────────────────────────────
-  const PWD_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c7ad2badc0b1cff3f3c43e5b99'; // admin
+  const PWD_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'; // admin
 
   async function sha256(str) {
     const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
