@@ -1470,19 +1470,70 @@ const V = {
 
   roots: { sec:'The Crew Academy', pg:'ROOTS Ebook',
     html() {
-      return `<iframe src="docs/roots-ebook.html" id="roots-frame" style="width:100%;height:100%;border:none;display:block;"></iframe>`;
-    },
-    after() {
-      const c = document.getElementById('content');
-      c.style.padding = '0';
-      c.style.overflow = 'hidden';
-      c.style.display = 'flex';
-      c.style.flexDirection = 'column';
-      const frame = document.getElementById('roots-frame');
-      if (frame) {
-        frame.style.flex = '1';
-        frame.style.minHeight = '0';
-      }
+      const topics = [
+        [1,'Vocabulario Técnico',2],[2,'Anatomía del Cráneo',2],
+        [3,'Higiene y Desinfección',2],[4,'Herramientas de Corte',2],
+        [5,'Técnicas de Corte',2],[6,'El Fade',2],
+        [7,'Fundamentos',7],[8,'Tipos de Cabello',7],
+        [9,'Barba',2],[10,'Visagismo',2],[11,'Marketing',2],
+      ];
+      const rows = topics.map(([n,t,s]) => `
+        <tr>
+          <td style="color:var(--gold);font-weight:700">${n}</td>
+          <td>${t}</td>
+          <td class="r">${s}</td>
+          <td><span class="badge live"><span class="bdot"></span>Completo</span></td>
+        </tr>`).join('');
+      return `
+<!-- EBOOK OVERLAY -->
+<div id="ebook-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:#070707;flex-direction:column;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:#0b0b0b;border-bottom:1px solid rgba(201,168,76,.15);flex-shrink:0;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span style="font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#C9A84C;">ROOTS</span>
+      <span style="font-size:10px;color:rgba(242,238,230,.35);letter-spacing:.08em;">Barber Basics</span>
+    </div>
+    <button onclick="document.getElementById('ebook-overlay').style.display='none'" style="background:rgba(242,238,230,.06);border:1px solid rgba(242,238,230,.1);color:rgba(242,238,230,.6);font-size:13px;width:32px;height:32px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+  </div>
+  <iframe src="docs/roots-ebook.html" style="flex:1;border:none;width:100%;"></iframe>
+</div>
+
+<div class="pg-hd">
+  <span class="pg-tag">The Crew Academy · Material</span>
+  <h1 class="pg-title">ROOTS — <em>Barber Basics</em></h1>
+  <p class="pg-sub">Ebook interactivo de fundamentos de barbería · v2 HTML · 11 temas</p>
+</div>
+
+<!-- BOTÓN VER EBOOK -->
+<div onclick="const o=document.getElementById('ebook-overlay');o.style.display='flex';" style="cursor:pointer;background:linear-gradient(135deg,#1a1508,#241d0a);border:1px solid rgba(201,168,76,.35);border-radius:6px;padding:28px 32px;margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(201,168,76,.7)'" onmouseout="this.style.borderColor='rgba(201,168,76,.35)'">
+  <div>
+    <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,76,.6);margin-bottom:8px;">TCB Academy · Barber Basics</div>
+    <div style="font-size:22px;font-weight:800;letter-spacing:-.02em;color:#f0ede6;margin-bottom:6px;">ROOTS <span style="color:#C9A84C;">Ebook</span></div>
+    <div style="font-size:11px;color:rgba(240,237,230,.4);">11 temas · Diseño premium · Versión interactiva</div>
+  </div>
+  <div style="background:#C9A84C;color:#0b0b0b;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:12px 22px;border-radius:4px;white-space:nowrap;flex-shrink:0;">Ver Ebook →</div>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Temas</div><div class="kpi-val w">11</div><div class="kpi-sub2">Módulos completos</div></div>
+  <div class="kpi"><div class="kpi-lbl">Formato</div><div class="kpi-val w" style="font-size:14px;padding-top:6px;">HTML</div><div class="kpi-sub2">Interactivo · auto-deploy</div></div>
+  <div class="kpi"><div class="kpi-lbl">PDF</div><div class="kpi-val w" style="font-size:14px;padding-top:6px;">29 pág</div><div class="kpi-sub2">Exportado · 748KB</div></div>
+  <div class="kpi"><div class="kpi-lbl">Estado</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge live"><span class="bdot"></span>v2 Live</span></div><div class="kpi-sub2">HTML embebido en panel</div></div>
+</div>
+
+<div class="sec">Estructura del ebook</div>
+<div class="tw" style="margin-bottom:24px">
+  <table>
+    <thead><tr><th style="width:36px">#</th><th>Tema</th><th class="r">Slides</th><th>Estado</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr class="tf"><td colspan="2"><strong>TOTAL</strong></td><td class="r">32</td><td></td></tr></tfoot>
+  </table>
+</div>
+<div class="sec">Diseño</div>
+<div class="g3" style="margin-bottom:24px">
+  <div class="card"><div class="card-ttl">Fondo</div><div style="display:flex;align-items:center;gap:10px;margin-top:6px"><div style="width:26px;height:26px;border-radius:3px;background:#070707;border:1px solid var(--ln)"></div><span style="font-size:11px;color:var(--t2)">#070707 Dark</span></div></div>
+  <div class="card"><div class="card-ttl">Acento</div><div style="display:flex;align-items:center;gap:10px;margin-top:6px"><div style="width:26px;height:26px;border-radius:3px;background:#C9A84C"></div><span style="font-size:11px;color:var(--t2)">#C9A84C Gold</span></div></div>
+  <div class="card"><div class="card-ttl">Texto</div><div style="display:flex;align-items:center;gap:10px;margin-top:6px"><div style="width:26px;height:26px;border-radius:3px;background:#f0ede6;border:1px solid var(--ln)"></div><span style="font-size:11px;color:var(--t2)">#f0ede6 Warm white</span></div></div>
+</div>`;
     }
   },
 
