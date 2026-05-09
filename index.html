@@ -748,7 +748,7 @@
 <!-- ═══ LOGIN SCREEN ══════════════════════════════════════════ -->
 <div id="login-screen">
   <div class="login-box">
-    <img src="https://www.thecrewacademy.es/cdn/shop/files/Diseno_sin_titulo_27.png?crop=center&height=200&v=1773863841&width=200" alt="TCB" class="login-logo">
+    <img src="tcb-logo.png" alt="TCB" class="login-logo">
     <div>
       <div class="login-title">The Crew — Panel</div>
       <div class="login-sub">Acceso Administrador</div>
@@ -1143,7 +1143,8 @@ const V = {
 
   gastos: { sec:'Barbershop', pg:'Gastos & P&L',
     html() {
-      const { monthly, total_ing, total_gas, total_mar, pct_avg, prestamos_mes, gastos_fijos } = D.pl;
+      const { monthly, total_ing, total_gas, total_mar, pct_avg, prestamos_mes } = D.pl;
+      const { gastos_fijos } = D.cf;
       const plRows = monthly.map(r => {
         const pctColor = r.pct >= 20 ? 'var(--grn)' : r.pct >= 15 ? 'var(--gold)' : 'var(--orn)';
         return `<tr>
