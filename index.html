@@ -2137,8 +2137,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('dark-toggle').textContent = '◑ LIGHT';
   }
   const short = todayShort();
-  document.getElementById('sb-date').textContent = short;
-  document.getElementById('tb-date').textContent = short;
+  const sbDate = document.getElementById('sb-date');
+  const tbDate = document.getElementById('tb-date');
+  if (sbDate) sbDate.textContent = short;
+  if (tbDate) tbDate.textContent = short;
 
   document.querySelectorAll('.sb-item[data-view]').forEach(el =>
     el.addEventListener('click', () => { go(el.dataset.view); closeMenu(); }));
