@@ -1470,46 +1470,19 @@ const V = {
 
   roots: { sec:'The Crew Academy', pg:'ROOTS Ebook',
     html() {
-      const topics = [
-        [1,'Vocabulario Técnico',2], [2,'Anatomía del Cráneo',2],
-        [3,'Herramientas de Corte',2], [4,'Técnicas de Corte',2],
-        [5,'Fundamentos',7], [6,'Tipos de Cabello',7],
-        [7,'Visagismo',2], [8,'Marketing Personal',3],
-      ];
-      const rows = topics.map(([n,t,s]) => `
-        <tr>
-          <td style="color:var(--gold);font-weight:700">${n}</td>
-          <td>${t}</td>
-          <td class="r">${s}</td>
-          <td><span class="badge live"><span class="bdot"></span>Completo</span></td>
-        </tr>`).join('');
-      return `
-<div class="pg-hd">
-  <span class="pg-tag">The Crew Academy · Material</span>
-  <h1 class="pg-title">ROOTS — <em>Barber Basics</em></h1>
-  <p class="pg-sub">Ebook de fundamentos de barbería · v1 generado · 38 slides</p>
-</div>
-<div class="kpi-grid">
-  <div class="kpi"><div class="kpi-lbl">Total slides</div><div class="kpi-val w">38</div><div class="kpi-sub2">+ portada, índice, cierre</div></div>
-  <div class="kpi"><div class="kpi-lbl">Temas</div><div class="kpi-val w">8</div><div class="kpi-sub2">Módulos completos</div></div>
-  <div class="kpi"><div class="kpi-lbl">Formato</div><div class="kpi-val w" style="font-size:15px;padding-top:5px">PPTX</div><div class="kpi-sub2">Exportable a PDF</div></div>
-  <div class="kpi"><div class="kpi-lbl">Estado</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge dev"><span class="bdot"></span>v1 Ready</span></div><div class="kpi-sub2">Pendiente revisión visual</div></div>
-</div>
-<div class="sec">Estructura del ebook</div>
-<div class="tw" style="margin-bottom:24px">
-  <table>
-    <thead><tr><th style="width:36px">#</th><th>Tema</th><th class="r">Slides</th><th>Estado</th></tr></thead>
-    <tbody>${rows}</tbody>
-    <tfoot><tr class="tf"><td colspan="2"><strong>TOTAL</strong></td><td class="r">38</td><td></td></tr></tfoot>
-  </table>
-</div>
-<div class="sec">Diseño</div>
-<div class="g3" style="margin-bottom:24px">
-  <div class="card"><div class="card-ttl">Fondo</div><div style="display:flex;align-items:center;gap:10px;margin-top:6px"><div style="width:26px;height:26px;border-radius:3px;background:#191919;border:1px solid var(--ln)"></div><span style="font-size:11px;color:var(--t2)">#191919 Dark</span></div></div>
-  <div class="card"><div class="card-ttl">Acento</div><div style="display:flex;align-items:center;gap:10px;margin-top:6px"><div style="width:26px;height:26px;border-radius:3px;background:#C9A84C"></div><span style="font-size:11px;color:var(--t2)">#C9A84C Gold</span></div></div>
-  <div class="card"><div class="card-ttl">Texto</div><div style="display:flex;align-items:center;gap:10px;margin-top:6px"><div style="width:26px;height:26px;border-radius:3px;background:#f0ede6;border:1px solid var(--ln)"></div><span style="font-size:11px;color:var(--t2)">#f0ede6 Warm white</span></div></div>
-</div>
-<div class="note">Revisión visual pendiente en PowerPoint / Keynote. Próximo paso: añadir imágenes, ajustar fuentes y exportar a PDF final.</div>`;
+      return `<iframe src="docs/roots-ebook.html" id="roots-frame" style="width:100%;height:100%;border:none;display:block;"></iframe>`;
+    },
+    after() {
+      const c = document.getElementById('content');
+      c.style.padding = '0';
+      c.style.overflow = 'hidden';
+      c.style.display = 'flex';
+      c.style.flexDirection = 'column';
+      const frame = document.getElementById('roots-frame');
+      if (frame) {
+        frame.style.flex = '1';
+        frame.style.minHeight = '0';
+      }
     }
   },
 
@@ -2120,6 +2093,11 @@ function go(id) {
   document.getElementById('tb-pg').textContent  = view.pg;
 
   const content = document.getElementById('content');
+  // Reset styles from any fullscreen view (eg. roots iframe)
+  content.style.padding = '';
+  content.style.overflow = '';
+  content.style.display = '';
+  content.style.flexDirection = '';
   content.style.animation = 'none';
   content.offsetHeight;
   content.style.animation = '';
