@@ -1375,54 +1375,38 @@ const V = {
 
   equipo: { sec:'Barbershop', pg:'Equipo',
     html() {
-      const cards = D.team.map(({id,name,role,color,months}) => {
-        const total = months.reduce((s,r)=>s+r.v,0);
-        return `
-<div class="emp" style="--ec:${color}">
-  <style>.emp#e-${id}::before{background:${color}!important;width:3px}</style>
-  <div class="emp" id="e-${id}" style="border:none;padding:0 0 0 10px;background:transparent">
-    <div class="emp-name" style="color:${color}">${name}</div>
-    <div class="emp-role">${role}</div>
-    <div class="emp-total" style="color:${color}">${fmt(total)}</div>
-    <div class="emp-lbl">Total Ene–Abr 2026</div>
-    <div class="emp-bars" id="eb-${id}"></div>
-  </div>
-</div>`;
-      }).join('');
-
-      const compareRows = D.team.map(({name,color,months}) => {
-        const total = months.reduce((s,r)=>s+r.v,0);
-        return `<tr>
-          <td style="color:${color};font-weight:700">${name.split(' ')[0]}</td>
-          ${months.map(r=>`<td class="r">${fmt(r.v)}</td>`).join('')}
-          <td class="r au">${fmt(total)}</td>
-        </tr>`;
-      }).join('');
-
       return `
-<div class="pg-hd">
-  <span class="pg-tag">Barbershop · Equipo</span>
-  <h1 class="pg-title">El <em>Equipo</em></h1>
-  <p class="pg-sub">4 barberos · The Crew Barbershop, C/ Lacy 18, Sabadell</p>
+<div class="pg-hd" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+  <div>
+    <span class="pg-tag">Barbershop · Equipo</span>
+    <h1 class="pg-title">El <em>Equipo</em></h1>
+    <p class="pg-sub">Facturación acumulada enero–hoy · Yeasy en tiempo real</p>
+  </div>
+  <button id="equipo-sync-btn" onclick="equipoSync()" style="align-self:center;background:var(--ga);border:1px solid var(--gb);color:var(--gold);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;border-radius:4px;cursor:pointer;white-space:nowrap;">⟳ Actualizar</button>
 </div>
-<div class="kpi-grid">
-  <div class="kpi"><div class="kpi-lbl">Barberos</div><div class="kpi-val w">4</div><div class="kpi-sub2">Activos</div></div>
-  <div class="kpi"><div class="kpi-lbl">Facturación Yeasy</div><div class="kpi-val">${fmt(D.billing.yeasy)}</div><div class="kpi-sub2">2026 total equipo</div></div>
-  <div class="kpi"><div class="kpi-lbl">Media por barbero</div><div class="kpi-val">${fmt(Math.round(D.billing.yeasy/4))}</div><div class="kpi-sub2">Ene–Abr 2026</div></div>
-  <div class="kpi"><div class="kpi-lbl">Ubicación</div><div class="kpi-val w" style="font-size:13px;padding-top:6px">Sabadell</div><div class="kpi-sub2">C/ Lacy 18, Barcelona</div></div>
+<div id="equipo-status" style="font-size:10px;color:var(--t3);margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+  <span id="equipo-dot" style="width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;"></span>
+  <span id="equipo-msg">Cargando datos Yeasy...</span>
 </div>
-<div class="sec">Performance individual</div>
-<div class="g2" style="margin-bottom:24px">${cards}</div>
-<div class="sec">Tabla comparativa</div>
-<div class="tw">
-  <table>
-    <thead><tr><th>Barbero</th>${D.billing.monthly.map(r=>`<th class="r">${r.m}</th>`).join('')}<th class="r">Total</th></tr></thead>
-    <tbody>${compareRows}</tbody>
-    <tfoot><tr class="tf"><td><strong>TOTAL</strong></td>${D.billing.monthly.map((_,i)=>{const t=D.team.reduce((s,e)=>s+e.months[i].v,0);return`<td class="r">${fmt(t)}</td>`;}).join('')}<td class="r">${fmt(D.team.reduce((s,e)=>s+e.months.reduce((ss,r)=>ss+r.v,0),0))}</td></tr></tfoot>
-  </table>
+<div class="kpi-grid" style="margin-bottom:28px;">
+  <div class="kpi"><div class="kpi-lbl">Barberos</div><div class="kpi-val w">4</div><div class="kpi-sub2">The Crew Barbershop</div></div>
+  <div class="kpi"><div class="kpi-lbl">Total equipo 2026</div><div class="kpi-val" id="eq-total">—</div><div class="kpi-sub2" id="eq-total-sub">sincronizando...</div></div>
+  <div class="kpi"><div class="kpi-lbl">Media por barbero</div><div class="kpi-val g" id="eq-avg">—</div><div class="kpi-sub2">enero–hoy</div></div>
+  <div class="kpi"><div class="kpi-lbl">Top 2026</div><div class="kpi-val" id="eq-top" style="font-size:14px;padding-top:6px;">—</div><div class="kpi-sub2" id="eq-top-sub">—</div></div>
+</div>
+<div class="sec">Rendimiento individual — Enero a hoy</div>
+<div id="equipo-cards" class="g2" style="margin-bottom:28px;">
+  <div style="grid-column:1/-1;padding:24px;text-align:center;color:var(--t3);font-size:11px;">Cargando...</div>
+</div>
+<div class="sec">Tabla mensual por barbero</div>
+<div class="tw" id="equipo-tabla">
+  <table><thead><tr><th>Barbero</th><th class="r">Total</th></tr></thead><tbody><tr><td colspan="2" style="text-align:center;color:var(--t3);padding:16px;">Cargando...</td></tr></tbody></table>
+</div>
+<div style="margin-top:16px;display:flex;flex-direction:column;gap:10px;">
+  <a class="dl" href="https://business.yeasyapp.com" target="_blank"><div class="dl-ico">👥</div><div><div class="dl-ttl">Yeasy — Empleados</div><div class="dl-sub">Gestión de empleados y estadísticas</div></div><div class="dl-arr">↗</div></a>
 </div>`;
     },
-    after() { D.team.forEach(({id,color,months})=>buildEmpBars(`eb-${id}`,months,color)); }
+    after() { equipoSync(false); }
   },
 
   citas: { sec:'Barbershop', pg:'Citas',
@@ -1460,7 +1444,7 @@ const V = {
   <a class="dl" href="https://booksy.com" target="_blank"><div class="dl-ico">📋</div><div><div class="dl-ttl">Booksy Pro</div><div class="dl-sub">Barbero Barrio + Gerard Caja</div></div><div class="dl-arr">↗</div></a>
 </div>`;
     },
-    after() { citasSync(false); }
+    after() { citasSyncWithCache(); }
   },
 
 
@@ -2165,6 +2149,145 @@ function toggleDark() {
   btn.textContent = dark ? '◑ LIGHT' : '◑ DARK';
   localStorage.setItem('tcb-dark', dark ? '1' : '0');
   toast(dark ? 'Modo oscuro activado' : 'Modo claro activado', 'ok');
+}
+
+/* ── EQUIPO SYNC (YTD por barbero) ───────────────────────────── */
+async function yeasyYTDByEmployee() {
+  const token = await yeasyToken();
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0, 10);
+  const currentWeek = isoWeek(now);
+  const byEmp = {};
+  const monthlyByEmp = {}; // uuid -> {1: total, 2: total, ...}
+
+  await Promise.all(
+    Array.from({length: currentWeek}, (_,i) => i+1).map(week =>
+      fetch(`${YEASY.base}/billing/calculateFromPaymentByWeek?commerce=${YEASY.commerce}&week=${week}&year=${now.getFullYear()}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      }).then(r => r.json()).then(data => {
+        for (const [date, txs] of Object.entries(data)) {
+          if (date > todayStr) continue;
+          const month = parseInt(date.slice(5,7));
+          for (const tx of txs) {
+            if (tx.isDeleted) continue;
+            const emp = tx.employee || {};
+            const id = emp.uuid || 'unknown';
+            if (!byEmp[id]) {
+              byEmp[id] = { uuid:id, name:emp.name||'?', surname:emp.surname||'',
+                image:emp.image||'', position:emp.position||'', total:0, citas:0 };
+              monthlyByEmp[id] = {};
+            }
+            if (typeof tx.amount === 'number') {
+              byEmp[id].total += tx.amount;
+              monthlyByEmp[id][month] = (monthlyByEmp[id][month] || 0) + tx.amount;
+            }
+            byEmp[id].citas++;
+          }
+        }
+      }).catch(() => {})
+    )
+  );
+  return { byEmp, monthlyByEmp };
+}
+
+async function equipoSync(showToast = true) {
+  const dot = document.getElementById('equipo-dot');
+  const msg = document.getElementById('equipo-msg');
+  const btn = document.getElementById('equipo-sync-btn');
+  if (!dot) return;
+  dot.style.background = 'var(--gold)';
+  if (msg) msg.textContent = 'Cargando datos Yeasy...';
+  if (btn) btn.disabled = true;
+  try {
+    const { byEmp, monthlyByEmp } = await yeasyYTDByEmployee();
+    const barberos = Object.values(byEmp).filter(e => e.uuid !== 'unknown' && e.citas > 0).sort((a,b) => b.total - a.total);
+    const totalEur = barberos.reduce((s,e) => s+e.total, 0);
+    const avg = barberos.length ? Math.round(totalEur / barberos.length) : 0;
+    const top = barberos[0];
+    const now = new Date();
+    const todayLabel = `${now.getDate()} ${MONTH_NAMES[now.getMonth()]}`;
+
+    const setEl = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+    setEl('eq-total', fmt(totalEur));
+    setEl('eq-total-sub', `Yeasy · Ene–${todayLabel}`);
+    setEl('eq-avg', fmt(avg));
+    if (top) { setEl('eq-top', top.name); setEl('eq-top-sub', `${fmt(top.total)} · ${top.citas} citas`); }
+
+    // Cards
+    const colors = ['#C9A84C','#6B9FD4','#7FAE7A','#D4896B'];
+    const container = document.getElementById('equipo-cards');
+    if (container) {
+      const maxTotal = top ? top.total : 1;
+      container.innerHTML = barberos.map((b,i) => {
+        const pct = Math.round((b.total / maxTotal) * 100);
+        const color = colors[i % colors.length];
+        const initials = (b.name[0]||'') + (b.surname[0]||'');
+        const avatar = b.image
+          ? `<img src="${b.image}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid ${color};" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div style="display:none;width:48px;height:48px;border-radius:50%;background:${color}20;border:2px solid ${color};align-items:center;justify-content:center;font-size:14px;font-weight:800;color:${color};">${initials}</div>`
+          : `<div style="width:48px;height:48px;border-radius:50%;background:${color}20;border:2px solid ${color};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:${color};">${initials}</div>`;
+        return `<div class="card" style="border-top:2px solid ${color};">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+            ${avatar}
+            <div><div style="font-size:13px;font-weight:700;color:var(--t1);">${b.name} ${b.surname}</div><div style="font-size:10px;color:var(--t3);margin-top:2px;">${b.position||'Barbero'}</div></div>
+            ${i===0?`<div style="margin-left:auto;font-size:8px;font-weight:700;background:${color}20;color:${color};padding:3px 8px;border-radius:3px;">TOP</div>`:''}
+          </div>
+          <div style="display:flex;gap:20px;margin-bottom:12px;">
+            <div><div style="font-size:9px;color:var(--t3);margin-bottom:3px;">FACTURADO 2026</div><div style="font-size:20px;font-weight:800;color:${color};">${fmt(b.total)}</div></div>
+            <div><div style="font-size:9px;color:var(--t3);margin-bottom:3px;">CITAS</div><div style="font-size:20px;font-weight:800;color:var(--t2);">${b.citas}</div></div>
+            <div><div style="font-size:9px;color:var(--t3);margin-bottom:3px;">MEDIA/CITA</div><div style="font-size:20px;font-weight:800;color:var(--t2);">${fmt(Math.round(b.total/b.citas))}</div></div>
+          </div>
+          <div style="background:var(--ln2);border-radius:2px;height:4px;overflow:hidden;"><div style="height:100%;width:${pct}%;background:${color};border-radius:2px;"></div></div>
+          <div style="font-size:9px;color:var(--t3);margin-top:5px;">${pct}% del top</div>
+        </div>`;
+      }).join('');
+    }
+
+    // Tabla mensual
+    const tabla = document.getElementById('equipo-tabla');
+    if (tabla) {
+      const months = [...new Set(barberos.flatMap(b => Object.keys(monthlyByEmp[b.uuid]||{}).map(Number)))].sort((a,b)=>a-b);
+      const thead = `<tr><th>Barbero</th>${months.map(m=>`<th class="r">${MONTH_NAMES[m-1].slice(0,3)}</th>`).join('')}<th class="r">Total</th></tr>`;
+      const tbody = barberos.map((b,i) => {
+        const color = colors[i%colors.length];
+        const mData = monthlyByEmp[b.uuid] || {};
+        return `<tr>
+          <td style="color:${color};font-weight:700">${b.name}</td>
+          ${months.map(m=>`<td class="r">${mData[m]?fmtD(mData[m]):'—'}</td>`).join('')}
+          <td class="r au">${fmtD(b.total)}</td>
+        </tr>`;
+      }).join('');
+      const tfTotal = months.map(m => {
+        const t = barberos.reduce((s,b)=>(s+(monthlyByEmp[b.uuid]||{})[m]||0),0);
+        return `<td class="r">${fmtD(t)}</td>`;
+      }).join('');
+      tabla.innerHTML = `<table><thead>${thead}</thead><tbody>${tbody}</tbody><tfoot><tr class="tf"><td><strong>TOTAL</strong></td>${tfTotal}<td class="r">${fmtD(totalEur)}</td></tr></tfoot></table>`;
+    }
+
+    const ts = `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+    dot.style.background = 'var(--grn)';
+    if (msg) msg.textContent = `Sincronizado · ${ts} · Ene–${todayLabel}`;
+    if (btn) { btn.disabled=false; btn.textContent=`⟳ Actualizado ${ts}`; }
+    if (showToast) toast('Equipo sincronizado', 'ok');
+  } catch(e) {
+    console.warn('equipoSync error:', e);
+    if (dot) dot.style.background = 'var(--red)';
+    if (msg) msg.textContent = 'Error de conexión';
+    if (btn) btn.disabled = false;
+  }
+}
+
+/* ── CITAS con cache diario ──────────────────────────────────── */
+function citasSyncWithCache() {
+  const today = new Date().toISOString().slice(0,10);
+  const lastSync = localStorage.getItem('citas_sync_date');
+  // Auto-sync si no se ha sincronizado hoy
+  if (lastSync !== today) {
+    citasSync(false).then(() => {
+      localStorage.setItem('citas_sync_date', today);
+    });
+  } else {
+    citasSync(false); // siempre carga al abrir
+  }
 }
 
 /* ── ROUTER ───────────────────────────────────────────────────── */
