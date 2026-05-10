@@ -2200,7 +2200,8 @@ async function equipoSync(showToast = true) {
   if (btn) btn.disabled = true;
   try {
     const { byEmp, monthlyByEmp } = await yeasyYTDByEmployee();
-    const barberos = Object.values(byEmp).filter(e => e.uuid !== 'unknown' && e.citas > 0).sort((a,b) => b.total - a.total);
+    const EXCLUIR = ['max'];
+    const barberos = Object.values(byEmp).filter(e => e.uuid !== 'unknown' && e.citas > 0 && !EXCLUIR.includes((e.name||'').toLowerCase())).sort((a,b) => b.total - a.total);
     const totalEur = barberos.reduce((s,e) => s+e.total, 0);
     const avg = barberos.length ? Math.round(totalEur / barberos.length) : 0;
     const top = barberos[0];
@@ -2476,7 +2477,8 @@ async function citasSync(showToast = true) {
     const now = new Date();
     const month = now.getMonth() + 1;
     const byEmp = await yeasyMonthByEmployee(now.getFullYear(), month);
-    const barberos = Object.values(byEmp).filter(e => e.uuid !== 'unknown' && e.citas > 0).sort((a,b) => b.total - a.total);
+    const EXCLUIR_CITAS = ['max'];
+    const barberos = Object.values(byEmp).filter(e => e.uuid !== 'unknown' && e.citas > 0 && !EXCLUIR_CITAS.includes((e.name||'').toLowerCase())).sort((a,b) => b.total - a.total);
     const totalEur = barberos.reduce((s,e) => s+e.total, 0);
     const totalCitas = barberos.reduce((s,e) => s+e.citas, 0);
     const avg = barberos.length ? Math.round(totalEur / barberos.length) : 0;
