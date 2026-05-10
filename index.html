@@ -2290,29 +2290,39 @@ async function yeasySync() {
 
 const BOOKSY_MONTHLY = { 1:282, 2:575, 3:1119, 4:1278 };
 
-async function yeasyWeekByEmployee(week, year) {
+function isoWeek(date) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const day = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+}
+
+async function yeasyWeekByEmployee(weeks, year) {
   const token = await yeasyToken();
-  const res = await fetch(`${YEASY.base}/billing/calculateFromPaymentByWeek?commerce=${YEASY.commerce}&week=${week}&year=${year}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  const data = await res.json();
   const byEmp = {};
-  for (const txs of Object.values(data)) {
-    for (const tx of txs) {
-      if (tx.isDeleted) continue;
-      const emp = tx.employee || {};
-      const id = emp.uuid || 'unknown';
-      if (!byEmp[id]) {
-        byEmp[id] = {
-          uuid: id, name: emp.name || '?', surname: emp.surname || '',
-          image: emp.image || '', position: emp.position || '',
-          isOwner: emp.isOwner || false, total: 0, citas: 0
-        };
+  await Promise.all(weeks.map(week =>
+    fetch(`${YEASY.base}/billing/calculateFromPaymentByWeek?commerce=${YEASY.commerce}&week=${week}&year=${year}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then(r => r.json()).then(data => {
+      for (const txs of Object.values(data)) {
+        for (const tx of txs) {
+          if (tx.isDeleted) continue;
+          const emp = tx.employee || {};
+          const id = emp.uuid || 'unknown';
+          if (!byEmp[id]) {
+            byEmp[id] = {
+              uuid: id, name: emp.name || '?', surname: emp.surname || '',
+              image: emp.image || '', position: emp.position || '',
+              isOwner: emp.isOwner || false, total: 0, citas: 0
+            };
+          }
+          if (typeof tx.amount === 'number') byEmp[id].total += tx.amount;
+          byEmp[id].citas++;
+        }
       }
-      if (typeof tx.amount === 'number') byEmp[id].total += tx.amount;
-      byEmp[id].citas++;
-    }
-  }
+    }).catch(() => {})
+  ));
   return byEmp;
 }
 
@@ -2326,9 +2336,10 @@ async function citasSync(showToast = true) {
   if (btn) btn.disabled = true;
   try {
     const now = new Date();
-    const startOfYear = new Date(now.getFullYear(), 0, 1);
-    const week = Math.ceil(((now - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
-    const byEmp = await yeasyWeekByEmployee(week, now.getFullYear());
+    const week = isoWeek(now);
+    // Fetch current week + previous in case of week boundary (e.g. Sunday)
+    const weeksToFetch = now.getDay() === 0 ? [week - 1, week] : [week];
+    const byEmp = await yeasyWeekByEmployee(weeksToFetch, now.getFullYear());
     const barberos = Object.values(byEmp).filter(e => e.uuid !== 'unknown' && e.citas > 0).sort((a,b) => b.total - a.total);
     const totalEur = barberos.reduce((s,e) => s+e.total, 0);
     const totalCitas = barberos.reduce((s,e) => s+e.citas, 0);
@@ -2336,9 +2347,9 @@ async function citasSync(showToast = true) {
     const top = barberos[0];
     const setEl = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
     setEl('ck-total', fmt(totalEur));
-    setEl('ck-total-sub', `Yeasy · semana ${week}`);
+    setEl('ck-total-sub', `Yeasy · sem. ${weeksToFetch.join('+')} · ${now.getFullYear()}`);
     setEl('ck-citas', totalCitas);
-    setEl('ck-citas-sub', `semana ${week} · ${now.getFullYear()}`);
+    setEl('ck-citas-sub', `sem. ${weeksToFetch.join('+')} · ${now.getFullYear()}`);
     setEl('ck-avg', fmt(avg));
     if (top) { setEl('ck-top', top.name); setEl('ck-top-sub', `${fmt(top.total)} · ${top.citas} citas`); }
     const container = document.getElementById('citas-barberos');
@@ -2370,7 +2381,7 @@ async function citasSync(showToast = true) {
     }
     const ts = `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
     dot.style.background = 'var(--grn)';
-    if (msg) msg.textContent = `Sincronizado · ${ts} · semana ${week}`;
+    if (msg) msg.textContent = `Sincronizado · ${ts} · sem. ${weeksToFetch.join('+')}`;
     if (btn) { btn.disabled=false; btn.textContent=`⟳ Actualizado ${ts}`; }
     if (showToast) toast('Citas sincronizadas', 'ok');
   } catch(e) {
