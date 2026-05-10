@@ -1431,8 +1431,8 @@ const V = {
 <div class="pg-hd" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
   <div>
     <span class="pg-tag">Barbershop · Equipo</span>
-    <h1 class="pg-title">Rendimiento <em>semanal</em></h1>
-    <p class="pg-sub">Citas cobradas y facturación por barbero · Yeasy en tiempo real</p>
+    <h1 class="pg-title">Rendimiento <em>mensual</em></h1>
+    <p class="pg-sub">Facturación del mes en curso por barbero · Yeasy · 1 al día de hoy</p>
   </div>
   <button id="citas-sync-btn" onclick="citasSync()" style="align-self:center;background:var(--ga);border:1px solid var(--gb);color:var(--gold);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;border-radius:4px;cursor:pointer;white-space:nowrap;">⟳ Actualizar</button>
 </div>
@@ -1449,7 +1449,7 @@ const V = {
   <div class="kpi"><div class="kpi-lbl">Top barbero</div><div class="kpi-val" id="ck-top" style="font-size:14px;padding-top:6px;">—</div><div class="kpi-sub2" id="ck-top-sub">esta semana</div></div>
 </div>
 
-<div class="sec">Barberos — esta semana</div>
+<div class="sec" id="citas-sec-label">Barberos — Mayo · 1 al 10</div>
 <div id="citas-barberos" class="g2" style="margin-bottom:28px;">
   <div style="grid-column:1/-1;padding:24px;text-align:center;color:var(--t3);font-size:11px;">Cargando...</div>
 </div>
@@ -2298,14 +2298,29 @@ function isoWeek(date) {
   return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
 }
 
-async function yeasyWeekByEmployee(weeks, year) {
+async function yeasyMonthByEmployee(year, month) {
   const token = await yeasyToken();
+  // Find all ISO weeks that overlap with this month
+  const firstDay = new Date(year, month - 1, 1);
+  const lastDay = new Date(year, month, 0); // last day of month
+  const weekStart = isoWeek(firstDay);
+  const weekEnd = isoWeek(lastDay);
+  const weeks = [];
+  for (let w = weekStart; w <= weekEnd; w++) weeks.push(w);
+  // Edge: if month starts on week 52/53 of previous year
+  if (weekStart > weekEnd) weeks.push(...[weekStart, weekEnd]);
+
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const monthStr = `${year}-${String(month).padStart(2,'0')}`;
+
   const byEmp = {};
   await Promise.all(weeks.map(week =>
     fetch(`${YEASY.base}/billing/calculateFromPaymentByWeek?commerce=${YEASY.commerce}&week=${week}&year=${year}`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(r => r.json()).then(data => {
-      for (const txs of Object.values(data)) {
+      for (const [date, txs] of Object.entries(data)) {
+        // Only include dates in this month and up to today
+        if (!date.startsWith(monthStr) || date > todayStr) continue;
         for (const tx of txs) {
           if (tx.isDeleted) continue;
           const emp = tx.employee || {};
@@ -2336,20 +2351,19 @@ async function citasSync(showToast = true) {
   if (btn) btn.disabled = true;
   try {
     const now = new Date();
-    const week = isoWeek(now);
-    // Fetch current week + previous in case of week boundary (e.g. Sunday)
-    const weeksToFetch = now.getDay() === 0 ? [week - 1, week] : [week];
-    const byEmp = await yeasyWeekByEmployee(weeksToFetch, now.getFullYear());
+    const month = now.getMonth() + 1;
+    const byEmp = await yeasyMonthByEmployee(now.getFullYear(), month);
     const barberos = Object.values(byEmp).filter(e => e.uuid !== 'unknown' && e.citas > 0).sort((a,b) => b.total - a.total);
     const totalEur = barberos.reduce((s,e) => s+e.total, 0);
     const totalCitas = barberos.reduce((s,e) => s+e.citas, 0);
     const avg = barberos.length ? Math.round(totalEur / barberos.length) : 0;
     const top = barberos[0];
+    const monthLabel = MONTH_NAMES[month-1];
     const setEl = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
     setEl('ck-total', fmt(totalEur));
-    setEl('ck-total-sub', `Yeasy · sem. ${weeksToFetch.join('+')} · ${now.getFullYear()}`);
+    setEl('ck-total-sub', `Yeasy · 1–${now.getDate()} ${monthLabel}`);
     setEl('ck-citas', totalCitas);
-    setEl('ck-citas-sub', `sem. ${weeksToFetch.join('+')} · ${now.getFullYear()}`);
+    setEl('ck-citas-sub', `cobradas · ${monthLabel} ${now.getFullYear()}`,);
     setEl('ck-avg', fmt(avg));
     if (top) { setEl('ck-top', top.name); setEl('ck-top-sub', `${fmt(top.total)} · ${top.citas} citas`); }
     const container = document.getElementById('citas-barberos');
@@ -2381,7 +2395,7 @@ async function citasSync(showToast = true) {
     }
     const ts = `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
     dot.style.background = 'var(--grn)';
-    if (msg) msg.textContent = `Sincronizado · ${ts} · sem. ${weeksToFetch.join('+')}`;
+    if (msg) msg.textContent = `Sincronizado · ${ts} · 1–${now.getDate()} ${monthLabel}`;
     if (btn) { btn.disabled=false; btn.textContent=`⟳ Actualizado ${ts}`; }
     if (showToast) toast('Citas sincronizadas', 'ok');
   } catch(e) {
