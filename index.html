@@ -1426,143 +1426,44 @@ const V = {
 
   citas: { sec:'Barbershop', pg:'Citas',
     html() {
-      const today = new Date();
-      const dow = today.getDay(); // 0=dom
-      const monday = new Date(today);
-      monday.setDate(today.getDate() - (dow === 0 ? 6 : dow - 1));
-
-      const dias = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-      const barberos = [
-        { name:'Gerard Chao',       initials:'GC', color:'#C9A84C', bg:'rgba(201,168,76,.13)'  },
-        { name:'Iván Contreras',    initials:'IC', color:'#6B9FD4', bg:'rgba(107,159,212,.13)' },
-        { name:'Javier Barrionuevo',initials:'JB', color:'#7FAE7A', bg:'rgba(127,174,122,.13)' },
-        { name:'Gerard Caja',       initials:'GJ', color:'#D4896B', bg:'rgba(212,137,107,.13)' },
-      ];
-
-      // Slots por día por barbero (hora inicio, duración en slots de 30min, servicio)
-      const schedule = {
-        0: [ // Lun
-          [0,['09:00',2,'Corte + barba'],['10:30',1,'Corte'],['12:00',2,'Corte + degradado'],['16:00',1,'Corte'],['17:00',2,'Corte + barba'],['18:30',1,'Corte']],
-          [1,['09:30',1,'Corte'],['11:00',2,'Fade completo'],['16:30',2,'Corte + barba'],['18:00',1,'Corte']],
-          [2,['10:00',2,'Corte + barba'],['12:00',1,'Corte'],['17:00',1,'Corte'],['18:00',2,'Fade']],
-          [3,['09:00',1,'Corte'],['10:30',2,'Corte + barba'],['16:00',2,'Fade completo'],['18:30',1,'Corte']],
-        ],
-        1: [ // Mar
-          [0,['09:00',1,'Corte'],['10:00',2,'Fade completo'],['12:00',1,'Corte'],['17:00',2,'Corte + barba'],['19:00',1,'Corte']],
-          [1,['09:30',2,'Corte + barba'],['11:30',1,'Corte'],['17:30',1,'Corte'],['18:30',2,'Fade']],
-          [2,['10:00',1,'Corte'],['11:00',2,'Corte + barba'],['16:00',1,'Corte'],['17:30',2,'Fade completo']],
-          [3,['09:00',2,'Corte + barba'],['11:00',1,'Corte'],['16:30',2,'Fade'],['18:30',1,'Corte']],
-        ],
-        2: [ // Mié
-          [0,['09:00',2,'Corte + barba'],['11:00',1,'Corte'],['16:00',2,'Fade completo'],['18:30',1,'Corte']],
-          [1,['10:00',1,'Corte'],['11:30',2,'Corte + barba'],['17:00',2,'Fade'],['19:00',1,'Corte']],
-          [2,['09:30',2,'Fade completo'],['12:00',1,'Corte'],['17:00',2,'Corte + barba']],
-          [3,['10:00',2,'Corte + barba'],['12:00',1,'Corte'],['16:00',1,'Corte'],['17:30',2,'Fade']],
-        ],
-        3: [ // Jue
-          [0,['09:00',1,'Corte'],['10:00',2,'Corte + barba'],['12:00',1,'Corte'],['17:00',2,'Fade'],['19:00',1,'Corte']],
-          [1,['09:30',2,'Fade completo'],['11:30',1,'Corte'],['16:00',2,'Corte + barba'],['18:30',1,'Corte']],
-          [2,['10:00',2,'Corte + barba'],['12:00',1,'Corte'],['17:30',2,'Fade completo']],
-          [3,['09:00',1,'Corte'],['10:30',2,'Corte + barba'],['16:30',1,'Corte'],['18:00',2,'Fade']],
-        ],
-        4: [ // Vie
-          [0,['09:00',2,'Corte + barba'],['11:00',1,'Corte'],['12:00',2,'Fade'],['16:00',2,'Corte + barba'],['18:30',2,'Fade completo']],
-          [1,['09:30',1,'Corte'],['10:30',2,'Corte + barba'],['12:30',1,'Corte'],['16:30',2,'Fade'],['18:30',1,'Corte']],
-          [2,['09:00',2,'Fade completo'],['11:30',1,'Corte'],['16:00',2,'Corte + barba'],['18:30',1,'Corte']],
-          [3,['10:00',2,'Corte + barba'],['12:00',1,'Corte'],['16:30',2,'Fade'],['18:30',2,'Corte + barba']],
-        ],
-        5: [ // Sáb
-          [0,['09:00',2,'Corte + barba'],['11:00',1,'Corte'],['12:00',2,'Fade completo'],['16:00',2,'Corte + barba'],['18:00',1,'Corte'],['19:00',2,'Fade']],
-          [1,['09:30',2,'Fade'],['11:30',1,'Corte'],['12:30',2,'Corte + barba'],['16:00',1,'Corte'],['17:00',2,'Fade completo'],['19:00',1,'Corte']],
-          [2,['09:00',1,'Corte'],['10:00',2,'Corte + barba'],['12:00',2,'Fade'],['16:30',2,'Fade completo'],['18:30',1,'Corte']],
-          [3,['09:30',2,'Corte + barba'],['11:30',1,'Corte'],['12:30',2,'Fade'],['16:00',2,'Corte + barba'],['18:00',1,'Corte'],['19:30',2,'Fade completo']],
-        ],
-        6: [], // Dom cerrado
-      };
-
-      // Contar citas totales por barbero esta semana
-      const totalsPorBarbero = barberos.map((_,bi) => {
-        let t = 0;
-        for(let d=0;d<6;d++) { const ds = schedule[d]; if(ds) { const bs = ds.find(x=>x[0]===bi); if(bs) t += bs.slice(1).length; } }
-        return t;
-      });
-      const totalSemana = totalsPorBarbero.reduce((a,b)=>a+b,0);
-
-      // Construir columnas de días
-      const cols = dias.map((dia, di) => {
-        const fecha = new Date(monday); fecha.setDate(monday.getDate() + di);
-        const dd = fecha.getDate();
-        const mm = fecha.getMonth()+1;
-        const isToday = fecha.toDateString() === today.toDateString();
-        const daySched = schedule[di] || [];
-        const isClosed = di === 6;
-
-        const blocks = daySched.map(([bi, ...slots]) => {
-          const b = barberos[bi];
-          const slotHtml = slots.map(([h, dur, svc]) => `
-            <div style="background:${b.bg};border-left:2px solid ${b.color};border-radius:3px;padding:5px 8px;margin-bottom:4px;">
-              <div style="font-size:9px;font-weight:700;color:${b.color};letter-spacing:.04em;">${h} · ${b.initials}</div>
-              <div style="font-size:9px;color:rgba(240,237,230,.55);margin-top:1px;">${svc}</div>
-            </div>`).join('');
-          return slotHtml;
-        }).join('');
-
-        return `
-          <div style="flex:1;min-width:0;${isToday?'background:rgba(201,168,76,.04);border-radius:6px;':''}">
-            <div style="padding:8px 6px 10px;text-align:center;border-bottom:1px solid var(--ln);margin-bottom:8px;">
-              <div style="font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${isToday?'var(--gold)':'var(--t3)'};">${dia}</div>
-              <div style="font-size:18px;font-weight:800;color:${isToday?'var(--gold)':'var(--t2)'};line-height:1.2;">${dd}</div>
-              <div style="font-size:8px;color:var(--t3);">${mm < 10?'0'+mm:mm}/26</div>
-              ${isToday?'<div style="width:4px;height:4px;background:var(--gold);border-radius:50%;margin:4px auto 0;"></div>':''}
-            </div>
-            ${isClosed
-              ? '<div style="padding:12px 6px;text-align:center;font-size:9px;color:var(--t3);">Cerrado</div>'
-              : (blocks || '<div style="padding:12px 6px;text-align:center;font-size:9px;color:var(--t3);">Sin citas</div>')}
-          </div>`;
-      }).join('');
-
-      // Semana label
-      const semLabel = `${monday.getDate()}/${monday.getMonth()+1} — ${new Date(monday.getFullYear(),monday.getMonth(),monday.getDate()+5).getDate()}/${monday.getMonth()+1}`;
-
       return `
-<div class="pg-hd">
-  <span class="pg-tag">Barbershop · Agenda</span>
-  <h1 class="pg-title">Citas de la <em>semana</em></h1>
-  <p class="pg-sub">Semana del ${semLabel} · The Crew Barbershop · Yeasy</p>
+<div class="pg-hd" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+  <div>
+    <span class="pg-tag">Barbershop · Equipo</span>
+    <h1 class="pg-title">Rendimiento <em>semanal</em></h1>
+    <p class="pg-sub">Citas cobradas y facturación por barbero · Yeasy en tiempo real</p>
+  </div>
+  <button id="citas-sync-btn" onclick="citasSync()" style="align-self:center;background:var(--ga);border:1px solid var(--gb);color:var(--gold);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;border-radius:4px;cursor:pointer;white-space:nowrap;">⟳ Actualizar</button>
 </div>
 
-<div class="kpi-grid" style="margin-bottom:28px;">
-  <div class="kpi"><div class="kpi-lbl">Citas semana</div><div class="kpi-val">${totalSemana}</div><div class="kpi-sub2">Lun — Sáb</div></div>
-  ${barberos.map((b,i) => `<div class="kpi"><div class="kpi-lbl">${b.name.split(' ')[0]}</div><div class="kpi-val w" style="color:${b.color}">${totalsPorBarbero[i]}</div><div class="kpi-sub2">citas esta semana</div></div>`).join('')}
+<div id="citas-status" style="font-size:10px;color:var(--t3);margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+  <span id="citas-dot" style="width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;"></span>
+  <span id="citas-msg">Cargando datos Yeasy...</span>
 </div>
 
-<div class="sec">Vista semanal</div>
-<div style="display:flex;gap:4px;overflow-x:auto;padding-bottom:8px;margin-bottom:24px;">${cols}</div>
+<div class="kpi-grid" id="citas-kpis">
+  <div class="kpi"><div class="kpi-lbl">Total semana</div><div class="kpi-val" id="ck-total">—</div><div class="kpi-sub2" id="ck-total-sub">sincronizando...</div></div>
+  <div class="kpi"><div class="kpi-lbl">Citas cobradas</div><div class="kpi-val w" id="ck-citas">—</div><div class="kpi-sub2" id="ck-citas-sub">esta semana</div></div>
+  <div class="kpi"><div class="kpi-lbl">Media por barbero</div><div class="kpi-val g" id="ck-avg">—</div><div class="kpi-sub2">esta semana</div></div>
+  <div class="kpi"><div class="kpi-lbl">Top barbero</div><div class="kpi-val" id="ck-top" style="font-size:14px;padding-top:6px;">—</div><div class="kpi-sub2" id="ck-top-sub">esta semana</div></div>
+</div>
 
-<div class="sec">Barberos</div>
-<div class="g2" style="margin-bottom:24px;">
-  ${barberos.map((b,i) => `
-    <div class="card" style="border-top:2px solid ${b.color};">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-        <div style="width:32px;height:32px;border-radius:50%;background:${b.bg};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:${b.color};">${b.initials}</div>
-        <div><div class="card-ttl">${b.name}</div><div style="font-size:9px;color:var(--t3);">The Crew Barbershop</div></div>
-      </div>
-      <div style="display:flex;gap:16px;">
-        <div><div style="font-size:9px;color:var(--t3);margin-bottom:2px;">Esta semana</div><div style="font-size:16px;font-weight:800;color:${b.color};">${totalsPorBarbero[i]}</div></div>
-        <div><div style="font-size:9px;color:var(--t3);margin-bottom:2px;">Ocupación</div><div style="font-size:16px;font-weight:800;color:var(--t2);">${Math.round((totalsPorBarbero[i]/Math.max(...totalsPorBarbero))*100)}%</div></div>
-      </div>
-    </div>`).join('')}
+<div class="sec">Barberos — esta semana</div>
+<div id="citas-barberos" class="g2" style="margin-bottom:28px;">
+  <div style="grid-column:1/-1;padding:24px;text-align:center;color:var(--t3);font-size:11px;">Cargando...</div>
 </div>
 
 <div class="sec">Acceso directo</div>
 <div style="display:flex;flex-direction:column;gap:10px">
-  <a class="dl" href="https://business.yeasyapp.com" target="_blank"><div class="dl-ico">📅</div><div><div class="dl-ttl">Yeasy Business</div><div class="dl-sub">Gestión de citas en tiempo real · The Crew Barbershop</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="https://business.yeasyapp.com" target="_blank"><div class="dl-ico">📅</div><div><div class="dl-ttl">Yeasy Business</div><div class="dl-sub">Agenda completa en tiempo real · The Crew Barbershop</div></div><div class="dl-arr">↗</div></a>
   <a class="dl" href="https://booksy.com" target="_blank"><div class="dl-ico">📋</div><div><div class="dl-ttl">Booksy Pro</div><div class="dl-sub">Barbero Barrio + Gerard Caja</div></div><div class="dl-arr">↗</div></a>
 </div>`;
-    }
+    },
+    after() { citasSync(false); }
   },
 
-  academia: { sec:'The Crew Academy', pg:'Academia',
+
+    academia: { sec:'The Crew Academy', pg:'Academia',
     html() {
       return `
 <div class="pg-hd">
@@ -2387,6 +2288,97 @@ async function yeasySync() {
 }
 
 const BOOKSY_MONTHLY = { 1:282, 2:575, 3:1119, 4:1278 };
+
+async function yeasyWeekByEmployee(week, year) {
+  const token = await yeasyToken();
+  const res = await fetch(`${YEASY.base}/billing/calculateFromPaymentByWeek?commerce=${YEASY.commerce}&week=${week}&year=${year}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  const data = await res.json();
+  const byEmp = {};
+  for (const txs of Object.values(data)) {
+    for (const tx of txs) {
+      if (tx.isDeleted) continue;
+      const emp = tx.employee || {};
+      const id = emp.uuid || 'unknown';
+      if (!byEmp[id]) {
+        byEmp[id] = {
+          uuid: id, name: emp.name || '?', surname: emp.surname || '',
+          image: emp.image || '', position: emp.position || '',
+          isOwner: emp.isOwner || false, total: 0, citas: 0
+        };
+      }
+      if (typeof tx.amount === 'number') byEmp[id].total += tx.amount;
+      byEmp[id].citas++;
+    }
+  }
+  return byEmp;
+}
+
+async function citasSync(showToast = true) {
+  const dot = document.getElementById('citas-dot');
+  const msg = document.getElementById('citas-msg');
+  const btn = document.getElementById('citas-sync-btn');
+  if (!dot) return;
+  dot.style.background = 'var(--gold)';
+  if (msg) msg.textContent = 'Conectando con Yeasy...';
+  if (btn) btn.disabled = true;
+  try {
+    const now = new Date();
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+    const week = Math.ceil(((now - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
+    const byEmp = await yeasyWeekByEmployee(week, now.getFullYear());
+    const barberos = Object.values(byEmp).filter(e => e.uuid !== 'unknown' && e.citas > 0).sort((a,b) => b.total - a.total);
+    const totalEur = barberos.reduce((s,e) => s+e.total, 0);
+    const totalCitas = barberos.reduce((s,e) => s+e.citas, 0);
+    const avg = barberos.length ? Math.round(totalEur / barberos.length) : 0;
+    const top = barberos[0];
+    const setEl = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+    setEl('ck-total', fmt(totalEur));
+    setEl('ck-total-sub', `Yeasy · semana ${week}`);
+    setEl('ck-citas', totalCitas);
+    setEl('ck-citas-sub', `semana ${week} · ${now.getFullYear()}`);
+    setEl('ck-avg', fmt(avg));
+    if (top) { setEl('ck-top', top.name); setEl('ck-top-sub', `${fmt(top.total)} · ${top.citas} citas`); }
+    const container = document.getElementById('citas-barberos');
+    if (container) {
+      const maxTotal = top ? top.total : 1;
+      const colors = ['#C9A84C','#6B9FD4','#7FAE7A','#D4896B','#A07848','#9B8EC4'];
+      container.innerHTML = barberos.map((b,i) => {
+        const pct = Math.round((b.total / maxTotal) * 100);
+        const color = colors[i % colors.length];
+        const initials = (b.name[0]||'') + (b.surname[0]||'');
+        const avatar = b.image
+          ? `<img src="${b.image}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid ${color};" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div style="display:none;width:48px;height:48px;border-radius:50%;background:${color}20;border:2px solid ${color};align-items:center;justify-content:center;font-size:14px;font-weight:800;color:${color};">${initials}</div>`
+          : `<div style="width:48px;height:48px;border-radius:50%;background:${color}20;border:2px solid ${color};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:${color};">${initials}</div>`;
+        return `<div class="card" style="border-top:2px solid ${color};">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+            ${avatar}
+            <div><div style="font-size:13px;font-weight:700;color:var(--t1);">${b.name} ${b.surname}</div><div style="font-size:10px;color:var(--t3);margin-top:2px;">${b.position||'Barbero'}</div></div>
+            ${i===0?`<div style="margin-left:auto;font-size:8px;font-weight:700;letter-spacing:.1em;background:${color}20;color:${color};padding:3px 8px;border-radius:3px;">TOP</div>`:''}
+          </div>
+          <div style="display:flex;gap:20px;margin-bottom:12px;">
+            <div><div style="font-size:9px;color:var(--t3);margin-bottom:3px;">FACTURADO</div><div style="font-size:20px;font-weight:800;color:${color};">${fmt(b.total)}</div></div>
+            <div><div style="font-size:9px;color:var(--t3);margin-bottom:3px;">CITAS</div><div style="font-size:20px;font-weight:800;color:var(--t2);">${b.citas}</div></div>
+            <div><div style="font-size:9px;color:var(--t3);margin-bottom:3px;">MEDIA/CITA</div><div style="font-size:20px;font-weight:800;color:var(--t2);">${fmt(Math.round(b.total/b.citas))}</div></div>
+          </div>
+          <div style="background:var(--ln2);border-radius:2px;height:4px;overflow:hidden;"><div style="height:100%;width:${pct}%;background:${color};border-radius:2px;transition:width .6s ease;"></div></div>
+          <div style="font-size:9px;color:var(--t3);margin-top:5px;">${pct}% del top</div>
+        </div>`;
+      }).join('');
+    }
+    const ts = `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+    dot.style.background = 'var(--grn)';
+    if (msg) msg.textContent = `Sincronizado · ${ts} · semana ${week}`;
+    if (btn) { btn.disabled=false; btn.textContent=`⟳ Actualizado ${ts}`; }
+    if (showToast) toast('Citas sincronizadas', 'ok');
+  } catch(e) {
+    console.warn('citasSync error:', e);
+    dot.style.background = 'var(--red)';
+    if (msg) msg.textContent = 'Error de conexión';
+    if (btn) btn.disabled = false;
+  }
+}
 
 async function facturacionSync(showToast = true) {
   const dot  = document.getElementById('yeasy-dot');
