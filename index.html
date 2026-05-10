@@ -1105,40 +1105,52 @@ const V = {
 
   facturacion: { sec:'Barbershop', pg:'Facturación',
     html() {
-      const { monthly, yeasy, booksy, total, best } = D.billing;
-      const months = ['Enero','Febrero','Marzo','Abril'];
-      const rows = monthly.map(({m,y,b},i) => `<tr><td>${months[i]}</td><td class="r">${fmtD(y)}</td><td class="r">${fmtD(b)}</td><td class="r au">${fmtD(y+b)}</td></tr>`).join('');
+      const { booksy } = D.billing;
+      const booksyMonthly = [
+        {m:'Enero',b:282},{m:'Febrero',b:575},{m:'Marzo',b:1119},{m:'Abril',b:1278},
+      ];
       return `
-<div class="pg-hd">
-  <span class="pg-tag">Barbershop · Facturación</span>
-  <h1 class="pg-title"><em>2026</em> — Enero a Abril</h1>
-  <p class="pg-sub">Yeasy (local principal) + Booksy (Barrio · Caja) · The Crew Barbershop, Sabadell</p>
+<div class="pg-hd" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+  <div>
+    <span class="pg-tag">Barbershop · Facturación</span>
+    <h1 class="pg-title"><em>2026</em> — Datos en vivo</h1>
+    <p class="pg-sub">Yeasy en tiempo real · Booksy manual · The Crew Barbershop, Sabadell</p>
+  </div>
+  <button id="yeasy-sync-btn" onclick="facturacionSync()" style="align-self:center;background:var(--ga);border:1px solid var(--gb);color:var(--gold);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;border-radius:4px;cursor:pointer;white-space:nowrap;">⟳ Sincronizar Yeasy</button>
 </div>
-<div class="kpi-grid">
-  <div class="kpi"><div class="kpi-lbl">Total 2026</div><div class="kpi-val">${fmt(total)}</div><div class="kpi-sub2">Yeasy + Booksy</div></div>
-  <div class="kpi"><div class="kpi-lbl">Yeasy</div><div class="kpi-val">${fmt(yeasy)}</div><div class="kpi-sub2">Local principal</div></div>
-  <div class="kpi"><div class="kpi-lbl">Booksy</div><div class="kpi-val w">${fmt(booksy)}</div><div class="kpi-sub2">Barrio + Caja</div></div>
-  <div class="kpi"><div class="kpi-lbl">Mejor mes</div><div class="kpi-val g">${fmt(best.val)}</div><div class="kpi-sub2">${best.name} 2026</div></div>
+
+<div id="yeasy-status" style="font-size:10px;color:var(--t3);margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+  <span id="yeasy-dot" style="width:6px;height:6px;border-radius:50%;background:var(--t3);display:inline-block;"></span>
+  <span id="yeasy-msg">Cargando datos Yeasy...</span>
 </div>
-<div class="sec">Facturación mensual</div>
+
+<div class="kpi-grid" id="fact-kpis">
+  <div class="kpi"><div class="kpi-lbl">Total Yeasy 2026</div><div class="kpi-val" id="kpi-yeasy-total">—</div><div class="kpi-sub2" id="kpi-yeasy-sub">sincronizando...</div></div>
+  <div class="kpi"><div class="kpi-lbl">Mes actual</div><div class="kpi-val" id="kpi-mes-actual">—</div><div class="kpi-sub2" id="kpi-mes-sub">sincronizando...</div></div>
+  <div class="kpi"><div class="kpi-lbl">Booksy 2026</div><div class="kpi-val w">${fmt(booksy)}</div><div class="kpi-sub2">Barrio + Caja · manual</div></div>
+  <div class="kpi"><div class="kpi-lbl">Mejor mes</div><div class="kpi-val g" id="kpi-best">—</div><div class="kpi-sub2" id="kpi-best-sub">sincronizando...</div></div>
+</div>
+
+<div class="sec">Facturación mensual Yeasy</div>
 <div class="card" style="margin-bottom:24px;padding-bottom:14px">
-  <div class="chart" id="fact-chart"></div>
-  <div class="legend">
-    <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div>Yeasy</div>
-    <div class="leg-item"><div class="leg-dot" style="background:#8A6830"></div>Booksy</div>
+  <div class="chart" id="fact-chart-live" style="min-height:140px;display:flex;align-items:center;justify-content:center;">
+    <span style="font-size:11px;color:var(--t3);">Cargando...</span>
   </div>
 </div>
+
 <div class="sec">Resumen por mes</div>
-<div class="tw">
+<div class="tw" id="fact-table-wrap">
   <table>
     <thead><tr><th>Mes</th><th class="r">Yeasy</th><th class="r">Booksy</th><th class="r">Total</th></tr></thead>
-    <tbody>${rows}</tbody>
-    <tfoot><tr class="tf"><td><strong>TOTAL 2026</strong></td><td class="r">${fmtD(yeasy)}</td><td class="r">${fmtD(booksy)}</td><td class="r">${fmtD(total)}</td></tr></tfoot>
+    <tbody id="fact-tbody"><tr><td colspan="4" style="text-align:center;color:var(--t3);padding:20px;">Cargando datos Yeasy...</td></tr></tbody>
+    <tfoot><tr class="tf"><td><strong>TOTAL 2026</strong></td><td class="r" id="tf-yeasy">—</td><td class="r">${fmtD(booksy)}</td><td class="r" id="tf-total">—</td></tr></tfoot>
   </table>
 </div>
-<div class="note">Booksy crece mes a mes: de 282 € en enero a 1.278 € en abril (+353%). Abril cierra como el mejor mes del año con 11.258 €.</div>`;
+<div class="note">Yeasy: datos en tiempo real via API. Booksy (Barrio + Caja): actualización manual mensual.</div>`;
     },
-    after() { buildChart('fact-chart', D.billing.monthly); }
+    after() {
+      facturacionSync(false);
+    }
   },
 
   gastos: { sec:'Barbershop', pg:'Gastos & P&L',
@@ -2308,6 +2320,160 @@ document.addEventListener('DOMContentLoaded', () => {
 
   setTimeout(() => toast('Panel cargado · Datos en vivo Instagram', 'ok'), 700);
 });
+
+/* ── YEASY LIVE ───────────────────────────────────────────────── */
+const YEASY = {
+  base: 'https://apitest.yeasyapp.com',
+  commerce: '56f3295f-eacb-4c5c-8562-b8ac5ebfdc21',
+  email: 'thecrewbarber.co@gmail.com',
+  pwd: 'Chaothecrew2809',
+};
+const MONTH_NAMES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+async function yeasyToken() {
+  const cached = localStorage.getItem('yeasy_token');
+  const ts = parseInt(localStorage.getItem('yeasy_ts') || '0');
+  if (cached && Date.now() - ts < 23 * 3600 * 1000) return cached;
+  const res = await fetch(`${YEASY.base}/auth/login/commerce`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'no-follow': 'no-follow' },
+    body: JSON.stringify({ email: YEASY.email, password: YEASY.pwd })
+  });
+  const data = await res.json();
+  const token = data.accessToken;
+  localStorage.setItem('yeasy_token', token);
+  localStorage.setItem('yeasy_ts', Date.now().toString());
+  return token;
+}
+
+async function yeasyBillingYear(year) {
+  const token = await yeasyToken();
+  const now = new Date();
+  const currentWeek = Math.ceil(((now - new Date(now.getFullYear(), 0, 1)) / 86400000 + new Date(now.getFullYear(), 0, 1).getDay() + 1) / 7);
+  const maxWeek = year < now.getFullYear() ? 52 : currentWeek;
+  const monthly = {};
+
+  const fetches = [];
+  for (let w = 1; w <= maxWeek; w++) {
+    fetches.push(
+      fetch(`${YEASY.base}/billing/calculateFromPaymentByWeek?commerce=${YEASY.commerce}&week=${w}&year=${year}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      }).then(r => r.json()).then(data => {
+        for (const [date, txs] of Object.entries(data)) {
+          const m = parseInt(date.slice(5, 7));
+          for (const tx of txs) {
+            if (!tx.isDeleted && typeof tx.amount === 'number') {
+              monthly[m] = (monthly[m] || 0) + tx.amount;
+            }
+          }
+        }
+      }).catch(() => {})
+    );
+  }
+  await Promise.all(fetches);
+  return monthly;
+}
+
+async function yeasySync() {
+  try {
+    const year = new Date().getFullYear();
+    const monthly = await yeasyBillingYear(year);
+    const months = Object.keys(monthly).map(Number).sort((a,b)=>a-b);
+    return { monthly, months, total: Object.values(monthly).reduce((a,b)=>a+b,0) };
+  } catch(e) {
+    console.warn('Yeasy sync error:', e);
+    return null;
+  }
+}
+
+const BOOKSY_MONTHLY = { 1:282, 2:575, 3:1119, 4:1278 };
+
+async function facturacionSync(showToast = true) {
+  const dot  = document.getElementById('yeasy-dot');
+  const msg  = document.getElementById('yeasy-msg');
+  const btn  = document.getElementById('yeasy-sync-btn');
+  if (!dot) return;
+
+  if (dot) dot.style.background = 'var(--gold)';
+  if (msg) msg.textContent = 'Conectando con Yeasy...';
+  if (btn) btn.disabled = true;
+
+  const data = await yeasySync();
+  if (!data) {
+    if (dot) dot.style.background = 'var(--red)';
+    if (msg) msg.textContent = 'Error de conexión con Yeasy';
+    if (btn) btn.disabled = false;
+    return;
+  }
+
+  const { monthly, total } = data;
+  const curMonth = new Date().getMonth() + 1;
+  const curMonthVal = monthly[curMonth] || 0;
+  const bestMonth = Object.entries(monthly).sort((a,b)=>b[1]-a[1])[0];
+  const booksyTotal = Object.values(BOOKSY_MONTHLY).reduce((a,b)=>a+b,0);
+
+  // KPIs
+  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setEl('kpi-yeasy-total', fmt(total));
+  setEl('kpi-yeasy-sub', `${Object.keys(monthly).length} meses · Yeasy`);
+  setEl('kpi-mes-actual', fmt(curMonthVal));
+  setEl('kpi-mes-sub', `${MONTH_NAMES[curMonth-1]} · en curso`);
+  setEl('kpi-best', fmt(parseFloat(bestMonth[1])));
+  setEl('kpi-best-sub', `${MONTH_NAMES[parseInt(bestMonth[0])-1]} · mejor mes`);
+  setEl('tf-yeasy', fmtD(total));
+  setEl('tf-total', fmtD(total + booksyTotal));
+
+  // Tabla
+  const tbody = document.getElementById('fact-tbody');
+  if (tbody) {
+    const months = Object.keys(monthly).map(Number).sort((a,b)=>a-b);
+    tbody.innerHTML = months.map(m => {
+      const y = monthly[m] || 0;
+      const b = BOOKSY_MONTHLY[m] || 0;
+      const isCur = m === curMonth;
+      return `<tr${isCur?' style="background:var(--ga)"':''}>
+        <td>${MONTH_NAMES[m-1]}${isCur?' <span style="font-size:8px;color:var(--gold);font-weight:700;">EN CURSO</span>':''}</td>
+        <td class="r">${fmtD(y)}</td>
+        <td class="r">${b ? fmtD(b) : '<span style="color:var(--t3)">—</span>'}</td>
+        <td class="r au">${fmtD(y + b)}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Gráfico live
+  const chartEl = document.getElementById('fact-chart-live');
+  if (chartEl) {
+    const months = Object.keys(monthly).map(Number).sort((a,b)=>a-b);
+    const chartData = months.map(m => ({ m: MONTH_NAMES[m-1].slice(0,3), y: monthly[m]||0, b: BOOKSY_MONTHLY[m]||0 }));
+    chartEl.innerHTML = '';
+    buildChartInEl(chartEl, chartData);
+  }
+
+  // Status
+  const now = new Date();
+  const ts = `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+  if (dot) dot.style.background = 'var(--grn)';
+  if (msg) msg.textContent = `Sincronizado · ${ts} · ${Object.keys(monthly).length} meses`;
+  if (btn) { btn.disabled = false; btn.textContent = `⟳ Sincronizado ${ts}`; }
+  if (showToast) toast('Yeasy sincronizado', 'ok');
+}
+
+function buildChartInEl(el, data) {
+  const maxVal = Math.max(...data.map(d => d.y + d.b), 1);
+  el.style.cssText = 'display:flex;align-items:flex-end;gap:8px;height:140px;padding:8px 0 0;';
+  data.forEach(({ m, y, b }) => {
+    const total = y + b;
+    const col = document.createElement('div');
+    col.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;';
+    col.innerHTML = `
+      <div style="width:100%;display:flex;flex-direction:column;gap:2px;justify-content:flex-end;height:${(total/maxVal)*100}%">
+        ${b ? `<div style="height:${(b/total)*100}%;background:#8A6830;opacity:.8;border-radius:2px 2px 0 0;min-height:2px;"></div>` : ''}
+        <div style="height:${(y/total)*100}%;background:var(--gold);opacity:.85;border-radius:${b?'0':'2px 2px'} 0 0;min-height:2px;"></div>
+      </div>
+      <div style="font-size:9px;font-weight:600;color:var(--t3);letter-spacing:.04em;">${m}</div>`;
+    el.appendChild(col);
+  });
+}
 </script>
 
 <script>
