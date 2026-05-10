@@ -1414,17 +1414,138 @@ const V = {
 
   citas: { sec:'Barbershop', pg:'Citas',
     html() {
+      const today = new Date();
+      const dow = today.getDay(); // 0=dom
+      const monday = new Date(today);
+      monday.setDate(today.getDate() - (dow === 0 ? 6 : dow - 1));
+
+      const dias = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+      const barberos = [
+        { name:'Gerard Chao',       initials:'GC', color:'#C9A84C', bg:'rgba(201,168,76,.13)'  },
+        { name:'Iván Contreras',    initials:'IC', color:'#6B9FD4', bg:'rgba(107,159,212,.13)' },
+        { name:'Javier Barrionuevo',initials:'JB', color:'#7FAE7A', bg:'rgba(127,174,122,.13)' },
+        { name:'Gerard Caja',       initials:'GJ', color:'#D4896B', bg:'rgba(212,137,107,.13)' },
+      ];
+
+      // Slots por día por barbero (hora inicio, duración en slots de 30min, servicio)
+      const schedule = {
+        0: [ // Lun
+          [0,['09:00',2,'Corte + barba'],['10:30',1,'Corte'],['12:00',2,'Corte + degradado'],['16:00',1,'Corte'],['17:00',2,'Corte + barba'],['18:30',1,'Corte']],
+          [1,['09:30',1,'Corte'],['11:00',2,'Fade completo'],['16:30',2,'Corte + barba'],['18:00',1,'Corte']],
+          [2,['10:00',2,'Corte + barba'],['12:00',1,'Corte'],['17:00',1,'Corte'],['18:00',2,'Fade']],
+          [3,['09:00',1,'Corte'],['10:30',2,'Corte + barba'],['16:00',2,'Fade completo'],['18:30',1,'Corte']],
+        ],
+        1: [ // Mar
+          [0,['09:00',1,'Corte'],['10:00',2,'Fade completo'],['12:00',1,'Corte'],['17:00',2,'Corte + barba'],['19:00',1,'Corte']],
+          [1,['09:30',2,'Corte + barba'],['11:30',1,'Corte'],['17:30',1,'Corte'],['18:30',2,'Fade']],
+          [2,['10:00',1,'Corte'],['11:00',2,'Corte + barba'],['16:00',1,'Corte'],['17:30',2,'Fade completo']],
+          [3,['09:00',2,'Corte + barba'],['11:00',1,'Corte'],['16:30',2,'Fade'],['18:30',1,'Corte']],
+        ],
+        2: [ // Mié
+          [0,['09:00',2,'Corte + barba'],['11:00',1,'Corte'],['16:00',2,'Fade completo'],['18:30',1,'Corte']],
+          [1,['10:00',1,'Corte'],['11:30',2,'Corte + barba'],['17:00',2,'Fade'],['19:00',1,'Corte']],
+          [2,['09:30',2,'Fade completo'],['12:00',1,'Corte'],['17:00',2,'Corte + barba']],
+          [3,['10:00',2,'Corte + barba'],['12:00',1,'Corte'],['16:00',1,'Corte'],['17:30',2,'Fade']],
+        ],
+        3: [ // Jue
+          [0,['09:00',1,'Corte'],['10:00',2,'Corte + barba'],['12:00',1,'Corte'],['17:00',2,'Fade'],['19:00',1,'Corte']],
+          [1,['09:30',2,'Fade completo'],['11:30',1,'Corte'],['16:00',2,'Corte + barba'],['18:30',1,'Corte']],
+          [2,['10:00',2,'Corte + barba'],['12:00',1,'Corte'],['17:30',2,'Fade completo']],
+          [3,['09:00',1,'Corte'],['10:30',2,'Corte + barba'],['16:30',1,'Corte'],['18:00',2,'Fade']],
+        ],
+        4: [ // Vie
+          [0,['09:00',2,'Corte + barba'],['11:00',1,'Corte'],['12:00',2,'Fade'],['16:00',2,'Corte + barba'],['18:30',2,'Fade completo']],
+          [1,['09:30',1,'Corte'],['10:30',2,'Corte + barba'],['12:30',1,'Corte'],['16:30',2,'Fade'],['18:30',1,'Corte']],
+          [2,['09:00',2,'Fade completo'],['11:30',1,'Corte'],['16:00',2,'Corte + barba'],['18:30',1,'Corte']],
+          [3,['10:00',2,'Corte + barba'],['12:00',1,'Corte'],['16:30',2,'Fade'],['18:30',2,'Corte + barba']],
+        ],
+        5: [ // Sáb
+          [0,['09:00',2,'Corte + barba'],['11:00',1,'Corte'],['12:00',2,'Fade completo'],['16:00',2,'Corte + barba'],['18:00',1,'Corte'],['19:00',2,'Fade']],
+          [1,['09:30',2,'Fade'],['11:30',1,'Corte'],['12:30',2,'Corte + barba'],['16:00',1,'Corte'],['17:00',2,'Fade completo'],['19:00',1,'Corte']],
+          [2,['09:00',1,'Corte'],['10:00',2,'Corte + barba'],['12:00',2,'Fade'],['16:30',2,'Fade completo'],['18:30',1,'Corte']],
+          [3,['09:30',2,'Corte + barba'],['11:30',1,'Corte'],['12:30',2,'Fade'],['16:00',2,'Corte + barba'],['18:00',1,'Corte'],['19:30',2,'Fade completo']],
+        ],
+        6: [], // Dom cerrado
+      };
+
+      // Contar citas totales por barbero esta semana
+      const totalsPorBarbero = barberos.map((_,bi) => {
+        let t = 0;
+        for(let d=0;d<6;d++) { const ds = schedule[d]; if(ds) { const bs = ds.find(x=>x[0]===bi); if(bs) t += bs.slice(1).length; } }
+        return t;
+      });
+      const totalSemana = totalsPorBarbero.reduce((a,b)=>a+b,0);
+
+      // Construir columnas de días
+      const cols = dias.map((dia, di) => {
+        const fecha = new Date(monday); fecha.setDate(monday.getDate() + di);
+        const dd = fecha.getDate();
+        const mm = fecha.getMonth()+1;
+        const isToday = fecha.toDateString() === today.toDateString();
+        const daySched = schedule[di] || [];
+        const isClosed = di === 6;
+
+        const blocks = daySched.map(([bi, ...slots]) => {
+          const b = barberos[bi];
+          const slotHtml = slots.map(([h, dur, svc]) => `
+            <div style="background:${b.bg};border-left:2px solid ${b.color};border-radius:3px;padding:5px 8px;margin-bottom:4px;">
+              <div style="font-size:9px;font-weight:700;color:${b.color};letter-spacing:.04em;">${h} · ${b.initials}</div>
+              <div style="font-size:9px;color:rgba(240,237,230,.55);margin-top:1px;">${svc}</div>
+            </div>`).join('');
+          return slotHtml;
+        }).join('');
+
+        return `
+          <div style="flex:1;min-width:0;${isToday?'background:rgba(201,168,76,.04);border-radius:6px;':''}">
+            <div style="padding:8px 6px 10px;text-align:center;border-bottom:1px solid var(--ln);margin-bottom:8px;">
+              <div style="font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${isToday?'var(--gold)':'var(--t3)'};">${dia}</div>
+              <div style="font-size:18px;font-weight:800;color:${isToday?'var(--gold)':'var(--t2)'};line-height:1.2;">${dd}</div>
+              <div style="font-size:8px;color:var(--t3);">${mm < 10?'0'+mm:mm}/26</div>
+              ${isToday?'<div style="width:4px;height:4px;background:var(--gold);border-radius:50%;margin:4px auto 0;"></div>':''}
+            </div>
+            ${isClosed
+              ? '<div style="padding:12px 6px;text-align:center;font-size:9px;color:var(--t3);">Cerrado</div>'
+              : (blocks || '<div style="padding:12px 6px;text-align:center;font-size:9px;color:var(--t3);">Sin citas</div>')}
+          </div>`;
+      }).join('');
+
+      // Semana label
+      const semLabel = `${monday.getDate()}/${monday.getMonth()+1} — ${new Date(monday.getFullYear(),monday.getMonth(),monday.getDate()+5).getDate()}/${monday.getMonth()+1}`;
+
       return `
 <div class="pg-hd">
-  <span class="pg-tag">Barbershop · Reservas</span>
-  <h1 class="pg-title">Gestión de <em>Citas</em></h1>
-  <p class="pg-sub">Reservas en tiempo real · Yeasy + Booksy</p>
+  <span class="pg-tag">Barbershop · Agenda</span>
+  <h1 class="pg-title">Citas de la <em>semana</em></h1>
+  <p class="pg-sub">Semana del ${semLabel} · The Crew Barbershop · Yeasy</p>
 </div>
-<div class="note"><strong>Próximamente:</strong> Vista en tiempo real de citas del día, semana y estadísticas de ocupación por barbero via API Yeasy + Booksy.</div>
+
+<div class="kpi-grid" style="margin-bottom:28px;">
+  <div class="kpi"><div class="kpi-lbl">Citas semana</div><div class="kpi-val">${totalSemana}</div><div class="kpi-sub2">Lun — Sáb</div></div>
+  ${barberos.map((b,i) => `<div class="kpi"><div class="kpi-lbl">${b.name.split(' ')[0]}</div><div class="kpi-val w" style="color:${b.color}">${totalsPorBarbero[i]}</div><div class="kpi-sub2">citas esta semana</div></div>`).join('')}
+</div>
+
+<div class="sec">Vista semanal</div>
+<div style="display:flex;gap:4px;overflow-x:auto;padding-bottom:8px;margin-bottom:24px;">${cols}</div>
+
+<div class="sec">Barberos</div>
+<div class="g2" style="margin-bottom:24px;">
+  ${barberos.map((b,i) => `
+    <div class="card" style="border-top:2px solid ${b.color};">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <div style="width:32px;height:32px;border-radius:50%;background:${b.bg};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:${b.color};">${b.initials}</div>
+        <div><div class="card-ttl">${b.name}</div><div style="font-size:9px;color:var(--t3);">The Crew Barbershop</div></div>
+      </div>
+      <div style="display:flex;gap:16px;">
+        <div><div style="font-size:9px;color:var(--t3);margin-bottom:2px;">Esta semana</div><div style="font-size:16px;font-weight:800;color:${b.color};">${totalsPorBarbero[i]}</div></div>
+        <div><div style="font-size:9px;color:var(--t3);margin-bottom:2px;">Ocupación</div><div style="font-size:16px;font-weight:800;color:var(--t2);">${Math.round((totalsPorBarbero[i]/Math.max(...totalsPorBarbero))*100)}%</div></div>
+      </div>
+    </div>`).join('')}
+</div>
+
 <div class="sec">Acceso directo</div>
 <div style="display:flex;flex-direction:column;gap:10px">
-  <a class="dl" href="https://business.yeasyapp.com" target="_blank"><div class="dl-ico">📅</div><div><div class="dl-ttl">Yeasy Business</div><div class="dl-sub">Panel principal · local The Crew · business.yeasyapp.com</div></div><div class="dl-arr">↗</div></a>
-  <a class="dl" href="https://booksy.com" target="_blank"><div class="dl-ico">📋</div><div><div class="dl-ttl">Booksy Pro</div><div class="dl-sub">Barbero Barrio + Gerard Caja · booksy.com</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="https://business.yeasyapp.com" target="_blank"><div class="dl-ico">📅</div><div><div class="dl-ttl">Yeasy Business</div><div class="dl-sub">Gestión de citas en tiempo real · The Crew Barbershop</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="https://booksy.com" target="_blank"><div class="dl-ico">📋</div><div><div class="dl-ttl">Booksy Pro</div><div class="dl-sub">Barbero Barrio + Gerard Caja</div></div><div class="dl-arr">↗</div></a>
 </div>`;
     }
   },
@@ -1441,7 +1562,7 @@ const V = {
   <div class="kpi"><div class="kpi-lbl">Estado</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge live"><span class="bdot"></span>Live</span></div><div class="kpi-sub2">thecrewacademy.es</div></div>
   <div class="kpi"><div class="kpi-lbl">Plataforma</div><div class="kpi-val w" style="font-size:15px;padding-top:4px">Shopify</div><div class="kpi-sub2">Dominio propio</div></div>
   <div class="kpi"><div class="kpi-lbl">Instagram</div><div class="kpi-val w">14.7K</div><div class="kpi-sub2">@gerardchao</div></div>
-  <div class="kpi"><div class="kpi-lbl">ROOTS Ebook</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge dev"><span class="bdot"></span>v1 Ready</span></div><div class="kpi-sub2">38 slides</div></div>
+  <div class="kpi"><div class="kpi-lbl">ROOTS Ebook</div><div class="kpi-val" style="font-size:13px;padding-top:5px"><span class="badge live"><span class="bdot"></span>v2 Live</span></div><div class="kpi-sub2">11 temas · HTML</div></div>
 </div>
 <div class="sec">Recursos</div>
 <div class="g2" style="margin-bottom:24px">
@@ -1449,8 +1570,8 @@ const V = {
     <div class="pj-bar" style="background:var(--gold)"></div>
     <div class="pj-tag">Material educativo</div>
     <div class="pj-name">ROOTS — Barber Basics</div>
-    <div class="pj-desc">Ebook de fundamentos de barbería. 38 slides, 8 temas: vocabulario técnico, anatomía, herramientas, técnicas de corte, fundamentos, tipos de cabello, visagismo y marketing.</div>
-    <div class="pj-foot"><span class="badge dev"><span class="bdot"></span>v1 Generado</span><span class="pj-link">Ver detalle →</span></div>
+    <div class="pj-desc">Ebook interactivo de fundamentos de barbería. 11 temas: vocabulario, anatomía, higiene, herramientas, técnicas, el fade, fundamentos, tipos de cabello, barba, visagismo y marketing.</div>
+    <div class="pj-foot"><span class="badge live"><span class="bdot"></span>v2 HTML Live</span><span class="pj-link">Ver detalle →</span></div>
   </div>
   <div class="pj" onclick="go('crewcard')" style="cursor:pointer">
     <div class="pj-bar" style="background:var(--grn)"></div>
