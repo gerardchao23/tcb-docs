@@ -1438,6 +1438,18 @@ const V = {
   <div style="grid-column:1/-1;padding:24px;text-align:center;color:var(--t3);font-size:11px;">Cargando...</div>
 </div>
 
+<div class="sec">Objetivo mensual — 14.000 €</div>
+<div id="citas-objetivo" style="margin-bottom:28px;"><div style="padding:24px;text-align:center;color:var(--t3);font-size:11px;">Cargando...</div></div>
+
+<div class="sec">Previsión por barbero para llegar al objetivo</div>
+<div id="citas-prevision" class="g2" style="margin-bottom:28px;"><div style="grid-column:1/-1;padding:24px;text-align:center;color:var(--t3);font-size:11px;">Cargando...</div></div>
+
+<div class="sec">Qué subir a historias esta semana</div>
+<div id="citas-historias" style="margin-bottom:28px;"><div style="padding:24px;text-align:center;color:var(--t3);font-size:11px;">Cargando...</div></div>
+
+<div class="sec">Venta de productos — objetivo semanal</div>
+<div id="citas-productos" style="margin-bottom:28px;"><div style="padding:24px;text-align:center;color:var(--t3);font-size:11px;">Cargando...</div></div>
+
 <div class="sec">Acceso directo</div>
 <div style="display:flex;flex-direction:column;gap:10px">
   <a class="dl" href="https://business.yeasyapp.com" target="_blank"><div class="dl-ico">📅</div><div><div class="dl-ttl">Yeasy Business</div><div class="dl-sub">Agenda completa en tiempo real · The Crew Barbershop</div></div><div class="dl-arr">↗</div></a>
@@ -2518,6 +2530,131 @@ async function citasSync(showToast = true) {
         </div>`;
       }).join('');
     }
+    // ── Objetivo 14k ──────────────────────────────────────────────
+    const TARGET = 14000;
+    const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+    const dayOfMonth = now.getDate();
+    const daysLeft = daysInMonth - dayOfMonth;
+    const falta = Math.max(0, TARGET - totalEur);
+    const pctObj = Math.min(100, Math.round((totalEur / TARGET) * 100));
+    const objEl = document.getElementById('citas-objetivo');
+    if (objEl) {
+      const barColor = pctObj >= 100 ? 'var(--grn)' : pctObj >= 70 ? 'var(--gold)' : 'var(--red)';
+      objEl.innerHTML = `<div class="card">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--t3);margin-bottom:14px;">OBJETIVO MENSUAL</div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px;">
+          <div>
+            <div style="font-size:28px;font-weight:900;color:${barColor};">${fmt(totalEur)}</div>
+            <div style="font-size:10px;color:var(--t3);margin-top:3px;">facturado este mes · objetivo ${fmt(TARGET)}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:22px;font-weight:800;color:var(--t2);">${pctObj}%</div>
+            <div style="font-size:10px;color:var(--t3);">${daysLeft} días restantes</div>
+          </div>
+        </div>
+        <div style="background:var(--ln2);border-radius:3px;height:8px;overflow:hidden;">
+          <div style="height:100%;width:${pctObj}%;background:${barColor};border-radius:3px;transition:width .8s ease;"></div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--t3);">
+          ${falta > 0
+            ? `Faltan <strong style="color:var(--t1);">${fmt(falta)}</strong> — ritmo diario necesario: <strong style="color:var(--t1);">${fmt(Math.ceil(falta / Math.max(1, daysLeft)))}</strong>/día`
+            : `<strong style="color:var(--grn);">¡Objetivo alcanzado!</strong> Superado por ${fmt(totalEur - TARGET)}`
+          }
+        </div>
+      </div>`;
+    }
+
+    // ── Previsión por barbero ──────────────────────────────────────
+    const prevEl = document.getElementById('citas-prevision');
+    if (prevEl && barberos.length) {
+      const colors = ['#C9A84C','#6B9FD4','#7FAE7A','#D4896B','#A07848','#9B8EC4'];
+      const targetPerBarber = TARGET / barberos.length;
+      prevEl.innerHTML = barberos.map((b, i) => {
+        const color = colors[i % colors.length];
+        const faltaB = Math.max(0, targetPerBarber - b.total);
+        const avgTicket = b.citas > 0 ? Math.round(b.total / b.citas) : 22;
+        const citasPendientes = Math.ceil(faltaB / Math.max(avgTicket, 1));
+        const ritmoB = daysLeft > 0 ? (faltaB / daysLeft).toFixed(1) : 0;
+        const citasDia = daysLeft > 0 ? Math.ceil(citasPendientes / daysLeft) : citasPendientes;
+        const pctB = Math.min(100, Math.round((b.total / targetPerBarber) * 100));
+        return `<div class="card" style="border-top:2px solid ${color};">
+          <div style="font-size:12px;font-weight:700;color:var(--t1);margin-bottom:10px;">${b.name} ${b.surname}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+            <div><div style="font-size:9px;color:var(--t3);">FACTURADO</div><div style="font-size:18px;font-weight:800;color:${color};">${fmt(b.total)}</div></div>
+            <div><div style="font-size:9px;color:var(--t3);">OBJETIVO</div><div style="font-size:18px;font-weight:800;color:var(--t2);">${fmt(targetPerBarber)}</div></div>
+            <div><div style="font-size:9px;color:var(--t3);">CITAS PENDIENTES</div><div style="font-size:18px;font-weight:800;color:var(--t2);">${faltaB > 0 ? citasPendientes : '✓'}</div></div>
+            <div><div style="font-size:9px;color:var(--t3);">RITMO/DÍA</div><div style="font-size:18px;font-weight:800;color:var(--t2);">${faltaB > 0 ? `${citasDia} citas` : '✓'}</div></div>
+          </div>
+          <div style="background:var(--ln2);border-radius:2px;height:4px;overflow:hidden;"><div style="height:100%;width:${pctB}%;background:${color};border-radius:2px;"></div></div>
+          <div style="font-size:9px;color:var(--t3);margin-top:4px;">${pctB}% de su objetivo</div>
+        </div>`;
+      }).join('');
+    }
+
+    // ── Plan de historias (semana actual) ─────────────────────────
+    const histEl = document.getElementById('citas-historias');
+    if (histEl) {
+      const todayDow = now.getDay(); // 0=Dom, 1=Lun … 6=Sab
+      const storiesPlan = [
+        { dia: 'Dom', tipo: 'Cierre de semana', ej: '"Semana terminada 💈 — Gracias a todos los que pasaron. Reservas abiertas para la semana que viene 🔗"' },
+        { dia: 'Lun', tipo: 'Apertura + agenda', ej: '"Semana arrancada ⚡ Agenda abierta — ¿ya tienes tu cita? 🔗"' },
+        { dia: 'Mar', tipo: 'Proceso / técnica', ej: 'Vídeo corto de un fade o texturizado en proceso (sin voz, música de fondo)' },
+        { dia: 'Mié', tipo: 'Antes/después', ej: 'Foto comparativa del mismo cliente: antes al llegar y después del corte' },
+        { dia: 'Jue', tipo: 'Engagement', ej: 'Encuesta: "¿Qué estilo prefieres esta temporada?" o pregunta abierta' },
+        { dia: 'Vie', tipo: 'Huecos libres', ej: '"Quedan 2 huecos hoy — escríbenos o reserva online 🔗"' },
+        { dia: 'Sáb', tipo: 'Ambiente del local', ej: 'Stories del equipo, humor, momento del día, música que suena en el local' },
+      ];
+      histEl.innerHTML = `<div class="card">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--t3);margin-bottom:14px;">QUÉ SUBIR A HISTORIAS ESTA SEMANA</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          ${storiesPlan.map((s, idx) => {
+            const isToday = idx === todayDow;
+            return `<div style="display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start;padding:10px 12px;border-radius:8px;background:${isToday ? 'var(--gold)18' : 'var(--ln2)'};border:1px solid ${isToday ? 'var(--gold)' : 'transparent'};">
+              <div style="font-size:11px;font-weight:800;color:${isToday ? 'var(--gold)' : 'var(--t3)'};">${s.dia}${isToday ? ' ◀' : ''}</div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--t1);">${s.tipo}</div>
+                <div style="font-size:10px;color:var(--t3);margin-top:3px;">${s.ej}</div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    }
+
+    // ── Targets de productos ───────────────────────────────────────
+    const prodEl = document.getElementById('citas-productos');
+    if (prodEl && barberos.length) {
+      const PROD_MARGEN = 15; // € margen por producto
+      const prodDia = 2; // productos/barbero/día
+      const totalProdDia = prodDia * barberos.length;
+      const prodMes = totalProdDia * daysInMonth;
+      const ingresosProd = prodMes * PROD_MARGEN;
+      const prodRestante = prodDia * barberos.length * daysLeft;
+      const colors = ['#C9A84C','#6B9FD4','#7FAE7A','#D4896B','#A07848','#9B8EC4'];
+      prodEl.innerHTML = `<div class="card">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--t3);margin-bottom:14px;">VENTA DE PRODUCTOS — OBJETIVO MES</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;">
+          <div style="text-align:center;"><div style="font-size:9px;color:var(--t3);">OBJETIVO/DÍA</div><div style="font-size:20px;font-weight:800;color:var(--gold);">${totalProdDia}</div><div style="font-size:9px;color:var(--t3);">productos</div></div>
+          <div style="text-align:center;"><div style="font-size:9px;color:var(--t3);">OBJETIVO MES</div><div style="font-size:20px;font-weight:800;color:var(--t2);">${prodMes}</div><div style="font-size:9px;color:var(--t3);">unidades</div></div>
+          <div style="text-align:center;"><div style="font-size:9px;color:var(--t3);">INGRESO EXTRA</div><div style="font-size:20px;font-weight:800;color:var(--grn);">${fmt(ingresosProd)}</div><div style="font-size:9px;color:var(--t3);">margen ${fmt(PROD_MARGEN)}/ud</div></div>
+        </div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--t3);margin-bottom:10px;">POR BARBERO · ${prodDia} PRODUCTOS/DÍA</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          ${barberos.map((b, i) => `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--ln2);border-radius:6px;border-left:3px solid ${colors[i%colors.length]};">
+            <div style="font-size:11px;font-weight:700;color:var(--t1);">${b.name} ${b.surname}</div>
+            <div style="display:flex;gap:16px;font-size:10px;color:var(--t3);">
+              <span><strong style="color:var(--t2);">${prodDia}/día</strong> hoy</span>
+              <span><strong style="color:var(--t2);">${prodDia * daysLeft}</strong> quedan</span>
+              <span><strong style="color:var(--grn);">${fmt(prodDia * daysLeft * PROD_MARGEN)}</strong> potencial</span>
+            </div>
+          </div>`).join('')}
+        </div>
+        <div style="margin-top:12px;padding:10px;background:var(--ln2);border-radius:6px;font-size:10px;color:var(--t3);">
+          💡 Recuerda ofrecerles siempre: cera de acabado, champú específico o sérum. 1 producto por cliente activo = ${fmt(barberos.length * PROD_MARGEN)}/día extra.
+        </div>
+      </div>`;
+    }
+
     const ts = `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
     dot.style.background = 'var(--grn)';
     if (msg) msg.textContent = `Sincronizado · ${ts} · 1–${now.getDate()} ${monthLabel}`;
