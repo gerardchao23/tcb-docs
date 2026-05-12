@@ -4,371 +4,697 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NOMAD DEPARTMENT — Campaign Brief Summer 2025</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="https://www.thecrewacademy.es/cdn/shop/files/Diseno_sin_titulo_27.png?crop=center&height=32&v=1773863841&width=32">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+:root {
+  --bg: #F4F4F6;
+  --surf: #FFFFFF;
+  --gold: #C9A84C;
+  --gold-light: rgba(201,168,76,.10);
+  --t1: #111111;
+  --t2: rgba(17,17,17,.55);
+  --t3: rgba(17,17,17,.35);
+  --ln: rgba(0,0,0,.08);
+  --font: 'Montserrat', sans-serif;
+}
+
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  background: #f8f8f6;
-  color: #111;
-  font-family: 'Barlow', sans-serif;
-  font-weight: 300;
-  font-size: 16px;
-  line-height: 1.8;
+  background: var(--bg);
+  color: var(--t1);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
 }
 
-.doc {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 80px 40px 120px;
+/* ── TOP BAR ── */
+.topbar {
+  background: var(--surf);
+  border-bottom: 1px solid var(--ln);
+  padding: 0 40px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-/* header */
-.doc-header {
-  border-bottom: 2px solid #111;
-  padding-bottom: 32px;
-  margin-bottom: 64px;
+.topbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.doc-brand {
+.topbar-logo img {
+  height: 28px;
+  width: auto;
+}
+
+.topbar-logo span {
   font-size: 12px;
-  letter-spacing: .35em;
+  font-weight: 600;
+  letter-spacing: .1em;
   text-transform: uppercase;
-  color: #999;
-  margin-bottom: 12px;
+  color: var(--t2);
 }
 
-.doc-title {
-  font-size: 36px;
+.topbar-badge {
+  font-size: 10px;
   font-weight: 600;
-  line-height: 1.1;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: var(--gold-light);
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(201,168,76,.2);
+}
+
+/* ── DOC ── */
+.doc {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 56px 40px 100px;
+}
+
+/* ── COVER ── */
+.cover {
+  background: var(--surf);
+  border: 1px solid var(--ln);
+  border-radius: 12px;
+  padding: 48px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gold);
+}
+
+.cover-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+
+.cover-title {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 8px;
+  color: var(--t1);
+}
+
+.cover-sub {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--t2);
+  margin-bottom: 32px;
+}
+
+.cover-meta {
+  display: flex;
+  gap: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--ln);
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.meta-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--t3);
+}
+
+.meta-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--t1);
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--surf);
+  border: 1px solid var(--ln);
+  border-radius: 12px;
+  padding: 36px 40px;
+  margin-bottom: 16px;
+}
+
+.card-num {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gold);
   margin-bottom: 8px;
 }
 
-.doc-meta {
-  font-size: 13px;
-  color: #888;
-  letter-spacing: .1em;
-}
-
-/* sections */
-.section {
-  margin-bottom: 56px;
-}
-
-.section-num {
-  font-size: 11px;
-  letter-spacing: .35em;
-  text-transform: uppercase;
-  color: #bbb;
-  margin-bottom: 6px;
-}
-
-.section-title {
-  font-size: 22px;
-  font-weight: 600;
+.card-title {
+  font-size: 20px;
+  font-weight: 700;
   margin-bottom: 20px;
-  color: #111;
+  color: var(--t1);
 }
 
-p {
-  margin-bottom: 16px;
-  color: #333;
+.card p {
+  color: var(--t2);
+  margin-bottom: 14px;
+  font-weight: 400;
 }
 
-p:last-child { margin-bottom: 0; }
+.card p:last-child { margin-bottom: 0; }
 
-strong { font-weight: 600; color: #111; }
+.card p strong { color: var(--t1); font-weight: 600; }
 
-em { font-style: italic; color: #555; }
-
-/* divider */
-hr {
-  border: none;
-  border-top: 1px solid #ddd;
-  margin: 56px 0;
-}
-
-/* list */
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-ul li {
-  padding: 10px 0;
-  padding-left: 20px;
-  position: relative;
-  color: #333;
-  border-bottom: 1px solid #eee;
-}
-
-ul li::before {
-  content: '—';
-  position: absolute;
-  left: 0;
-  color: #ccc;
-}
-
-ul li:last-child { border-bottom: none; }
-
-/* phase block */
-.phase {
-  margin-bottom: 32px;
-  padding: 28px 32px;
-  background: #fff;
-  border-left: 3px solid #111;
-}
-
-.phase-label {
-  font-size: 11px;
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: #aaa;
-  margin-bottom: 6px;
-}
-
-.phase-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-.phase p { color: #555; font-size: 15px; }
-
-/* scene */
+/* ── SCENES ── */
 .scene {
   display: flex;
-  gap: 28px;
-  padding: 20px 0;
-  border-bottom: 1px solid #eee;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--ln);
 }
 
 .scene:last-child { border-bottom: none; }
 
-.scene-time {
-  font-weight: 600;
+.scene-left {
+  min-width: 88px;
+}
+
+.scene-hour {
   font-size: 15px;
-  min-width: 80px;
-  color: #111;
-  padding-top: 2px;
+  font-weight: 700;
+  color: var(--t1);
+  line-height: 1;
+  margin-bottom: 3px;
 }
 
 .scene-city {
-  font-size: 12px;
-  color: #bbb;
+  font-size: 10px;
+  font-weight: 600;
   letter-spacing: .2em;
   text-transform: uppercase;
-  display: block;
-  margin-top: 2px;
+  color: var(--gold);
 }
 
-.scene-body { flex: 1; }
-
-.scene-body p { font-size: 15px; color: #555; margin-bottom: 0; }
+.scene-body p {
+  font-size: 13px;
+  color: var(--t2);
+  margin-bottom: 6px;
+}
 
 .scene-pieces {
-  font-size: 12px;
-  color: #aaa;
-  margin-top: 6px;
-  font-style: italic;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--t3);
+  letter-spacing: .05em;
 }
 
-/* note box */
-.note {
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  padding: 24px 28px;
-  margin: 24px 0;
-  color: #555;
-  font-size: 15px;
+/* ── PHASES ── */
+.phase {
+  border: 1px solid var(--ln);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 12px;
 }
 
-.note strong { color: #111; }
-
-/* footer */
-.doc-footer {
-  border-top: 2px solid #111;
-  padding-top: 32px;
-  margin-top: 80px;
+.phase-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 12px;
-  color: #aaa;
-  letter-spacing: .1em;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--surf);
+  border-bottom: 1px solid var(--ln);
 }
 
+.phase-num-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--gold-light);
+  border: 1px solid rgba(201,168,76,.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.phase-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--t1);
+  flex: 1;
+}
+
+.phase-timing {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--t3);
+  letter-spacing: .05em;
+}
+
+.phase-body {
+  padding: 20px 24px;
+  background: #FAFAFA;
+}
+
+.phase-body p {
+  font-size: 13px;
+  color: var(--t2);
+  margin-bottom: 10px;
+}
+
+.phase-body p:last-child { margin-bottom: 0; }
+
+.phase-body p strong { color: var(--t1); font-weight: 600; }
+
+.phase-body em { font-style: italic; color: var(--t3); }
+
+/* ── COORDS ── */
+.coords-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.coord-card {
+  background: var(--bg);
+  border: 1px solid var(--ln);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.coord-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--t1);
+  font-family: monospace;
+  margin-bottom: 4px;
+}
+
+.coord-city {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--t3);
+}
+
+/* ── PIECES ── */
+.pieces-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.piece-card {
+  background: var(--bg);
+  border: 1px solid var(--ln);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.piece-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.piece-name {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--t1);
+}
+
+.piece-desc {
+  font-size: 12px;
+  color: var(--t2);
+  line-height: 1.6;
+}
+
+/* ── HIGHLIGHT BOX ── */
+.highlight {
+  background: var(--gold-light);
+  border: 1px solid rgba(201,168,76,.2);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-top: 20px;
+}
+
+.highlight p {
+  font-size: 13px;
+  color: var(--t2);
+  margin: 0;
+}
+
+.highlight p strong { color: var(--t1); font-weight: 600; }
+
+/* ── CLOSING ── */
+.closing {
+  background: var(--t1);
+  border-radius: 12px;
+  padding: 48px;
+  margin-top: 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.closing::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gold);
+}
+
+.closing-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.closing-title span { color: var(--gold); }
+
+.closing-sub {
+  font-size: 13px;
+  color: rgba(255,255,255,.45);
+  margin-bottom: 32px;
+  font-weight: 400;
+}
+
+.closing-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.closing-logo img { height: 32px; filter: brightness(0) invert(1); opacity: .6; }
+
+.closing-logo span {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.4);
+}
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: var(--ln);
+  margin: 28px 0;
+}
+
+/* ── RESPONSIVE ── */
 @media (max-width: 600px) {
-  .doc { padding: 48px 24px 80px; }
-  .doc-title { font-size: 26px; }
-  .scene { flex-direction: column; gap: 8px; }
-  .doc-footer { flex-direction: column; gap: 12px; }
+  .doc { padding: 32px 20px 80px; }
+  .cover, .card { padding: 28px 24px; }
+  .pieces-grid { grid-template-columns: 1fr; }
+  .coords-grid { grid-template-columns: 1fr 1fr; }
+  .cover-meta { flex-wrap: wrap; gap: 16px; }
+  .topbar { padding: 0 20px; }
+  .topbar-logo span { display: none; }
 }
 </style>
 </head>
 <body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <img src="https://www.thecrewacademy.es/cdn/shop/files/Diseno_sin_titulo_27.png?crop=center&height=56&v=1773863841&width=56" alt="TCB">
+    <span>The Crew Academy</span>
+  </div>
+  <div class="topbar-badge">Confidencial</div>
+</div>
+
 <div class="doc">
 
-  <div class="doc-header">
-    <div class="doc-brand">Nomad Department</div>
-    <div class="doc-title">Campaign Brief<br>Summer Drop 2025</div>
-    <div class="doc-meta">Confidencial · Mayo 2025</div>
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-label">Campaign Brief</div>
+    <div class="cover-title">Nomad Department<br>Summer Drop 2025</div>
+    <div class="cover-sub">One Day. Every World.</div>
+    <div class="cover-meta">
+      <div class="meta-item">
+        <span class="meta-label">Proyecto</span>
+        <span class="meta-value">Nomad Department</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Drop</span>
+        <span class="meta-value">Summer 2025</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Fecha</span>
+        <span class="meta-value">Mayo 2025</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Prendas</span>
+        <span class="meta-value">4 piezas</span>
+      </div>
+    </div>
   </div>
 
-  <!-- CONCEPTO -->
-  <div class="section">
-    <div class="section-num">01</div>
-    <div class="section-title">El concepto</div>
-    <p>El nombre lo dice todo: <strong>Nomad.</strong> Un nómada no viene de un solo sitio — lo lleva todo consigo. Ese es el hilo conductor de todo el lanzamiento.</p>
-    <p>El drop tiene cuatro prendas que funcionan en dos mundos distintos: el <strong>short negro y la gorra</strong> son beach, verano, flow. La <strong>camiseta oversize y el cargo camo</strong> son street, ciudad, actitud. Pero las cuatro prendas las puede llevar la misma persona el mismo día — porque un nómada se mueve entre mundos sin elegir.</p>
-    <p>El lanzamiento lo demuestra de forma visual y narrativa con el concepto <strong>"One Day. Every World."</strong></p>
+  <!-- 01 CONCEPTO -->
+  <div class="card">
+    <div class="card-num">01 — El concepto</div>
+    <div class="card-title">Un nómada no viene de un solo sitio.<br>Lo lleva todo consigo.</div>
+    <p>El nombre lo dice todo: <strong>Nomad.</strong> Y el logo lo confirma — cada letra tiene su propia fuente, su propio color, su propia personalidad. No es un error de diseño. Es el mensaje.</p>
+    <p>Este drop tiene cuatro prendas que funcionan en dos mundos distintos: el <strong>short negro y la gorra</strong> son beach, verano, flow. La <strong>camiseta oversize y el cargo camo</strong> son street, ciudad, actitud. Pero las cuatro las puede llevar la misma persona el mismo día — porque un nómada se mueve entre mundos sin elegir.</p>
+    <p>El lanzamiento lo demuestra con el concepto <strong>"One Day. Every World."</strong></p>
   </div>
 
-  <hr>
-
-  <!-- ONE DAY EVERY WORLD -->
-  <div class="section">
-    <div class="section-num">02</div>
-    <div class="section-title">"One Day. Every World."</div>
-    <p>El video de lanzamiento dura 90 segundos. Cuenta la historia de un nómada que en un solo día visita varias ciudades del mundo llevando las cuatro prendas del drop. <strong>Todo generado con inteligencia artificial</strong> — lo que nos da libertad total de localización, luz y ambiente sin presupuesto de rodaje.</p>
+  <!-- 02 ONE DAY -->
+  <div class="card">
+    <div class="card-num">02 — "One Day. Every World."</div>
+    <div class="card-title">El video de lanzamiento</div>
+    <p>90 segundos. Un solo personaje. Varias ciudades del mundo. Las cuatro prendas del drop. <strong>Todo generado con inteligencia artificial</strong> — libertad total de localización y ambiente sin presupuesto de rodaje.</p>
     <p>Cada ciudad corresponde a una letra de NOMAD. Las letras van apareciendo en pantalla a medida que avanza el video, hasta que al final se forma la palabra completa.</p>
-    <p><strong>La gorra es el elemento que aparece en todas las escenas</strong> — es el nexo entre los dos mundos del drop y el hilo visual del video. Las transiciones entre ciudades se hacen siempre a través de ella: plano cerrado en la gorra, morphing visual, nueva ciudad.</p>
-  </div>
+    <p><strong>La gorra aparece en todas las escenas</strong> — es el nexo entre los dos mundos del drop. Las transiciones entre ciudades se hacen siempre a través de ella: plano cerrado en la gorra, morphing visual, nueva ciudad.</p>
 
-  <!-- ESCENAS -->
-  <div class="section">
-    <div class="section-num">03</div>
-    <div class="section-title">Las escenas del video</div>
+    <div class="divider"></div>
 
     <div class="scene">
-      <div class="scene-time">06:00<span class="scene-city">Tokyo</span></div>
+      <div class="scene-left">
+        <div class="scene-hour">06:00</div>
+        <div class="scene-city">Tokyo</div>
+      </div>
       <div class="scene-body">
-        <p>Amanecer. Luces de neón apagándose. Metro vacío. Esa hora entre la noche y el día en la ciudad más viva del mundo. Silencio y color.</p>
-        <div class="scene-pieces">Short negro + Gorra · Letra: N</div>
+        <p>Amanecer. Luces de neón apagándose. Metro vacío. Esa hora entre la noche y el día en la ciudad más viva del mundo.</p>
+        <div class="scene-pieces">Short negro + Gorra · Letra N</div>
       </div>
     </div>
 
     <div class="scene">
-      <div class="scene-time">09:00<span class="scene-city">Marruecos</span></div>
+      <div class="scene-left">
+        <div class="scene-hour">09:00</div>
+        <div class="scene-city">Marruecos</div>
+      </div>
       <div class="scene-body">
-        <p>Medina. Callejón estrecho con luz naranja brutal de mañana. El blanco de la camiseta contra las paredes ocre. Alguien pasando en moto detrás.</p>
-        <div class="scene-pieces">Camiseta + Cargo camo · Letra: O</div>
+        <p>Medina. Callejón estrecho con luz naranja brutal de mañana. El blanco de la camiseta contra las paredes ocre.</p>
+        <div class="scene-pieces">Camiseta + Cargo camo · Letra O</div>
       </div>
     </div>
 
     <div class="scene">
-      <div class="scene-time">12:00<span class="scene-city">Grecia</span></div>
+      <div class="scene-left">
+        <div class="scene-hour">12:00</div>
+        <div class="scene-city">Grecia</div>
+      </div>
       <div class="scene-body">
-        <p>Santorini. Agua azul imposible, blanco mediterráneo. Horizonte limpio. El verano en su máxima expresión — nada que añadir.</p>
-        <div class="scene-pieces">Short negro + Gorra · Letra: M</div>
+        <p>Santorini. Agua azul imposible, blanco mediterráneo. Horizonte limpio. El verano en su máxima expresión.</p>
+        <div class="scene-pieces">Short negro + Gorra · Letra M</div>
       </div>
     </div>
 
     <div class="scene">
-      <div class="scene-time">15:00<span class="scene-city">Ibiza</span></div>
+      <div class="scene-left">
+        <div class="scene-hour">15:00</div>
+        <div class="scene-city">Ibiza</div>
+      </div>
       <div class="scene-body">
-        <p>En el agua. Cámara submarina. El sol entrando desde arriba. La gorra flotando. El logo NOMAD bajo el agua. La escena más limpia y la más potente.</p>
-        <div class="scene-pieces">Short negro + Gorra · Letra: a</div>
+        <p>En el agua. Cámara submarina. El sol entrando desde arriba. La gorra flotando. El logo NOMAD bajo el agua.</p>
+        <div class="scene-pieces">Short negro + Gorra · Letra a</div>
       </div>
     </div>
 
     <div class="scene">
-      <div class="scene-time">21:00<span class="scene-city">Nueva York</span></div>
+      <div class="scene-left">
+        <div class="scene-hour">21:00</div>
+        <div class="scene-city">Nueva York</div>
+      </div>
       <div class="scene-body">
-        <p>Noche. Calle mojada. Reflejos de taxi amarillo. Aquí entra el drop de música. Máxima energía. El contraste total con Ibiza — mismo personaje, otro planeta.</p>
-        <div class="scene-pieces">Cargo camo + Gorra · Letra: D</div>
+        <p>Noche. Calle mojada. Reflejos de taxi amarillo. Aquí entra el drop de música. Máxima energía del video.</p>
+        <div class="scene-pieces">Cargo camo + Gorra · Letra D</div>
       </div>
     </div>
 
     <div class="scene">
-      <div class="scene-time">23:59<span class="scene-city">Final</span></div>
+      <div class="scene-left">
+        <div class="scene-hour">23:59</div>
+        <div class="scene-city">Final</div>
+      </div>
       <div class="scene-body">
-        <p>Plano estático. El personaje sentado con las cuatro prendas delante. Mira a cámara. NOMAD se forma en pantalla letra a letra. Fade a negro. Sin música. Silencio.</p>
+        <p>Plano estático. El personaje sentado con las cuatro prendas delante. Mira a cámara. NOMAD se forma en pantalla letra a letra. Fade a negro. Silencio.</p>
         <div class="scene-pieces">Las 4 prendas · Logo completo</div>
       </div>
     </div>
 
-    <div class="note">
-      <strong>Producción:</strong> todo el video se genera con herramientas de IA — Runway o Kling para las escenas, Luma Dream Machine para las transiciones. Mismo personaje en todas las ciudades para mantener coherencia. Audio: sonido ambiente real de cada ciudad en la primera mitad, música que construye hacia el final, silencio en el plano final.
+    <div class="highlight">
+      <p><strong>Producción:</strong> todo el video se genera con IA — Runway o Kling para las escenas, Luma Dream Machine para las transiciones. Mismo personaje en todas las ciudades para mantener coherencia visual. Audio: sonido ambiente de cada ciudad en la primera mitad, música que construye hacia el final, silencio en el plano final.</p>
     </div>
   </div>
 
-  <hr>
-
-  <!-- FASES -->
-  <div class="section">
-    <div class="section-num">04</div>
-    <div class="section-title">Plan de lanzamiento</div>
+  <!-- 03 LANZAMIENTO -->
+  <div class="card">
+    <div class="card-num">03 — Plan de lanzamiento</div>
+    <div class="card-title">La intriga primero.</div>
     <p>El lanzamiento se construye en cinco fases. La clave es no explicar nada — dejar que la gente lo descubra sola. Cuando alguien siente que descubrió algo, lo comparte.</p>
+  </div>
 
-    <div class="phase">
-      <div class="phase-label">Fase 01 · 3 semanas antes</div>
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num-badge">01</div>
       <div class="phase-title">El Silencio</div>
+      <div class="phase-timing">3 semanas antes</div>
+    </div>
+    <div class="phase-body">
       <p>Si hay redes activas, se para de publicar sin ninguna explicación. La ausencia genera más curiosidad que cualquier teaser. Si las redes son nuevas, se empieza directamente desde el silencio.</p>
     </div>
+  </div>
 
-    <div class="phase">
-      <div class="phase-label">Fase 02 · 7 días antes</div>
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num-badge">02</div>
       <div class="phase-title">Las Coordenadas</div>
-      <p>Un post por día durante cuatro días. Solo coordenadas GPS — sin caption, sin hashtags, sin logo, sin nada más. La gente las googlea, descubre las ciudades y empieza a especular en comentarios. No se responde nada. El misterio es el contenido.</p>
-      <p style="margin-top:12px; font-size:14px; color:#aaa;">
-        35.6762° N, 139.6503° E — Tokyo<br>
-        33.9716° N, 6.8498° W — Marruecos<br>
-        37.9838° N, 23.7275° E — Grecia<br>
-        40.7128° N, 74.0060° W — Nueva York
-      </p>
+      <div class="phase-timing">7 días antes</div>
     </div>
+    <div class="phase-body">
+      <p>Un post por día durante cuatro días. Solo coordenadas GPS — <strong>sin caption, sin hashtags, sin logo, sin nada más.</strong> La gente las googlea, descubre las ciudades y empieza a especular. No se responde nada. El misterio es el contenido.</p>
+      <div class="coords-grid">
+        <div class="coord-card">
+          <div class="coord-value">35.6762° N, 139.6503° E</div>
+          <div class="coord-city">Tokyo</div>
+        </div>
+        <div class="coord-card">
+          <div class="coord-value">33.9716° N, 6.8498° W</div>
+          <div class="coord-city">Marruecos</div>
+        </div>
+        <div class="coord-card">
+          <div class="coord-value">37.9838° N, 23.7275° E</div>
+          <div class="coord-city">Grecia</div>
+        </div>
+        <div class="coord-card">
+          <div class="coord-value">40.7128° N, 74.0060° W</div>
+          <div class="coord-city">Nueva York</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <div class="phase">
-      <div class="phase-label">Fase 03 · 3 días antes</div>
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num-badge">03</div>
       <div class="phase-title">Las Letras</div>
-      <p>Tres posts en tres días: la N amarilla, la O morada y la D roja. Fondo negro, sin texto. En comentarios alguien escribe "NOMAD?" — no se responde. Que lo descubran solos.</p>
+      <div class="phase-timing">3 días antes</div>
     </div>
+    <div class="phase-body">
+      <p>Tres posts en tres días: la <strong>N amarilla</strong>, la <strong>O morada</strong> y la <strong>D roja.</strong> Fondo negro, sin texto. En comentarios alguien escribe "NOMAD?" — no se responde. Que lo descubran solos.</p>
+    </div>
+  </div>
 
-    <div class="phase">
-      <div class="phase-label">Fase 04 · 24 horas antes</div>
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num-badge">04</div>
       <div class="phase-title">La Story Final</div>
+      <div class="phase-timing">24 horas antes</div>
+    </div>
+    <div class="phase-body">
       <p>Un video de seis segundos. Sonido de olas, fade a negro, sonido de ciudad, fade a negro. Solo aparece la palabra <em>"mañana."</em> Sin logo, sin nombre, sin nada más.</p>
     </div>
+  </div>
 
-    <div class="phase">
-      <div class="phase-label">Fase 05 · Drop Day · 12:00h</div>
-      <div class="phase-title">El Golpe</div>
-      <p>A las 12:00h en punto se publica el video "One Day. Every World." en Reels y TikTok. A continuación, un carrusel editorial con cada prenda en su mundo y el link de la tienda en el último slide. Stories con countdown las últimas dos horas y link directo al lanzar. El caption del día es solo: <em>"One day. Every world."</em> y el link.</p>
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num-badge">05</div>
+      <div class="phase-title">El Golpe — Drop Day</div>
+      <div class="phase-timing">12:00h</div>
+    </div>
+    <div class="phase-body">
+      <p>A las 12:00h en punto se publica el video <strong>"One Day. Every World."</strong> en Reels y TikTok. A continuación, un carrusel editorial con cada prenda y el link en el último slide. Stories con countdown las últimas dos horas.</p>
+      <p>El caption del día: <em>"One day. Every world."</em> + link tienda.</p>
     </div>
   </div>
 
-  <hr>
-
-  <!-- LAS PRENDAS -->
-  <div class="section">
-    <div class="section-num">05</div>
-    <div class="section-title">Las cuatro prendas</div>
-
-    <ul>
-      <li><strong>Short negro</strong> — La pieza central. Logo multicolor en la espalda con las cinco letras de NOMAD en cinco colores y fuentes distintas. Beach, verano, movimiento.</li>
-      <li><strong>Gorra</strong> — La pieza bisagra. Cada panel tiene su letra: N · O · M · a · D repartidas por toda la gorra. La lees dando la vuelta. Funciona en playa y en ciudad — aparece en todas las escenas del video.</li>
-      <li><strong>Camiseta oversize</strong> — Corte boxy. Logo con textura camo inspirado en Balenciaga. Street, ciudad, actitud. La más limpia del drop.</li>
-      <li><strong>Cargo camo</strong> — Camo gris militar con detalles rojos. Patch "Nomad Department" bordado con estrellas en el bolsillo trasero. Urban, funcional, con carácter.</li>
-    </ul>
+  <!-- 04 PRENDAS -->
+  <div class="card" style="margin-top:16px;">
+    <div class="card-num">04 — Las cuatro prendas</div>
+    <div class="card-title">2 mundos. 4 piezas.</div>
+    <div class="pieces-grid">
+      <div class="piece-card">
+        <div class="piece-tag">Shore Flow</div>
+        <div class="piece-name">Short Negro</div>
+        <div class="piece-desc">Logo multicolor en la espalda con las cinco letras en cinco colores y fuentes distintas. La pieza central del drop.</div>
+      </div>
+      <div class="piece-card">
+        <div class="piece-tag">Shore + Street</div>
+        <div class="piece-name">Gorra</div>
+        <div class="piece-desc">Cada panel tiene su letra: N·O·M·a·D. La lees dando la vuelta. Funciona en playa y en ciudad — el hilo del drop.</div>
+      </div>
+      <div class="piece-card">
+        <div class="piece-tag">Urban Edge</div>
+        <div class="piece-name">Camiseta Oversize</div>
+        <div class="piece-desc">Corte boxy. Logo con textura camo inspirado en Balenciaga. La más limpia y contundente del drop.</div>
+      </div>
+      <div class="piece-card">
+        <div class="piece-tag">Urban Edge</div>
+        <div class="piece-name">Cargo Camo</div>
+        <div class="piece-desc">Camo gris militar, detalles rojos. Patch "Nomad Department" bordado con estrellas. Urban, funcional, con carácter.</div>
+      </div>
+    </div>
   </div>
 
-  <hr>
-
-  <!-- RESUMEN -->
-  <div class="section">
-    <div class="section-num">06</div>
-    <div class="section-title">En resumen</div>
-    <p>Cuatro prendas con dos personalidades distintas pero complementarias. Un video de 90 segundos generado con IA que muestra esas prendas en cinco países en un solo día. Un lanzamiento en cinco fases que construye intriga durante tres semanas sin mostrar nada antes de tiempo.</p>
-    <p><strong>El resultado que buscamos:</strong> que la gente sienta que descubrió Nomad Department antes de que nadie les explicara nada. Que lo compartan porque quieren hacerlo, no porque se lo pidamos.</p>
-    <p>Este es el mejor drop de verano que ninguna marca española ha hecho. Lo hacemos nosotros primero.</p>
-  </div>
-
-  <div class="doc-footer">
-    <div>Nomad Department · Summer Drop 2025</div>
-    <div>Confidencial</div>
+  <!-- CLOSING -->
+  <div class="closing">
+    <div class="closing-title">El mejor drop de verano<br>que <span>ninguna marca española</span><br>ha hecho. Lo hacemos nosotros.</div>
+    <div class="closing-sub">Nomad Department · Summer Drop 2025 · Confidencial</div>
+    <div class="closing-logo">
+      <img src="https://www.thecrewacademy.es/cdn/shop/files/Diseno_sin_titulo_27.png?crop=center&height=56&v=1773863841&width=56" alt="TCB">
+      <span>The Crew Academy</span>
+    </div>
   </div>
 
 </div>
