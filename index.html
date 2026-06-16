@@ -776,6 +776,7 @@
     <nav class="sb-nav">
       <div class="sb-section">Inicio</div>
       <div class="sb-item active" data-view="dashboard"><span class="sb-icon">⬡</span>Dashboard</div>
+      <div class="sb-item" data-view="tareas"><span class="sb-icon">◈</span>Tareas<span class="sb-badge" id="sb-task-badge" style="display:none">0</span></div>
 
       <div class="sb-section">Barbershop</div>
       <div class="sb-item" data-view="facturacion"><span class="sb-icon">◈</span>Facturación</div>
@@ -941,6 +942,32 @@ const todayShort = () => new Date().toLocaleDateString('es-ES',{day:'2-digit',mo
 const PLAN_KEY = 'tcb-planner-v1';
 function getPlan() { try { return JSON.parse(localStorage.getItem(PLAN_KEY) || '{}'); } catch(e) { return {}; } }
 function savePlan(d) { localStorage.setItem(PLAN_KEY, JSON.stringify(d)); }
+
+/* ── TASK BOARD (localStorage) ──────────────────────────────── */
+const TASK_KEY = 'tcb-tasks-v1';
+const TASK_SEED = [
+  { id:'t1',  txt:'Solicitar muestra a BRANDED (~34$)',        proj:'CHAOS',      col:'todo',  prio:'alta'  },
+  { id:'t2',  txt:'Diseño de packaging',                       proj:'CHAOS',      col:'todo',  prio:'media' },
+  { id:'t3',  txt:'Primer pedido de producción',               proj:'CHAOS',      col:'todo',  prio:'baja'  },
+  { id:'t4',  txt:'Generar imágenes con MidJourney',           proj:'NOMAD',      col:'doing', prio:'alta'  },
+  { id:'t5',  txt:'Animar escenas con Runway / Kling',         proj:'NOMAD',      col:'todo',  prio:'media' },
+  { id:'t6',  txt:'Editar video final (90 seg)',               proj:'NOMAD',      col:'todo',  prio:'media' },
+  { id:'t7',  txt:'Producir las 4 prendas',                    proj:'NOMAD',      col:'todo',  prio:'baja'  },
+  { id:'t8',  txt:'Verificar head.glb en Safari',              proj:'BarberLab',  col:'doing', prio:'alta'  },
+  { id:'t9',  txt:'Revisión visual ROOTS en PowerPoint',       proj:'ROOTS',      col:'todo',  prio:'media' },
+  { id:'t10', txt:'Exportar ROOTS a PDF final',                proj:'ROOTS',      col:'todo',  prio:'baja'  },
+  { id:'t11', txt:'Grabar reel close-up satisfying',           proj:'Marketing',  col:'doing', prio:'alta'  },
+];
+const PROJ_COLORS = { CHAOS:'#F5D020', NOMAD:'var(--gold)', BarberLab:'var(--blu)', ROOTS:'var(--grn)', Marketing:'var(--orn)', Academy:'var(--t3)', Barbershop:'var(--red)' };
+function getTasks() { try { const v = localStorage.getItem(TASK_KEY); return v ? JSON.parse(v) : TASK_SEED.slice(); } catch(e) { return TASK_SEED.slice(); } }
+function saveTasks(d) { localStorage.setItem(TASK_KEY, JSON.stringify(d)); }
+function updateTaskBadge() {
+  const badge = document.getElementById('sb-task-badge');
+  if (!badge) return;
+  const pend = getTasks().filter(t => t.col !== 'done').length;
+  badge.textContent = pend;
+  badge.style.display = pend > 0 ? '' : 'none';
+}
 
 function buildChart(id, monthly) {
   const el=document.getElementById(id); if(!el) return;
@@ -2325,6 +2352,134 @@ ${renderWeek(2, 'En dos semanas')}
     }
   },
 
+  /* ── TASK BOARD (Kanban) ───────────────────────────────────── */
+  tareas: { sec:'Inicio', pg:'Tareas',
+    html() {
+      const tasks = getTasks();
+      const cols = [
+        { id:'todo',  lbl:'Por hacer', color:'var(--t3)'   },
+        { id:'doing', lbl:'En curso',  color:'var(--gold)' },
+        { id:'done',  lbl:'Hecho',     color:'var(--grn)'  },
+      ];
+      const nTodo  = tasks.filter(t => t.col === 'todo').length;
+      const nDoing = tasks.filter(t => t.col === 'doing').length;
+      const nDone  = tasks.filter(t => t.col === 'done').length;
+      const prioColor = p => p === 'alta' ? 'var(--red)' : p === 'media' ? 'var(--orn)' : 'var(--grn)';
+      const btnS = 'width:26px;height:22px;border:1px solid var(--ln);border-radius:4px;background:var(--surf);color:var(--t2);cursor:pointer;font-family:var(--font);font-size:13px;line-height:1;display:inline-flex;align-items:center;justify-content:center;transition:all .12s';
+      const card = t => {
+        const pc = PROJ_COLORS[t.proj] || 'var(--t3)';
+        return '<div style="background:var(--surf);border:1px solid var(--ln);border-radius:4px;padding:12px;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.06)">'
+          + '<div style="position:absolute;top:0;left:0;bottom:0;width:3px;background:' + pc + ';border-radius:4px 0 0 4px"></div>'
+          + '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;padding-left:6px">'
+          + '<span style="font-size:7.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:' + pc + '">' + t.proj + '</span>'
+          + '<span title="Prioridad ' + t.prio + '" style="margin-left:auto;width:7px;height:7px;border-radius:50%;background:' + prioColor(t.prio) + '"></span>'
+          + '</div>'
+          + '<div style="font-size:12px;color:' + (t.col === 'done' ? 'var(--t3)' : 'var(--t1)') + ';line-height:1.45;padding-left:6px;margin-bottom:10px' + (t.col === 'done' ? ';text-decoration:line-through' : '') + '">' + t.txt + '</div>'
+          + '<div style="display:flex;gap:4px;padding-left:6px">'
+          + (t.col !== 'todo' ? '<button onclick="taskMove(\'' + t.id + '\',-1)" title="Atrás" style="' + btnS + '" onmouseover="this.style.borderColor=\'var(--gold)\'" onmouseout="this.style.borderColor=\'var(--ln)\'">‹</button>' : '')
+          + (t.col !== 'done' ? '<button onclick="taskMove(\'' + t.id + '\',1)" title="Avanzar" style="' + btnS + '" onmouseover="this.style.borderColor=\'var(--gold)\'" onmouseout="this.style.borderColor=\'var(--ln)\'">›</button>' : '')
+          + '<button onclick="taskDel(\'' + t.id + '\')" title="Borrar" style="margin-left:auto;' + btnS + '" onmouseover="this.style.borderColor=\'var(--red)\';this.style.color=\'var(--red)\'" onmouseout="this.style.borderColor=\'var(--ln)\';this.style.color=\'var(--t2)\'">×</button>'
+          + '</div></div>';
+      };
+      const columns = cols.map(c => {
+        const items = tasks.filter(t => t.col === c.id);
+        const body = items.length ? items.map(card).join('') : '<div style="font-size:10px;color:var(--t4);text-align:center;padding:24px 0">Sin tareas</div>';
+        return '<div style="background:var(--s2);border:1px solid var(--ln);border-radius:6px;padding:12px;min-height:220px">'
+          + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">'
+          + '<span style="width:8px;height:8px;border-radius:2px;background:' + c.color + '"></span>'
+          + '<span style="font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t2)">' + c.lbl + '</span>'
+          + '<span style="margin-left:auto;font-size:10px;font-weight:700;color:var(--t3);background:var(--surf);border:1px solid var(--ln);border-radius:10px;padding:1px 8px">' + items.length + '</span>'
+          + '</div>'
+          + '<div style="display:flex;flex-direction:column;gap:8px">' + body + '</div></div>';
+      }).join('');
+      const projOpts = Object.keys(PROJ_COLORS).map(p => '<option value="' + p + '">' + p + '</option>').join('');
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">Inicio · Gestión</span>
+  <h1 class="pg-title">Centro de <em>Tareas</em></h1>
+  <p class="pg-sub">Todos los proyectos en un tablero — guardado localmente en el navegador</p>
+</div>
+<div class="kpi-grid" style="margin-bottom:24px">
+  <div class="kpi"><div class="kpi-lbl">Total</div><div class="kpi-val w">${tasks.length}</div><div class="kpi-sub2">tareas en el tablero</div></div>
+  <div class="kpi"><div class="kpi-lbl">Por hacer</div><div class="kpi-val">${nTodo}</div><div class="kpi-sub2">pendientes de empezar</div></div>
+  <div class="kpi"><div class="kpi-lbl">En curso</div><div class="kpi-val" style="color:var(--orn)">${nDoing}</div><div class="kpi-sub2">trabajando ahora</div></div>
+  <div class="kpi"><div class="kpi-lbl">Hecho</div><div class="kpi-val g">${nDone}</div><div class="kpi-sub2">completadas</div></div>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+  <div class="sec" style="margin-bottom:0;flex:1">Tablero</div>
+  <button onclick="taskAddOpen()" style="padding:7px 16px;background:var(--gold);border:none;border-radius:20px;font-family:var(--font);font-size:11px;font-weight:700;color:#fff;cursor:pointer;letter-spacing:.02em;white-space:nowrap">+ Nueva tarea</button>
+</div>
+<div class="g3" style="margin-bottom:24px;align-items:start">${columns}</div>
+<div id="tsk-overlay" onclick="if(event.target===this)taskAddClose()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center">
+  <div style="background:var(--surf);border:1px solid var(--ln);border-radius:8px;padding:28px;width:min(420px,90vw);box-shadow:0 24px 64px rgba(0,0,0,.3)">
+    <div style="font-size:14px;font-weight:800;color:var(--t1);margin-bottom:20px">Nueva tarea</div>
+    <div style="margin-bottom:14px">
+      <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Descripción</div>
+      <input id="tsk-txt" type="text" placeholder="Ej: Grabar reel del fade texturizado" style="width:100%;padding:9px 12px;background:var(--s2);border:1px solid var(--ln);border-radius:4px;font-family:var(--font);font-size:12px;color:var(--t1);outline:none;transition:border-color .2s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--ln)'" onkeydown="if(event.key==='Enter')taskAddSave()">
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:20px">
+      <div style="flex:1">
+        <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Proyecto</div>
+        <select id="tsk-proj" style="width:100%;padding:9px 10px;background:var(--s2);border:1px solid var(--ln);border-radius:4px;font-family:var(--font);font-size:12px;color:var(--t1);outline:none">${projOpts}</select>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Prioridad</div>
+        <select id="tsk-prio" style="width:100%;padding:9px 10px;background:var(--s2);border:1px solid var(--ln);border-radius:4px;font-family:var(--font);font-size:12px;color:var(--t1);outline:none">
+          <option value="alta">Alta</option><option value="media" selected>Media</option><option value="baja">Baja</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button onclick="taskAddClose()" style="padding:8px 16px;border:1px solid var(--ln);border-radius:4px;background:none;font-family:var(--font);font-size:12px;color:var(--t2);cursor:pointer">Cancelar</button>
+      <button onclick="taskAddSave()" style="padding:8px 20px;background:var(--gold);border:none;border-radius:4px;font-family:var(--font);font-size:12px;font-weight:700;color:#fff;cursor:pointer">Crear</button>
+    </div>
+  </div>
+</div>`;
+    },
+    after() {
+      const COLS = ['todo','doing','done'];
+      window.taskMove = function(id, dir) {
+        const tasks = getTasks();
+        const t = tasks.find(x => x.id === id);
+        if (!t) return;
+        const i = COLS.indexOf(t.col);
+        const ni = Math.max(0, Math.min(COLS.length - 1, i + dir));
+        t.col = COLS[ni];
+        saveTasks(tasks);
+        updateTaskBadge();
+        go('tareas');
+      };
+      window.taskDel = function(id) {
+        const tasks = getTasks().filter(x => x.id !== id);
+        saveTasks(tasks);
+        updateTaskBadge();
+        toast('Tarea eliminada', 'ok');
+        go('tareas');
+      };
+      window.taskAddOpen = function() {
+        const ov = document.getElementById('tsk-overlay');
+        if (ov) ov.style.display = 'flex';
+        setTimeout(() => { const n = document.getElementById('tsk-txt'); if (n) n.focus(); }, 80);
+      };
+      window.taskAddClose = function() {
+        const ov = document.getElementById('tsk-overlay');
+        if (ov) ov.style.display = 'none';
+      };
+      window.taskAddSave = function() {
+        const txt = document.getElementById('tsk-txt').value.trim();
+        if (!txt) { document.getElementById('tsk-txt').focus(); return; }
+        const tasks = getTasks();
+        tasks.push({ id: 't' + Date.now(), txt, proj: document.getElementById('tsk-proj').value, col: 'todo', prio: document.getElementById('tsk-prio').value });
+        saveTasks(tasks);
+        updateTaskBadge();
+        taskAddClose();
+        toast('Tarea añadida', 'ok');
+        go('tareas');
+      };
+      updateTaskBadge();
+    }
+  },
+
 };
 
 /* ── ANIMATED COUNTERS ────────────────────────────────────────── */
@@ -2399,6 +2554,7 @@ function toast(msg, type) {
 /* ── CMD+K PALETTE ────────────────────────────────────────────── */
 const CMDK_ITEMS = [
   { ico:'⬡', t:'Dashboard',           id:'dashboard',  s:'Inicio' },
+  { ico:'◈', t:'Tareas',              id:'tareas',     s:'Inicio' },
   { ico:'💰', t:'Facturación',         id:'facturacion',s:'Barbershop' },
   { ico:'📊', t:'Gastos & P&L',        id:'gastos',     s:'Barbershop' },
   { ico:'💵', t:'Cashflow 2026',       id:'cashflow',   s:'Barbershop' },
@@ -2691,6 +2847,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const hash = location.hash.slice(1);
   go(hash && V[hash] ? hash : 'dashboard');
+
+  updateTaskBadge();
 
   tickClock(); setInterval(tickClock, 1000);
 
