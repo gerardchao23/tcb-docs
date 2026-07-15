@@ -782,6 +782,7 @@
       <div class="sb-item" data-view="facturacion"><span class="sb-icon">◈</span>Facturación</div>
       <div class="sb-item" data-view="gastos"><span class="sb-icon">◈</span>Gastos & P&L</div>
       <div class="sb-item" data-view="cashflow"><span class="sb-icon">◈</span>Cashflow<span class="sb-badge">2026</span></div>
+      <div class="sb-item" data-view="mensual"><span class="sb-icon">◈</span>Mes a Mes<span class="sb-badge">€</span></div>
       <div class="sb-item" data-view="equipo"><span class="sb-icon">◈</span>Equipo</div>
       <div class="sb-item" data-view="citas"><span class="sb-icon">◈</span>Citas</div>
 
@@ -857,20 +858,21 @@ const D = {
       { m:'Feb', y:7500,  b:575  },
       { m:'Mar', y:9730,  b:1119 },
       { m:'Abr', y:9277,  b:1278 },
-      { m:'May', y:3248,  b:0    },
+      { m:'May', y:10078, b:1614 },
+      { m:'Jun', y:10198, b:2097 },
     ],
-    yeasy: 38042, booksy: 3254, total: 41296,
-    best: { name:'Marzo', val:10849 },
+    yeasy: 55070, booksy: 6965, total: 62035,
+    best: { name:'Junio', val:12295 },
   },
   team: [
     { id:'gerard', name:'Gerard Chao',         role:'Fundador · Head Barber', color:'#C9A84C',
-      months:[{m:'Ene',v:3200},{m:'Feb',v:2900},{m:'Mar',v:3800},{m:'Abr',v:4100}] },
+      months:[{m:'Ene',v:3200},{m:'Feb',v:2900},{m:'Mar',v:3800},{m:'Abr',v:4100},{m:'May',v:3157},{m:'Jun',v:4049}] },
     { id:'ivan',   name:'Iván Contreras',       role:'Barbero Senior',         color:'#8B9E6E',
-      months:[{m:'Ene',v:2400},{m:'Feb',v:2100},{m:'Mar',v:2700},{m:'Abr',v:3000}] },
+      months:[{m:'Ene',v:2400},{m:'Feb',v:2100},{m:'Mar',v:2700},{m:'Abr',v:3000},{m:'May',v:2854},{m:'Jun',v:3146}] },
     { id:'javier', name:'Javier Barrionuevo',   role:'Barbero',                color:'#C4622D',
-      months:[{m:'Ene',v:1600},{m:'Feb',v:1400},{m:'Mar',v:1800},{m:'Abr',v:1900}] },
+      months:[{m:'Ene',v:1600},{m:'Feb',v:1400},{m:'Mar',v:1800},{m:'Abr',v:1900},{m:'May',v:2235},{m:'Jun',v:2353}] },
     { id:'caja',   name:'Gerard Caja',           role:'Barbero',                color:'#6B8F71',
-      months:[{m:'Ene',v:1087},{m:'Feb',v:1100},{m:'Mar',v:1430},{m:'Abr',v:1258}] },
+      months:[{m:'Ene',v:1087},{m:'Feb',v:1100},{m:'Mar',v:1430},{m:'Abr',v:1258},{m:'May',v:2806},{m:'Jun',v:2749}] },
   ],
   pl: {
     monthly: [
@@ -878,8 +880,10 @@ const D = {
       { m:'Feb', ing:8075,   gas:7228.69, mar:846.31,   pct:10.5 },
       { m:'Mar', ing:10849,  gas:8422.44, mar:2426.56,  pct:22.4 },
       { m:'Abr', ing:10555,  gas:9176.08, mar:1378.92,  pct:13.1 },
+      { m:'May', ing:11692,  gas:8290,    mar:3402,     pct:29.1 },
+      { m:'Jun', ing:12295,  gas:8500,    mar:3795,     pct:30.9 },
     ],
-    total_ing: 38048, total_gas: 32505.80, total_mar: 5542.20, pct_avg: 14.6,
+    total_ing: 62035, total_gas: 49295.80, total_mar: 12739.20, pct_avg: 20.5,
     prestamos_mes: 1413.60,
   },
   cf: {
@@ -888,8 +892,10 @@ const D = {
       { m:'Feb', ing:8075,  op:7229, mar:846,  fin:2614, hac:0,    salidas:9843,  res:-1768,  acc:-10427 },
       { m:'Mar', ing:10849, op:8422, mar:2427, fin:2614, hac:0,    salidas:11036, res:-187,   acc:-10614 },
       { m:'Abr', ing:11258, op:9176, mar:2082, fin:2614, hac:3331, salidas:15121, res:-3863,  acc:-14477 },
+      { m:'May', ing:11692, op:8290, mar:3402, fin:2614, hac:0,    salidas:10904, res:788,    acc:-13689 },
+      { m:'Jun', ing:12295, op:8500, mar:3795, fin:2614, hac:0,    salidas:11114, res:1181,   acc:-12508 },
     ],
-    total: { ing:38751, op:32506, mar:6245, fin:10456, hac:10266, salidas:53228, res:-14477 },
+    total: { ing:62738, op:49296, mar:13442, fin:15684, hac:10266, salidas:75246, res:-12508 },
     hacienda_cal: [
       { fecha:'20 Ene 2026', tri:'Q4 2025', importe:6935,  estado:'pagado' },
       { fecha:'20 Abr 2026', tri:'Q1 2026', importe:3331,  estado:'pagado' },
@@ -1420,6 +1426,49 @@ const V = {
   <a class="dl" href="docs/cashflow_2026.html" target="_blank"><div class="dl-ico">💵</div><div><div class="dl-ttl">Cashflow 2026 — Informe completo</div><div class="dl-sub">Calendario semanal · Punto de equilibrio · Recomendaciones</div></div><div class="dl-arr">↗</div></a>
 </div>`;
     }
+  },
+
+  mensual: { sec:'Barbershop', pg:'Mes a Mes',
+    html() {
+      return `
+<div class="pg-hd" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+  <div>
+    <span class="pg-tag">Barbershop · Resultado mensual</span>
+    <h1 class="pg-title">Mes a <em>Mes</em></h1>
+    <p class="pg-sub">Cada mes uno por uno: lo facturado, lo ganado y lo perdido · Enero–Julio 2026</p>
+  </div>
+  <button id="mensual-sync-btn" onclick="mensualSync()" style="align-self:center;background:var(--ga);border:1px solid var(--gb);color:var(--gold);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;border-radius:4px;cursor:pointer;white-space:nowrap;">⟳ Sincronizar Yeasy</button>
+</div>
+
+<div id="mensual-status" style="font-size:10px;color:var(--t3);margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+  <span id="mensual-dot" style="width:6px;height:6px;border-radius:50%;background:var(--t3);display:inline-block;"></span>
+  <span id="mensual-msg">Cargando datos en vivo...</span>
+</div>
+
+<div class="kpi-grid" id="mensual-kpis">
+  <div class="kpi"><div class="kpi-lbl">Facturado total</div><div class="kpi-val" id="mn-fact">—</div><div class="kpi-sub2" id="mn-fact-sub">sincronizando...</div></div>
+  <div class="kpi"><div class="kpi-lbl">Total ganado</div><div class="kpi-val g" id="mn-gan">—</div><div class="kpi-sub2" id="mn-gan-sub">sincronizando...</div></div>
+  <div class="kpi"><div class="kpi-lbl">Total perdido</div><div class="kpi-val" style="color:var(--red)" id="mn-per">—</div><div class="kpi-sub2" id="mn-per-sub">sincronizando...</div></div>
+  <div class="kpi"><div class="kpi-lbl">Resultado neto</div><div class="kpi-val" id="mn-neto">—</div><div class="kpi-sub2">Ganado − perdido</div></div>
+</div>
+
+<div class="note"><strong>Facturado</strong> = ingresos reales en vivo (Yeasy vía API + Booksy). <strong>Ganado / Perdido</strong> = lo que queda tras <strong>gastos operativos + préstamos + Hacienda</strong> (verificado con banco, ene–jun). Un mes en verde generó caja; uno en rojo la consumió.</div>
+
+<div class="sec">Ganado vs Perdido por mes</div>
+<div class="card" style="margin-bottom:24px;">
+  <div id="mensual-chart" style="display:flex;align-items:center;justify-content:center;height:220px;padding:6px 4px;"><span style="font-size:11px;color:var(--t3);">Cargando...</span></div>
+  <div class="legend" style="margin-top:10px;">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--grn)"></div>Ganado (caja positiva)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>Perdido (caja negativa)</div>
+  </div>
+</div>
+
+<div class="sec">Detalle mes por mes</div>
+<div id="mensual-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:28px;"><span style="font-size:11px;color:var(--t3);">Cargando datos Yeasy...</span></div>
+
+<div class="note" style="border-left-color:var(--gold)"><strong>Julio 2026 está en curso:</strong> se muestra la facturación en vivo, pero su resultado (ganado/perdido) no se cierra hasta tener los gastos e impuestos del mes completo. Los gastos (operativos + Hacienda) todavía se cargan a mano tras verificarlos con el banco; el correo aún no está conectado.</div>`;
+    },
+    after() { mensualSync(false); }
   },
 
   equipo: { sec:'Barbershop', pg:'Equipo',
@@ -2925,7 +2974,34 @@ async function yeasySync() {
   }
 }
 
-const BOOKSY_MONTHLY = { 1:282, 2:575, 3:1119, 4:1278 };
+const BOOKSY_MONTHLY = { 1:282, 2:575, 3:1119, 4:1278, 5:1614, 6:2097 };
+// mayo 2026:  Gerard Caja  915 € (54 citas) + Javier/Barrio 699 € (39 citas) = 1.614 €
+// junio 2026: Gerard Caja 1.223 € (64 citas) + Javier/Barrio 874 € (45 citas) = 2.097 €
+
+// Meses cerrados de Yeasy: facturación TOTAL del mes incluyendo citas servidas
+// pero no marcadas como cobradas (pendientes contadas como cobradas).
+// Sobrescribe el dato en vivo de la API de pagos. No-shows quedan fuera.
+// mayo 2026:  10.078 € cobrado + 0 € pendientes (todas realizadas) = 10.078 €
+// junio 2026:  8.285 € cobrado + 1.913 € (112 citas pendientes)   = 10.198 €
+const YEASY_CLOSED = { 5: 10078, 6: 10198 };
+
+// ── GASTOS POR CORREO (Google Apps Script) ────────────────────────
+// Pega aquí la URL del "Aplicación web" que despliegues en Apps Script.
+// Mientras esté vacío, el panel funciona igual (sin gastos del correo).
+const GASTOS_CORREO_URL = '';
+
+// Devuelve { '2026-07': 123.45, ... } o null si no hay conexión
+async function fetchGastosCorreo() {
+  if (!GASTOS_CORREO_URL) return null;
+  try {
+    const r = await fetch(GASTOS_CORREO_URL);
+    const d = await r.json();
+    return (d && d.gastos) ? d.gastos : null;
+  } catch (e) {
+    console.warn('Gastos correo error:', e);
+    return null;
+  }
+}
 
 function isoWeek(date) {
   const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
@@ -3187,7 +3263,11 @@ async function facturacionSync(showToast = true) {
     return;
   }
 
-  const { monthly, total } = data;
+  const { monthly } = data;
+  // Aplicar cierres de mes: sobrescribe el dato en vivo con la facturación total
+  // (incluye citas servidas sin cobrar). Ver YEASY_CLOSED.
+  for (const [m, v] of Object.entries(YEASY_CLOSED)) monthly[m] = v;
+  const total = Object.values(monthly).reduce((a, b) => a + b, 0);
   const curMonth = new Date().getMonth() + 1;
   const curMonthVal = monthly[curMonth] || 0;
   const bestMonth = Object.entries(monthly).sort((a,b)=>b[1]-a[1])[0];
@@ -3212,8 +3292,11 @@ async function facturacionSync(showToast = true) {
       const y = monthly[m] || 0;
       const b = BOOKSY_MONTHLY[m] || 0;
       const isCur = m === curMonth;
+      const isClosed = YEASY_CLOSED[m] !== undefined;
+      const tag = isCur ? ' <span style="font-size:8px;color:var(--gold);font-weight:700;">EN CURSO</span>'
+        : (isClosed ? ' <span style="font-size:8px;color:var(--grn);font-weight:700;">CERRADO</span>' : '');
       return `<tr${isCur?' style="background:var(--ga)"':''}>
-        <td>${MONTH_NAMES[m-1]}${isCur?' <span style="font-size:8px;color:var(--gold);font-weight:700;">EN CURSO</span>':''}</td>
+        <td>${MONTH_NAMES[m-1]}${tag}</td>
         <td class="r">${fmtD(y)}</td>
         <td class="r">${b ? fmtD(b) : '<span style="color:var(--t3)">—</span>'}</td>
         <td class="r au">${fmtD(y + b)}</td>
@@ -3254,6 +3337,171 @@ function buildChartInEl(el, data) {
       <div style="font-size:9px;font-weight:600;color:var(--t3);letter-spacing:.04em;">${m}</div>`;
     el.appendChild(col);
   });
+}
+
+/* ── MES A MES (Yeasy live + gastos verificados) ──────────────── */
+async function mensualSync(showToast = true) {
+  const dot = document.getElementById('mensual-dot');
+  const msg = document.getElementById('mensual-msg');
+  const btn = document.getElementById('mensual-sync-btn');
+  if (!dot) return;
+  dot.style.background = 'var(--gold)';
+  if (msg) msg.textContent = 'Conectando con Yeasy...';
+  if (btn) btn.disabled = true;
+
+  const data = await yeasySync();
+  if (!data) {
+    dot.style.background = 'var(--red)';
+    if (msg) msg.textContent = 'Error de conexión con Yeasy';
+    if (btn) btn.disabled = false;
+    return;
+  }
+
+  // Facturación en vivo por mes (Yeasy + cierres) + Booksy manual
+  const yeasyM = { ...data.monthly };
+  for (const [m, v] of Object.entries(YEASY_CLOSED)) yeasyM[m] = v;
+  const curMonth = new Date().getMonth() + 1;
+
+  // Gastos capturados del correo (Apps Script), por mes 'YYYY-MM'
+  const gastosCorreo = await fetchGastosCorreo();
+  const mesKey = m => '2026-' + String(m).padStart(2, '0');
+  const correoMes = m => (gastosCorreo ? (gastosCorreo[mesKey(m)] || 0) : null);
+
+  // Gastos verificados con banco (D.cf.monthly va Ene=1 .. Jun=6)
+  const GAST = {};
+  D.cf.monthly.forEach((r, i) => { GAST[i + 1] = { op: r.op, fin: r.fin, hac: r.hac }; });
+  const FIJO_PRESTAMO = D.cf.fijos_mes || 2614; // préstamo/distribución fijo mensual
+
+  const rows = [];
+  let acc = 0;
+  for (let m = 1; m <= curMonth; m++) {
+    const yeasy = yeasyM[m] || 0;
+    const booksy = BOOKSY_MONTHLY[m] || 0;
+    const facturado = yeasy + booksy;
+    const g = GAST[m];
+    if (g) {
+      const salidas = g.op + g.fin + g.hac;
+      const res = facturado - salidas;
+      acc += res;
+      rows.push({ m, facturado, yeasy, booksy, op: g.op, fin: g.fin, hac: g.hac, salidas, res, acc, cerrado: true, correo: correoMes(m) });
+    } else {
+      // Mes en curso: sin gastos cerrados aún (solo el préstamo fijo es conocido)
+      rows.push({ m, facturado, yeasy, booksy, op: null, fin: FIJO_PRESTAMO, hac: null, salidas: null, res: null, acc: null, cerrado: false, correo: correoMes(m) });
+    }
+  }
+
+  const cerrados = rows.filter(r => r.cerrado);
+  const totalFact = rows.reduce((s, r) => s + r.facturado, 0);
+  const ganado = cerrados.filter(r => r.res > 0).reduce((s, r) => s + r.res, 0);
+  const perdido = cerrados.filter(r => r.res < 0).reduce((s, r) => s + r.res, 0);
+  const neto = ganado + perdido;
+  const nPos = cerrados.filter(r => r.res > 0).length;
+  const nNeg = cerrados.filter(r => r.res < 0).length;
+
+  const setEl = (id, val, color) => { const el = document.getElementById(id); if (el) { el.textContent = val; if (color) el.style.color = color; } };
+  setEl('mn-fact', fmt(totalFact));
+  setEl('mn-fact-sub', `Enero–${MONTH_NAMES[curMonth - 1]} 2026`);
+  setEl('mn-gan', '+' + fmt(ganado));
+  setEl('mn-gan-sub', `${nPos} ${nPos === 1 ? 'mes' : 'meses'} en positivo`);
+  setEl('mn-per', fmt(perdido));
+  setEl('mn-per-sub', `${nNeg} ${nNeg === 1 ? 'mes' : 'meses'} en negativo`);
+  setEl('mn-neto', (neto >= 0 ? '+' : '') + fmt(neto), neto >= 0 ? 'var(--grn)' : 'var(--red)');
+
+  // Gráfico ganado/perdido (solo meses cerrados)
+  const chartEl = document.getElementById('mensual-chart');
+  if (chartEl) {
+    if (cerrados.length) {
+      const maxAbs = Math.max(...cerrados.map(r => Math.abs(r.res)), 1);
+      chartEl.style.cssText = 'display:flex;align-items:stretch;gap:8px;height:220px;padding:6px 4px;';
+      chartEl.innerHTML = cerrados.map(r => {
+        const isPos = r.res >= 0;
+        const h = (Math.abs(r.res) / maxAbs) * 100;
+        return `
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;min-width:0;">
+          <div style="flex:1;width:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;">
+            ${isPos ? `<div style="font-size:9px;font-weight:800;color:var(--grn);margin-bottom:3px;white-space:nowrap;">+${fmt(r.res)}</div>
+            <div style="width:70%;max-width:34px;height:${h}%;min-height:3px;background:var(--grn);border-radius:3px 3px 0 0;"></div>` : ''}
+          </div>
+          <div style="height:1px;width:100%;background:var(--t4);"></div>
+          <div style="flex:1;width:100%;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;">
+            ${!isPos ? `<div style="width:70%;max-width:34px;height:${h}%;min-height:3px;background:var(--red);border-radius:0 0 3px 3px;"></div>
+            <div style="font-size:9px;font-weight:800;color:var(--red);margin-top:3px;white-space:nowrap;">${fmt(r.res)}</div>` : ''}
+          </div>
+          <div style="font-size:9px;font-weight:700;color:var(--t3);margin-top:4px;letter-spacing:.04em;">${MONTH_NAMES[r.m - 1].slice(0, 3)}</div>
+        </div>`;
+      }).join('');
+    } else {
+      chartEl.innerHTML = '<span style="font-size:11px;color:var(--t3);">Sin meses cerrados todavía</span>';
+    }
+  }
+
+  // Tarjetas mes a mes
+  const cardsEl = document.getElementById('mensual-cards');
+  if (cardsEl) {
+    const row = (lbl, val, c) => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--ln2);">
+        <span style="font-size:10px;color:var(--t3);">${lbl}</span>
+        <span style="font-size:12px;font-weight:700;color:${c || 'var(--t1)'};">${val}</span>
+      </div>`;
+    cardsEl.innerHTML = rows.map(r => {
+      if (!r.cerrado) {
+        // Mes en curso
+        return `
+        <div class="card" style="border-top:2px solid var(--gold);display:flex;flex-direction:column;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <div style="font-size:13px;font-weight:800;color:var(--t1);">${MONTH_NAMES[r.m - 1]} <span style="color:var(--t3);font-weight:600;">2026</span></div>
+            <span style="font-size:8px;font-weight:800;letter-spacing:.1em;color:var(--gold);background:var(--ga);border:1px solid var(--gb);padding:3px 8px;border-radius:20px;">EN CURSO</span>
+          </div>
+          <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:2px;">Facturado en vivo</div>
+          <div style="font-size:24px;font-weight:800;color:var(--t1);letter-spacing:-.02em;margin-bottom:12px;">${fmt(r.facturado)}</div>
+          ${row('Yeasy', fmt(r.yeasy), 'var(--gold)')}
+          ${row('Booksy', r.booksy ? fmt(r.booksy) : '—', r.booksy ? 'var(--t1)' : 'var(--t4)')}
+          ${row('Préstamos', fmt(r.fin), 'var(--blu)')}
+          ${row('Facturas correo (auto)', r.correo != null ? fmt(r.correo) : 'sin conectar', r.correo != null ? 'var(--red)' : 'var(--t4)')}
+          ${row('Nóminas, alquiler, Hacienda', 'pendiente cierre', 'var(--t4)')}
+          <div style="margin-top:auto;padding-top:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+              <span style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);">Resultado</span>
+              <span style="font-size:14px;font-weight:700;color:var(--t3);">en curso</span>
+            </div>
+            <div style="text-align:right;font-size:9px;color:var(--t3);margin-top:2px;">Se cierra al acabar el mes</div>
+          </div>
+        </div>`;
+      }
+      const isPos = r.res >= 0;
+      const col = isPos ? 'var(--grn)' : 'var(--red)';
+      const badge = isPos
+        ? `<span style="font-size:8px;font-weight:800;letter-spacing:.1em;color:var(--grn);background:rgba(46,122,42,.12);border:1px solid rgba(46,122,42,.3);padding:3px 8px;border-radius:20px;">GANADO</span>`
+        : `<span style="font-size:8px;font-weight:800;letter-spacing:.1em;color:var(--red);background:rgba(176,48,48,.12);border:1px solid rgba(176,48,48,.3);padding:3px 8px;border-radius:20px;">PERDIDO</span>`;
+      return `
+      <div class="card" style="border-top:2px solid ${col};display:flex;flex-direction:column;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div style="font-size:13px;font-weight:800;color:var(--t1);">${MONTH_NAMES[r.m - 1]} <span style="color:var(--t3);font-weight:600;">2026</span></div>
+          ${badge}
+        </div>
+        <div style="font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:2px;">Facturado</div>
+        <div style="font-size:24px;font-weight:800;color:var(--t1);letter-spacing:-.02em;margin-bottom:12px;">${fmt(r.facturado)}</div>
+        ${row('Gastos operativos', fmt(r.op), 'var(--red)')}
+        ${row('Préstamos', fmt(r.fin), 'var(--blu)')}
+        ${row('Hacienda', r.hac > 0 ? fmt(r.hac) : '—', r.hac > 0 ? 'var(--red)' : 'var(--t4)')}
+        ${row('Total salidas', fmt(r.salidas), 'var(--red)')}
+        <div style="margin-top:auto;padding-top:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+            <span style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);">${isPos ? 'Ganado' : 'Perdido'}</span>
+            <span style="font-size:22px;font-weight:800;color:${col};letter-spacing:-.02em;">${isPos ? '+' : ''}${fmt(r.res)}</span>
+          </div>
+          <div style="text-align:right;font-size:9px;color:var(--t3);margin-top:2px;">Acumulado: <strong style="color:${r.acc >= 0 ? 'var(--grn)' : 'var(--red)'};">${r.acc >= 0 ? '+' : ''}${fmt(r.acc)}</strong></div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  const now = new Date();
+  const ts = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+  dot.style.background = 'var(--grn)';
+  if (msg) msg.textContent = `Sincronizado · ${ts} · Enero–${MONTH_NAMES[curMonth - 1]}`;
+  if (btn) { btn.disabled = false; btn.textContent = `⟳ Sincronizado ${ts}`; }
+  if (showToast) toast('Mes a Mes sincronizado', 'ok');
 }
 </script>
 
