@@ -10,30 +10,32 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:   #ECEDF2;
+      --bg:   #F4F4F2;
       --surf: #FFFFFF;
-      --s2:   #F6F7FA;
-      --s3:   #F2F3F7;
+      --s2:   #F3F3F1;
+      --s3:   #ECECE9;
       --gold: #C9A84C;
       --ga:   rgba(201,168,76,.08);
       --gb:   rgba(201,168,76,.18);
       --gc:   rgba(201,168,76,.04);
-      --t1:   #111111;
-      --t2:   rgba(17,17,17,.60);
-      --t3:   rgba(17,17,17,.38);
-      --t4:   rgba(17,17,17,.28);
-      --ln:   rgba(0,0,0,.07);
-      --ln2:  rgba(0,0,0,.04);
+      --t1:   #0A0A0A;
+      --t2:   rgba(10,10,10,.58);
+      --t3:   rgba(10,10,10,.38);
+      --t4:   rgba(10,10,10,.26);
+      --ln:   rgba(0,0,0,.08);
+      --ln2:  rgba(0,0,0,.045);
       --grn:  #2E7A2A;
       --red:  #B03030;
       --blu:  #2A5E8A;
       --orn:  #B84820;
-      --r:    4px;
+      --r:    16px;
+      --r-sm: 10px;
       --sw:   228px;
       --th:   56px;
       --font: 'Montserrat', sans-serif;
       --glow: rgba(201,168,76,.10);
       --glow2: rgba(201,168,76,.05);
+      --shadow: 0 1px 2px rgba(0,0,0,.04), 0 1px 10px rgba(0,0,0,.03);
     }
     body.dark {
       --bg:   #0E0F11;
@@ -53,6 +55,7 @@
       --red:  #D95050;
       --blu:  #4A8FC4;
       --orn:  #D46830;
+      --shadow: 0 1px 2px rgba(0,0,0,.20), 0 1px 10px rgba(0,0,0,.14);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
@@ -82,7 +85,8 @@
       display: flex; flex-direction: column; align-items: center; gap: 24px;
       box-shadow: 0 8px 32px rgba(0,0,0,.10);
     }
-    .login-logo { width: 80px; height: 80px; object-fit: contain; border-radius: 16px; }
+    .login-wordmark { font-size: 34px; font-weight: 900; letter-spacing: -.02em; color: var(--t1); line-height: 1; }
+    .login-wordmark span { font-size: 14px; font-weight: 700; vertical-align: top; margin-left: 1px; }
     .login-title {
       font-size: 18px; font-weight: 800; color: var(--t1);
       letter-spacing: .02em; text-align: center;
@@ -137,15 +141,19 @@
     .sidebar::-webkit-scrollbar-thumb { background: var(--ln); border-radius: 2px; }
 
     .sb-brand {
-      padding: 24px 20px 20px;
+      padding: 26px 20px 20px;
       border-bottom: 1px solid var(--ln);
       flex-shrink: 0;
     }
-    .sb-logo {
-      height: 90px;
-      display: block;
+    .sb-wordmark {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -.02em;
+      color: var(--t1);
+      line-height: 1;
       margin-bottom: 10px;
     }
+    .sb-wordmark span { font-size: 11px; font-weight: 700; vertical-align: top; margin-left: 1px; }
     .sb-name {
       font-size: 9px;
       font-weight: 800;
@@ -155,31 +163,32 @@
     }
     .sb-sub { font-size: 8px; color: var(--t3); margin-top: 2px; letter-spacing: .06em; }
 
-    .sb-nav { flex: 1; padding: 8px 0 12px; }
+    .sb-nav { flex: 1; padding: 12px 10px 12px; }
     .sb-section {
       font-size: 7.5px;
       font-weight: 700;
       letter-spacing: .2em;
       text-transform: uppercase;
       color: var(--t4);
-      padding: 16px 20px 5px;
+      padding: 16px 10px 5px;
     }
     .sb-item {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 20px;
+      padding: 9px 12px;
+      margin: 1px 0;
       font-size: 11px;
       font-weight: 500;
       color: var(--t2);
       cursor: pointer;
-      border-left: 2px solid transparent;
+      border-radius: var(--r-sm);
       transition: color .15s, background .15s;
       user-select: none;
       text-decoration: none;
     }
-    .sb-item:hover { color: var(--t1); background: rgba(0,0,0,.04); }
-    .sb-item.active { color: var(--gold); border-left-color: var(--gold); background: var(--ga); }
+    .sb-item:hover { color: var(--t1); background: var(--s2); }
+    .sb-item.active { color: var(--bg); background: var(--t1); }
     .sb-icon { font-size: 10px; opacity: .55; width: 14px; text-align: center; flex-shrink: 0; }
     .sb-item.active .sb-icon { opacity: 1; }
     .sb-badge {
@@ -192,6 +201,7 @@
       border-radius: 2px;
       padding: 2px 5px;
     }
+    .sb-item.active .sb-badge { color: var(--t1); background: var(--bg); }
 
     .sb-footer {
       padding: 14px 20px;
@@ -259,17 +269,16 @@
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
-      gap: 1px;
-      background: var(--ln);
-      border: 1px solid var(--ln);
-      border-radius: var(--r);
-      overflow: hidden;
+      gap: 12px;
       margin-bottom: 28px;
     }
     .kpi {
       background: var(--surf);
+      border: 1px solid var(--ln);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
       padding: 18px 18px 16px;
-      transition: background .2s;
+      transition: background .2s, transform .2s;
     }
     .kpi:hover { background: var(--s2); }
     .kpi-lbl {
@@ -290,6 +299,22 @@
     .kpi-val.w { color: var(--t1); }
     .kpi-val.g { color: var(--grn); }
     .kpi-sub2 { font-size: 9px; color: var(--t3); margin-top: 5px; }
+
+    /* ── KPI HERO (tile negro sólido) ─────────────────────── */
+    .kpi-hero {
+      background: #0A0A0A;
+      border: 1px solid #0A0A0A;
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 22px 22px 20px;
+      grid-column: span 2;
+    }
+    body.dark .kpi-hero { background: #000; border-color: var(--gb); }
+    .kpi-hero .kpi-lbl { color: rgba(255,255,255,.55); }
+    .kpi-hero .kpi-val { color: #fff; font-size: 30px; }
+    .kpi-hero .kpi-sub2 { color: rgba(255,255,255,.6); }
+    @media (max-width: 960px) { .kpi-hero { grid-column: span 2; } }
+    @media (max-width: 640px) { .kpi-hero { grid-column: 1 / -1; } }
 
     /* ── SEC TITLE ─────────────────────────────────────────── */
     .sec {
@@ -321,6 +346,7 @@
       background: var(--surf);
       border: 1px solid var(--ln);
       border-radius: var(--r);
+      box-shadow: var(--shadow);
       padding: 18px;
     }
     .card-ttl {
@@ -336,6 +362,7 @@
     .tw {
       border: 1px solid var(--ln);
       border-radius: var(--r);
+      box-shadow: var(--shadow);
       overflow: hidden;
       margin-bottom: 24px;
     }
@@ -401,8 +428,8 @@
     .bv { font-size: 8px; font-weight: 700; color: var(--gold); opacity: 0; transition: opacity .2s; white-space: nowrap; }
     .bc:hover .bv { opacity: 1; }
     .br { width: 100%; border-radius: 2px 2px 0 0; min-height: 2px; }
-    .br.a { background: var(--gold); opacity: .72; }
-    .br.b { background: #8A6830; opacity: .82; }
+    .br.a { background: var(--t1); opacity: .88; }
+    .br.b { background: var(--t3); opacity: .9; }
     .bc:hover .br { opacity: 1 !important; }
     .bl { font-size: 9px; font-weight: 600; color: var(--t3); }
 
@@ -468,6 +495,7 @@
       background: var(--surf);
       border: 1px solid var(--ln);
       border-radius: var(--r);
+      box-shadow: var(--shadow);
       padding: 14px 16px;
       text-decoration: none;
       display: flex;
@@ -487,6 +515,7 @@
       background: var(--surf);
       border: 1px solid var(--ln);
       border-radius: var(--r);
+      box-shadow: var(--shadow);
       padding: 18px;
       cursor: pointer;
       transition: background .2s, border-color .2s;
@@ -687,13 +716,10 @@
       background: linear-gradient(90deg, rgba(201,168,76,.35) 0%, transparent 100%);
     }
 
-    /* ── SIDEBAR ACTIVE GRADIENT ─────────────────────────────── */
-    .sb-item.active {
-      background: linear-gradient(90deg, rgba(201,168,76,.1) 0%, transparent 80%);
-    }
-    .sb-item { transition: color .15s, background .2s, transform .1s; }
-    .sb-item:hover { padding-left: 22px; }
-    .sb-item.active:hover { padding-left: 20px; }
+    /* ── SIDEBAR ACTIVE PILL ──────────────────────────────────── */
+    .sb-item { transition: color .15s, background .2s; }
+    .sb-item:hover { background: var(--s2); }
+    .sb-item.active:hover { background: var(--t1); }
 
     /* ── CARD LIFTS ──────────────────────────────────────────── */
     .card  { transition: background .2s, border-color .2s, transform .18s; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
@@ -748,7 +774,7 @@
 <!-- ═══ LOGIN SCREEN ══════════════════════════════════════════ -->
 <div id="login-screen">
   <div class="login-box">
-    <img src="tcb-logo.png" alt="TCB" class="login-logo">
+    <div class="login-wordmark">TCB<span>&reg;</span></div>
     <div>
       <div class="login-title">The Crew — Panel</div>
       <div class="login-sub">Acceso Administrador</div>
@@ -768,7 +794,7 @@
   <!-- ═══ SIDEBAR ════════════════════════════════════════════ -->
   <aside class="sidebar">
     <div class="sb-brand">
-      <img src="tcb-logo.png" alt="TCB" class="sb-logo">
+      <div class="sb-wordmark">TCB<span>&reg;</span></div>
       <div class="sb-name">The Crew</div>
       <div class="sb-sub">PANEL</div>
     </div>
@@ -1015,13 +1041,9 @@ const V = {
 
   dashboard: { sec:'Inicio', pg:'Dashboard',
     html() {
-      const months = D.billing.monthly;
-      const sparkBilling = months.map(m => m.y + m.b);
-      const sparkMargin  = D.pl.monthly.map(m => m.mar);
-      const lastMonth = months[months.length-1].y + months[months.length-1].b;
-      const prevMonth = months[months.length-2].y + months[months.length-2].b;
-      const pct = ((lastMonth - prevMonth) / prevMonth * 100);
-      const trend = `<span class="trend ${pct>=0?'up':'dn'}">${pct>=0?'▲':'▼'} ${Math.abs(pct).toFixed(1)}%</span>`;
+      const nextHac = D.cf.hacienda_cal.find(h => h.estado === 'estimado') || D.cf.hacienda_cal[D.cf.hacienda_cal.length - 1];
+      const creditoPct = Math.round((D.cf.credito.usado / D.cf.credito.total) * 100);
+      const cfRes = D.cf.total.res;
 
       return `
 <div class="pg-hd">
@@ -1030,132 +1052,65 @@ const V = {
   <p class="pg-sub">${todayLong()}</p>
 </div>
 
-<div class="sec">Resumen en vivo</div>
-<div class="kpi-grid" style="margin-bottom:28px">
-  <div class="kpi">
-    <div class="kpi-lbl">Facturación 2026</div>
-    <div class="kpi-val counter" data-count="${D.billing.total}" data-fmt="eur">0 €</div>
-    <svg class="spark" id="sp-bill"></svg>
+<div class="sec">Mes en directo</div>
+<div id="dm-status" style="font-size:10px;color:var(--t3);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+  <span id="dm-dot" style="width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;"></span>
+  <span id="dm-msg">Cargando datos Yeasy...</span>
+</div>
+<div class="kpi-grid">
+  <div class="kpi-hero">
+    <div class="kpi-lbl">Facturado <span id="dm-mes">este mes</span> · en vivo</div>
+    <div class="kpi-val" id="dm-fact">—</div>
+    <div class="kpi-sub2">Se cierra al acabar el mes</div>
+  </div>
+  <div class="kpi"><div class="kpi-lbl">Yeasy</div><div class="kpi-val w" id="dm-yeasy">—</div></div>
+  <div class="kpi"><div class="kpi-lbl">Booksy</div><div class="kpi-val w" id="dm-booksy">—</div></div>
+</div>
+<div style="text-align:right;margin:10px 0 28px;"><span class="qa-arr" onclick="go('mensual')" style="cursor:pointer;">Ver Mes a Mes →</span></div>
+
+<div class="sec">Equipo</div>
+<div id="dash-equipo-chips" style="display:flex;flex-wrap:wrap;gap:12px;">
+  <span style="font-size:11px;color:var(--t3);">Cargando equipo...</span>
+</div>
+<div style="text-align:right;margin:10px 0 28px;"><span class="qa-arr" onclick="go('equipo')" style="cursor:pointer;">Ver Equipo →</span></div>
+
+<div class="sec">Cashflow</div>
+<div class="kpi-grid">
+  <div class="kpi-hero">
+    <div class="kpi-lbl">Resultado acumulado 2026</div>
+    <div class="kpi-val">${cfRes >= 0 ? '+' : ''}${fmt(cfRes)}</div>
+    <div class="kpi-sub2" style="color:${cfRes >= 0 ? '#3DA336' : '#D95050'}">${cfRes >= 0 ? 'Caja generada' : 'Caja consumida'} en el año</div>
   </div>
   <div class="kpi">
-    <div class="kpi-lbl">Mejor mes</div>
-    <div class="kpi-val g counter" data-count="${D.billing.best.val}" data-fmt="eur">0 €</div>
-    <div class="kpi-sub2">${D.billing.best.name} ${trend}</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-lbl">Margen 2026</div>
-    <div class="kpi-val counter" data-count="${Math.round(D.pl.total_mar)}" data-fmt="eur">0 €</div>
-    <svg class="spark" id="sp-margin"></svg>
-  </div>
-  <div class="kpi">
-    <div class="kpi-lbl">Seguidores IG</div>
-    <div class="kpi-val w counter" data-count="14827" data-fmt="num">0</div>
-    <div class="kpi-sub2">+605 en 30 días <span class="trend up">▲ 4.2%</span></div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-lbl">Mejor reel</div>
-    <div class="kpi-val g counter" data-count="1235580" data-fmt="M" data-dur="1300">0</div>
-    <div class="kpi-sub2">Satisfying close-up</div>
+    <div class="kpi-lbl">Crédito usado</div>
+    <div class="kpi-val w">${fmt(D.cf.credito.usado)}</div>
+    <div class="kpi-sub2">de ${fmt(D.cf.credito.total)} · disp. ${fmt(D.cf.credito.disp)}</div>
+    <div style="background:var(--ln2);border-radius:2px;height:4px;overflow:hidden;margin-top:8px;"><div style="height:100%;width:${creditoPct}%;background:var(--orn);border-radius:2px;"></div></div>
   </div>
   <div class="kpi">
     <div class="kpi-lbl">Próxima Hacienda</div>
-    <div class="kpi-val w" id="hac-days">—</div>
-    <div class="kpi-sub2" id="hac-sub">20 Jul 2026 · Q2 ~4.000 €</div>
+    <div class="kpi-val w" style="font-size:15px;padding-top:5px;">${nextHac.fecha}</div>
+    <div class="kpi-sub2">${nextHac.tri} · ~${fmt(nextHac.importe)}</div>
   </div>
 </div>
+<div style="text-align:right;margin:10px 0 28px;"><span class="qa-arr" onclick="go('cashflow')" style="cursor:pointer;">Ver Cashflow →</span></div>
 
-<div class="sec">Objetivos del año</div>
-<div class="g4" style="margin-bottom:28px">
-  <div class="card" style="padding:0">
-    <div class="ring-wrap">
-      <div class="ring"><svg id="ring-fact"></svg><div class="ring-val"><div class="ring-pct">94%</div></div></div>
-      <div style="text-align:center"><div class="ring-lbl">Facturación mes</div><div class="ring-sub">11.258 € / 12.000 €</div></div>
-    </div>
-  </div>
-  <div class="card" style="padding:0">
-    <div class="ring-wrap">
-      <div class="ring"><svg id="ring-ig"></svg><div class="ring-val"><div class="ring-pct">93%</div></div></div>
-      <div style="text-align:center"><div class="ring-lbl">Seguidores IG</div><div class="ring-sub">14.827 / 16.000</div></div>
-    </div>
-  </div>
-  <div class="card" style="padding:0">
-    <div class="ring-wrap">
-      <div class="ring"><svg id="ring-mar"></svg><div class="ring-val"><div class="ring-pct">81%</div></div></div>
-      <div style="text-align:center"><div class="ring-lbl">Margen objetivo</div><div class="ring-sub">16.1% / 20%</div></div>
-    </div>
-  </div>
-  <div class="card" style="padding:0">
-    <div class="ring-wrap">
-      <div class="ring"><svg id="ring-hac"></svg><div class="ring-val"><div class="ring-pct">50%</div></div></div>
-      <div style="text-align:center"><div class="ring-lbl">Reserva Hacienda</div><div class="ring-sub">2.000 / 4.000 €</div></div>
-    </div>
-  </div>
+<div class="sec">Gastos &amp; pérdidas · 2026</div>
+<div class="kpi-grid" style="margin-bottom:16px">
+  <div class="kpi"><div class="kpi-lbl">Ingresos año</div><div class="kpi-val w">${fmt(D.pl.total_ing)}</div></div>
+  <div class="kpi"><div class="kpi-lbl">Gastos año</div><div class="kpi-val" style="color:var(--red)">${fmt(D.pl.total_gas)}</div></div>
+  <div class="kpi"><div class="kpi-lbl">Margen año</div><div class="kpi-val g">${fmt(Math.round(D.pl.total_mar))}</div><div class="kpi-sub2">${D.pl.pct_avg}% de media</div></div>
 </div>
-
-<div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;margin-bottom:24px">
-  <div>
-    <div class="sec">Facturación mensual</div>
-    <div class="card" style="padding-bottom:14px">
-      <div class="chart" id="dash-chart"></div>
-      <div class="legend">
-        <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div>Yeasy</div>
-        <div class="leg-item"><div class="leg-dot" style="background:#8A6830"></div>Booksy</div>
-      </div>
-    </div>
-  </div>
-  <div>
-    <div class="sec">Próximos eventos</div>
-    <div class="card">
-      <div class="ev">
-        <div class="ev-date"><div class="ev-d">18</div><div class="ev-m">May</div></div>
-        <div class="ev-body"><div class="ev-ttl">Lunes bloqueados</div><div class="ev-sub">Liberados para proyectos</div></div>
-        <span class="ev-tag" style="background:rgba(46,122,42,.12);color:var(--grn)">SOON</span>
-      </div>
-      <div class="ev">
-        <div class="ev-date"><div class="ev-d">20</div><div class="ev-m">Jul</div></div>
-        <div class="ev-body"><div class="ev-ttl">Hacienda Q2 2026</div><div class="ev-sub">~4.000 € · IVA + IRPF</div></div>
-        <span class="ev-tag" style="background:rgba(176,48,48,.12);color:var(--red)">HACIENDA</span>
-      </div>
-      <div class="ev">
-        <div class="ev-date"><div class="ev-d">20</div><div class="ev-m">Oct</div></div>
-        <div class="ev-body"><div class="ev-ttl">Hacienda Q3 2026</div><div class="ev-sub">~4.000 € · IVA + IRPF</div></div>
-        <span class="ev-tag" style="background:rgba(176,48,48,.12);color:var(--red)">HACIENDA</span>
-      </div>
-      <div class="ev">
-        <div class="ev-date"><div class="ev-d">28</div><div class="ev-m">Mes</div></div>
-        <div class="ev-body"><div class="ev-ttl">Nóminas equipo</div><div class="ev-sub">~5.300 € · cada mes</div></div>
-        <span class="ev-tag" style="background:rgba(42,94,138,.12);color:var(--blu)">FIJO</span>
-      </div>
-    </div>
-  </div>
+<div class="card" style="margin-bottom:10px;">
+  <div class="card-ttl">Margen mensual</div>
+  <svg class="spark" id="sp-dash-margin" style="height:44px"></svg>
 </div>
-
-<div class="sec">Acceso rápido</div>
-<div class="g4">
-  <div class="qa" onclick="go('cashflow')"><div class="qa-ico">💵</div><div class="qa-lbl">Cashflow</div><div class="qa-sub">Tesorería 2026<br>Hacienda + crédito</div><div class="qa-arr">Ver →</div></div>
-  <div class="qa" onclick="go('contenido')"><div class="qa-ico">📱</div><div class="qa-lbl">Contenido IG</div><div class="qa-sub">14.8K seguidores<br>1.23M mejor reel</div><div class="qa-arr">Ver →</div></div>
-  <div class="qa" onclick="go('equipo')"><div class="qa-ico">👥</div><div class="qa-lbl">Equipo</div><div class="qa-sub">4 barberos<br>Performance</div><div class="qa-arr">Ver →</div></div>
-  <div class="qa" onclick="go('barberlab')"><div class="qa-ico">🧪</div><div class="qa-lbl">Proyectos</div><div class="qa-sub">BarberLab · CHAOS<br>3 activos</div><div class="qa-arr">Ver →</div></div>
-</div>`;
+<div style="text-align:right;"><span class="qa-arr" onclick="go('gastos')" style="cursor:pointer;">Ver Gastos &amp; P&amp;L →</span></div>`;
     },
     after() {
-      buildChart('dash-chart', D.billing.monthly);
-      const months = D.billing.monthly;
-      drawSpark(document.getElementById('sp-bill'),   months.map(m => m.y + m.b));
-      drawSpark(document.getElementById('sp-margin'), D.pl.monthly.map(m => m.mar), '#2E7A2A');
-      drawRing(document.getElementById('ring-fact'), 94);
-      drawRing(document.getElementById('ring-ig'),   93, '#C9A84C');
-      drawRing(document.getElementById('ring-mar'),  81, '#2E7A2A');
-      drawRing(document.getElementById('ring-hac'),  50, '#B84820');
-      // Countdown Hacienda
-      const hacDate = new Date('2026-07-20T00:00:00');
-      const now = new Date(); now.setHours(0,0,0,0);
-      const diff = Math.ceil((hacDate - now) / 86400000);
-      const elHac = document.getElementById('hac-days');
-      if (elHac) {
-        elHac.textContent = diff > 0 ? diff + ' días' : diff === 0 ? 'HOY' : 'Pasado';
-        elHac.style.color = diff <= 14 ? 'var(--red)' : diff <= 45 ? 'var(--orn)' : 'var(--t1)';
-      }
+      dashMesSync();
+      dashEquipoSync();
+      drawSpark(document.getElementById('sp-dash-margin'), D.pl.monthly.map(m => m.mar), '#2E7A2A');
     }
   },
 
@@ -2750,24 +2705,30 @@ async function yeasyYTDByEmployee() {
   return { byEmp, monthlyByEmp };
 }
 
-async function equipoSync(showToast = true) {
-  const dot = document.getElementById('equipo-dot');
-  const msg = document.getElementById('equipo-msg');
-  const btn = document.getElementById('equipo-sync-btn');
-  if (!dot) return;
-  dot.style.background = 'var(--gold)';
-  if (msg) msg.textContent = 'Cargando datos Yeasy...';
-  if (btn) btn.disabled = true;
-  try {
-    const { byEmp, monthlyByEmp } = await yeasyYTDByEmployee();
-    const EXCLUIR = ['max'];
-    const barberos = Object.values(byEmp).filter(e => e.uuid !== 'unknown' && e.citas > 0 && !EXCLUIR.includes((e.name||'').toLowerCase())).sort((a,b) => b.total - a.total);
-    const totalEur = barberos.reduce((s,e) => s+e.total, 0);
-    const avg = barberos.length ? Math.round(totalEur / barberos.length) : 0;
-    const top = barberos[0];
-    const now = new Date();
-    const todayLabel = `${now.getDate()} ${MONTH_NAMES[now.getMonth()]}`;
+const EQUIPO_COLORS = ['#C9A84C','#6B9FD4','#7FAE7A','#D4896B'];
 
+async function computeEquipoData() {
+  const { byEmp, monthlyByEmp } = await yeasyYTDByEmployee();
+  const EXCLUIR = ['max'];
+  const barberos = Object.values(byEmp).filter(e => e.uuid !== 'unknown' && e.citas > 0 && !EXCLUIR.includes((e.name||'').toLowerCase())).sort((a,b) => b.total - a.total);
+  const totalEur = barberos.reduce((s,e) => s+e.total, 0);
+  const avg = barberos.length ? Math.round(totalEur / barberos.length) : 0;
+  const top = barberos[0];
+  const now = new Date();
+  const todayLabel = `${now.getDate()} ${MONTH_NAMES[now.getMonth()]}`;
+  return { barberos, monthlyByEmp, totalEur, avg, top, todayLabel };
+}
+
+function equipoAvatar(b, color, size) {
+  const initials = (b.name[0]||'') + (b.surname[0]||'');
+  return b.image
+    ? `<img src="${b.image}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;border:2px solid ${color};" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div style="display:none;width:${size}px;height:${size}px;border-radius:50%;background:${color}20;border:2px solid ${color};align-items:center;justify-content:center;font-size:${Math.round(size*0.29)}px;font-weight:800;color:${color};">${initials}</div>`
+    : `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color}20;border:2px solid ${color};display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*0.29)}px;font-weight:800;color:${color};">${initials}</div>`;
+}
+
+function renderEquipoPage(d) {
+  const { barberos, monthlyByEmp, totalEur, avg, top, todayLabel } = d;
+  {
     const setEl = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
     setEl('eq-total', fmt(totalEur));
     setEl('eq-total-sub', `Yeasy · Ene–${todayLabel}`);
@@ -2775,17 +2736,14 @@ async function equipoSync(showToast = true) {
     if (top) { setEl('eq-top', top.name); setEl('eq-top-sub', `${fmt(top.total)} · ${top.citas} citas`); }
 
     // Cards
-    const colors = ['#C9A84C','#6B9FD4','#7FAE7A','#D4896B'];
+    const colors = EQUIPO_COLORS;
     const container = document.getElementById('equipo-cards');
     if (container) {
       const maxTotal = top ? top.total : 1;
       container.innerHTML = barberos.map((b,i) => {
         const pct = Math.round((b.total / maxTotal) * 100);
         const color = colors[i % colors.length];
-        const initials = (b.name[0]||'') + (b.surname[0]||'');
-        const avatar = b.image
-          ? `<img src="${b.image}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid ${color};" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div style="display:none;width:48px;height:48px;border-radius:50%;background:${color}20;border:2px solid ${color};align-items:center;justify-content:center;font-size:14px;font-weight:800;color:${color};">${initials}</div>`
-          : `<div style="width:48px;height:48px;border-radius:50%;background:${color}20;border:2px solid ${color};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:${color};">${initials}</div>`;
+        const avatar = equipoAvatar(b, color, 48);
         return `<div class="card" style="border-top:2px solid ${color};">
           <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
             ${avatar}
@@ -2823,10 +2781,24 @@ async function equipoSync(showToast = true) {
       }).join('');
       tabla.innerHTML = `<table><thead>${thead}</thead><tbody>${tbody}</tbody><tfoot><tr class="tf"><td><strong>TOTAL</strong></td>${tfTotal}<td class="r">${fmtD(totalEur)}</td></tr></tfoot></table>`;
     }
+  }
+}
 
+async function equipoSync(showToast = true) {
+  const dot = document.getElementById('equipo-dot');
+  const msg = document.getElementById('equipo-msg');
+  const btn = document.getElementById('equipo-sync-btn');
+  if (!dot) return;
+  dot.style.background = 'var(--gold)';
+  if (msg) msg.textContent = 'Cargando datos Yeasy...';
+  if (btn) btn.disabled = true;
+  try {
+    const d = await computeEquipoData();
+    renderEquipoPage(d);
+    const now = new Date();
     const ts = `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
     dot.style.background = 'var(--grn)';
-    if (msg) msg.textContent = `Sincronizado · ${ts} · Ene–${todayLabel}`;
+    if (msg) msg.textContent = `Sincronizado · ${ts} · Ene–${d.todayLabel}`;
     if (btn) { btn.disabled=false; btn.textContent=`⟳ Actualizado ${ts}`; }
     if (showToast) toast('Equipo sincronizado', 'ok');
   } catch(e) {
@@ -2834,6 +2806,30 @@ async function equipoSync(showToast = true) {
     if (dot) dot.style.background = 'var(--red)';
     if (msg) msg.textContent = 'Error de conexión';
     if (btn) btn.disabled = false;
+  }
+}
+
+/* ── DASHBOARD: Equipo (compacto) ────────────────────────────── */
+async function dashEquipoSync() {
+  const el = document.getElementById('dash-equipo-chips');
+  if (!el) return;
+  try {
+    const d = await computeEquipoData();
+    const maxTotal = d.top ? d.top.total : 1;
+    el.innerHTML = d.barberos.map((b,i) => {
+      const color = EQUIPO_COLORS[i % EQUIPO_COLORS.length];
+      const avatar = equipoAvatar(b, color, 40);
+      return `<div style="display:flex;align-items:center;gap:10px;background:var(--surf);border:1px solid var(--ln);border-radius:var(--r-sm);padding:8px 14px 8px 8px;box-shadow:var(--shadow);">
+        ${avatar}
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:5px;white-space:nowrap;">${b.name} ${b.surname||''}${i===0?`<span style="width:5px;height:5px;border-radius:50%;background:var(--gold);display:inline-block;flex-shrink:0;"></span>`:''}</div>
+          <div style="font-size:12px;font-weight:800;color:${color};">${fmt(b.total)}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    console.warn('dashEquipoSync error:', e);
+    el.innerHTML = '<span style="font-size:11px;color:var(--t3);">Error de conexión con Yeasy</span>';
   }
 }
 
@@ -3340,22 +3336,9 @@ function buildChartInEl(el, data) {
 }
 
 /* ── MES A MES (Yeasy live + gastos verificados) ──────────────── */
-async function mensualSync(showToast = true) {
-  const dot = document.getElementById('mensual-dot');
-  const msg = document.getElementById('mensual-msg');
-  const btn = document.getElementById('mensual-sync-btn');
-  if (!dot) return;
-  dot.style.background = 'var(--gold)';
-  if (msg) msg.textContent = 'Conectando con Yeasy...';
-  if (btn) btn.disabled = true;
-
+async function computeMensualData() {
   const data = await yeasySync();
-  if (!data) {
-    dot.style.background = 'var(--red)';
-    if (msg) msg.textContent = 'Error de conexión con Yeasy';
-    if (btn) btn.disabled = false;
-    return;
-  }
+  if (!data) return null;
 
   // Facturación en vivo por mes (Yeasy + cierres) + Booksy manual
   const yeasyM = { ...data.monthly };
@@ -3398,6 +3381,11 @@ async function mensualSync(showToast = true) {
   const nPos = cerrados.filter(r => r.res > 0).length;
   const nNeg = cerrados.filter(r => r.res < 0).length;
 
+  return { rows, cerrados, curMonth, totalFact, ganado, perdido, neto, nPos, nNeg };
+}
+
+function renderMensualPage(d) {
+  const { rows, cerrados, curMonth, totalFact, ganado, perdido, neto, nPos, nNeg } = d;
   const setEl = (id, val, color) => { const el = document.getElementById(id); if (el) { el.textContent = val; if (color) el.style.color = color; } };
   setEl('mn-fact', fmt(totalFact));
   setEl('mn-fact-sub', `Enero–${MONTH_NAMES[curMonth - 1]} 2026`);
@@ -3495,13 +3483,56 @@ async function mensualSync(showToast = true) {
       </div>`;
     }).join('');
   }
+}
+
+async function mensualSync(showToast = true) {
+  const dot = document.getElementById('mensual-dot');
+  const msg = document.getElementById('mensual-msg');
+  const btn = document.getElementById('mensual-sync-btn');
+  if (!dot) return;
+  dot.style.background = 'var(--gold)';
+  if (msg) msg.textContent = 'Conectando con Yeasy...';
+  if (btn) btn.disabled = true;
+
+  const d = await computeMensualData();
+  if (!d) {
+    dot.style.background = 'var(--red)';
+    if (msg) msg.textContent = 'Error de conexión con Yeasy';
+    if (btn) btn.disabled = false;
+    return;
+  }
+
+  renderMensualPage(d);
 
   const now = new Date();
   const ts = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
   dot.style.background = 'var(--grn)';
-  if (msg) msg.textContent = `Sincronizado · ${ts} · Enero–${MONTH_NAMES[curMonth - 1]}`;
+  if (msg) msg.textContent = `Sincronizado · ${ts} · Enero–${MONTH_NAMES[d.curMonth - 1]}`;
   if (btn) { btn.disabled = false; btn.textContent = `⟳ Sincronizado ${ts}`; }
   if (showToast) toast('Mes a Mes sincronizado', 'ok');
+}
+
+/* ── DASHBOARD: Mes en directo (compacto) ───────────────────── */
+async function dashMesSync() {
+  const dot = document.getElementById('dm-dot');
+  const msg = document.getElementById('dm-msg');
+  if (!dot) return;
+  try {
+    const d = await computeMensualData();
+    if (!d) throw new Error('sin datos');
+    const cur = d.rows[d.rows.length - 1];
+    const setEl = (id, val, color) => { const el = document.getElementById(id); if (el) { el.textContent = val; if (color) el.style.color = color; } };
+    setEl('dm-mes', `${MONTH_NAMES[cur.m - 1]} 2026`);
+    setEl('dm-fact', fmt(cur.facturado));
+    setEl('dm-yeasy', fmt(cur.yeasy));
+    setEl('dm-booksy', cur.booksy ? fmt(cur.booksy) : '—');
+    dot.style.background = 'var(--grn)';
+    if (msg) msg.textContent = 'Yeasy en vivo · sincronizado';
+  } catch (e) {
+    console.warn('dashMesSync error:', e);
+    dot.style.background = 'var(--red)';
+    if (msg) msg.textContent = 'Error de conexión con Yeasy';
+  }
 }
 </script>
 
