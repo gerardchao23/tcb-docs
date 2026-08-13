@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Crew — Panel</title>
-  <link rel="icon" type="image/png" href="https://www.thecrewacademy.es/cdn/shop/files/Diseno_sin_titulo_27.png?crop=center&height=32&v=1773863841&width=32">
+  <link rel="icon" type="image/png" href="favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -97,8 +97,19 @@
       display: flex; flex-direction: column; align-items: center; gap: 26px;
       width: 260px;
     }
-    .login-wordmark { font-size: 40px; font-weight: 900; letter-spacing: -.02em; color: #fff; line-height: 1; }
-    .login-wordmark span { font-size: 16px; font-weight: 700; vertical-align: top; margin-left: 1px; }
+    /* ── LOGO TCB (PNG recortado usado como máscara → color por contexto) ── */
+    .tcb-mark {
+      display: block;
+      aspect-ratio: 1382 / 416;
+      -webkit-mask: url("tcb-wordmark.png") center / contain no-repeat;
+              mask: url("tcb-wordmark.png") center / contain no-repeat;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+    /* sobre la aurora magenta: negativo en blanco. El degradado del logo
+       compite con el fondo y pierde legibilidad; el color lo pone la aurora */
+    .tcb-mark.on-dark { background: #fff; }
+    .login-wordmark { width: 138px; }
     .login-title {
       font-size: 13px; font-weight: 800; color: #fff;
       letter-spacing: .04em; text-align: center; text-transform: uppercase;
@@ -150,6 +161,15 @@
       pointer-events: none;
     }
     body.dock-open .entry-bg { opacity: 0; }
+    /* logo de la pantalla de entrada: flota sobre el dock y se va con él */
+    .entry-mark {
+      position: fixed; left: 50%; top: 50%;
+      transform: translate(-50%, calc(-50% - 76px));
+      width: 172px; z-index: 81;
+      opacity: 1; transition: opacity .45s ease;
+      pointer-events: none;
+    }
+    body.dock-open .entry-mark { opacity: 0; }
     .main-wrap { position: relative; z-index: 1; background: transparent; }
     body.dock-open .main-wrap { background: var(--bg); }
     body.dock-open .topbar,
@@ -161,8 +181,7 @@
 
     /* ── TOPBAR BRAND (wordmark) ──────────────────────────── */
     .tb-brand { display: flex; align-items: center; gap: 16px; }
-    .tb-wordmark { font-size: 17px; font-weight: 900; letter-spacing: -.02em; color: var(--t1); line-height: 1; flex-shrink: 0; }
-    .tb-wordmark span { font-size: 9px; font-weight: 700; vertical-align: top; margin-left: 1px; }
+    .tb-wordmark { width: 52px; color: var(--t1); }
 
     /* ── DOCK (navegación flotante) ───────────────────────── */
     .dock {
@@ -581,7 +600,8 @@
       body { font-size: 12px; }
       .content { padding: 18px 14px 86px; }
       .topbar { padding: 0 14px; }
-      .tb-wordmark { font-size: 14px; }
+      .tb-wordmark { width: 40px; }
+      .entry-mark { width: 138px; transform: translate(-50%, calc(-50% - 68px)); }
       .pg-title { font-size: 22px; }
       .pg-hd { padding: 14px 0 18px; }
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
@@ -767,7 +787,7 @@
 <!-- ═══ LOGIN SCREEN ══════════════════════════════════════════ -->
 <div id="login-screen" class="aurora-bg">
   <div class="login-box">
-    <div class="login-wordmark">TCB<span>&reg;</span></div>
+    <div class="login-wordmark tcb-mark on-dark" role="img" aria-label="TCB"></div>
     <div>
       <div class="login-title">The Crew — Panel</div>
       <div class="login-sub">Acceso Administrador</div>
@@ -781,13 +801,14 @@
 </div>
 
 <div class="entry-bg aurora-bg"></div>
+<div class="entry-mark" aria-hidden="true"><span class="tcb-mark on-dark"></span></div>
 
 <div class="app">
   <!-- ═══ MAIN ════════════════════════════════════════════════ -->
   <div class="main-wrap">
     <header class="topbar">
       <div class="tb-brand">
-        <span class="tb-wordmark">TCB<span>&reg;</span></span>
+        <span class="tb-wordmark tcb-mark" role="img" aria-label="TCB"></span>
         <div class="tb-crumb">
           <span class="tb-sec" id="tb-sec">The Crew</span>
           <span class="tb-sep">›</span>
