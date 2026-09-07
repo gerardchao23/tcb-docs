@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Oferta Taller — TCB</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080808;--surf:#0d0d0d;--surf2:#131313;
+  --gold:#C9A84C;--ga:rgba(201,168,76,.09);--gb:rgba(201,168,76,.2);
+  --t1:#f0ede6;--t2:rgba(240,237,230,.5);--t3:rgba(240,237,230,.24);
+  --ln:rgba(240,237,230,.07);--grn:#7FAE7A;--red:#C47068;--blu:#8A9E94;--warn:#D4A850;
+  --r:3px;--sw:220px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t1);font-family:'Montserrat',sans-serif;font-size:13px;min-height:100vh;-webkit-font-smoothing:antialiased}
+.layout{display:flex;min-height:100vh}
+
+.sidebar{width:var(--sw);min-width:var(--sw);background:var(--surf);border-right:1px solid var(--ln);display:flex;flex-direction:column;padding:32px 0 24px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar__logo{padding:0 24px 28px;border-bottom:1px solid var(--ln);margin-bottom:16px}
+.sidebar__logo-title{font-size:10px;font-weight:800;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+.sidebar__logo-sub{font-size:9px;color:var(--t3);margin-top:2px}
+.sidebar__section{padding:14px 24px 6px;font-size:8px;font-weight:700;letter-spacing:.18em;color:var(--t3);text-transform:uppercase}
+.sidebar__item{display:block;padding:9px 24px;font-size:11px;font-weight:500;color:var(--t2);text-decoration:none;border-left:2px solid transparent;transition:color .15s,background .15s}
+.sidebar__item:hover{color:var(--t1);background:rgba(240,237,230,.025)}
+.sidebar__item.active{color:var(--gold);border-left-color:var(--gold);background:var(--ga)}
+.sidebar__sep{height:1px;background:var(--ln);margin:12px 24px}
+
+.content{flex:1;padding:48px 52px 80px;max-width:1060px}
+
+.doc-tag{display:block;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.doc-title{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:14px}
+.doc-title em{color:var(--gold);font-style:normal}
+.doc-meta{display:flex;gap:20px;margin-bottom:36px;flex-wrap:wrap;padding-bottom:28px;border-bottom:1px solid var(--ln)}
+.doc-meta-item{font-size:11px;color:var(--t3)}
+.doc-meta-item span{color:var(--t2);font-weight:600}
+
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:var(--r);overflow:hidden;margin-bottom:40px}
+.stat-card{background:var(--surf);padding:22px 20px;transition:background .2s}
+.stat-card:hover{background:var(--surf2)}
+.stat-card__label{font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.stat-card__value{font-size:22px;font-weight:800;letter-spacing:-.03em}
+.stat-card__sub{font-size:10px;color:var(--t3);margin-top:4px}
+
+.section{margin-bottom:44px}
+.section-title{display:flex;align-items:center;gap:10px;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:18px}
+.section-title::before{content:"";width:3px;height:13px;background:var(--gold);border-radius:1px;flex-shrink:0}
+.section-title::after{content:"";flex:1;height:1px;background:var(--ln)}
+
+.table-wrap{overflow-x:auto;border:1px solid var(--ln);border-radius:var(--r)}
+table{width:100%;border-collapse:collapse}
+th{font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);padding:12px 16px;text-align:left;border-bottom:1px solid var(--ln)}
+th.right{text-align:right}
+td{padding:11px 16px;border-bottom:1px solid rgba(240,237,230,.04);font-size:12px;color:var(--t2);vertical-align:middle}
+td.right{text-align:right;font-variant-numeric:tabular-nums}
+td.gold{color:var(--gold);font-weight:700}
+td.green{color:var(--grn);font-weight:700}
+td.red{color:var(--red);font-weight:600}
+td.warn{color:var(--warn);font-weight:700}
+td.dim{color:var(--t3)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(240,237,230,.02)}
+tr.total-row td{background:var(--ga);border-top:1px solid var(--gb);font-weight:700;color:var(--t1)}
+tr.highlight td{background:rgba(201,168,76,.05)}
+
+.badge{display:inline-block;padding:2px 6px;border-radius:2px;font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;vertical-align:middle;margin-left:4px}
+.badge.red{background:rgba(196,112,104,.12);color:var(--red)}
+.badge.warn{background:rgba(212,168,80,.12);color:var(--warn)}
+.badge.green{background:rgba(127,174,122,.12);color:var(--grn)}
+.badge.gold{background:rgba(201,168,76,.12);color:var(--gold)}
+
+.notice{border-left:3px solid;padding:10px 16px;font-size:11px;line-height:1.75;margin-bottom:16px}
+.notice.warn{border-color:var(--warn);color:var(--t2)}
+.notice.red{border-color:var(--red);color:var(--t2)}
+.notice.ok{border-color:var(--grn);color:var(--t2)}
+.notice.info{border-color:var(--blu);color:var(--t2)}
+.notice b{color:var(--t1);font-weight:700}
+
+/* BAR CHART */
+.day-chart{display:flex;gap:8px;align-items:flex-end;height:140px;margin-bottom:8px}
+.day-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;height:100%;justify-content:flex-end}
+.day-bar{width:100%;border-radius:3px 3px 0 0}
+.day-lbl{font-size:9px;color:var(--t3);font-weight:700;margin-top:6px;text-align:center}
+.day-val{font-size:9px;color:var(--t2);margin-top:2px;text-align:center;font-variant-numeric:tabular-nums}
+
+/* PROGRESS BAR */
+.progress-outer{height:20px;background:rgba(240,237,230,.06);border-radius:10px;overflow:hidden;border:1px solid var(--ln)}
+.progress-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--warn),var(--gold));display:flex;align-items:center;justify-content:flex-end;padding-right:8px}
+.progress-fill span{font-size:9px;font-weight:800;color:#0d0d0d}
+.progress-lbl{display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:6px}
+
+/* STRATEGY CARDS */
+.strategy-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:0}
+.strat-card{background:var(--surf);border:1px solid var(--ln);border-radius:var(--r);padding:20px;transition:background .2s}
+.strat-card:hover{background:var(--surf2)}
+.strat-card.priority{border-color:var(--gb);background:var(--ga)}
+.strat-num{font-size:22px;font-weight:800;color:var(--gold);margin-bottom:8px}
+.strat-title{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:6px}
+.strat-target{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
+.strat-body{font-size:11px;color:var(--t2);line-height:1.65}
+.strat-body b{color:var(--t1)}
+.strat-impact{display:inline-block;font-size:9px;font-weight:700;padding:3px 8px;border-radius:2px;background:rgba(127,174,122,.12);color:var(--grn);margin-top:10px}
+
+/* WHATSAPP MESSAGE BOXES */
+.wa-box{background:var(--surf);border:1px solid var(--ln);border-radius:var(--r);margin-bottom:14px;overflow:hidden}
+.wa-head{display:flex;justify-content:space-between;align-items:center;padding:9px 16px;background:var(--surf2);border-bottom:1px solid var(--ln)}
+.wa-head-ttl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.wa-head-when{font-size:9px;color:var(--t3)}
+.wa-body{padding:16px 18px;font-size:12px;line-height:1.8;color:var(--t2);white-space:pre-line}
+
+.footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--ln);font-size:10px;color:var(--t3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .content{padding:24px 20px 60px}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .strategy-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="sidebar">
+  <div class="sidebar__logo">
+    <div class="sidebar__logo-title">TCB Docs</div>
+    <div class="sidebar__logo-sub">The Crew Barbershop</div>
+  </div>
+  <div class="sidebar__section">Finanzas</div>
+  <a href="index.html" class="sidebar__item">📊 Facturación</a>
+  <a href="gastos_2026.html" class="sidebar__item">📋 P&amp;L 2026</a>
+  <a href="cashflow_2026.html" class="sidebar__item">💸 Cash Flow</a>
+  <div class="sidebar__sep"></div>
+  <div class="sidebar__section">Equipo</div>
+  <a href="empleados.html" class="sidebar__item">👥 Empleados</a>
+  <div class="sidebar__sep"></div>
+  <div class="sidebar__section">Estrategia</div>
+  <a href="estrategia_captacion.html" class="sidebar__item">🎯 Captación</a>
+  <a href="taller_oferta.html" class="sidebar__item active">🎓 Oferta Taller</a>
+</nav>
+
+<main class="content">
+
+  <span class="doc-tag">Grupo de WhatsApp · 4 confirmados</span>
+  <h1 class="doc-title">Llenar el <em>taller</em></h1>
+  <div class="doc-meta">
+    <div class="doc-meta-item">Precio por persona <span>150€ (fijo)</span></div>
+    <div class="doc-meta-item">Plazas objetivo <span>10 → 1.500€</span></div>
+    <div class="doc-meta-item">Confirmados hoy <span>4 → 600€</span></div>
+    <div class="doc-meta-item">Plazo <span>2–3 semanas</span></div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-card__label">Plazas confirmadas</div>
+      <div class="stat-card__value" style="color:var(--warn)">4 / 10</div>
+      <div class="stat-card__sub">Faltan 6 personas</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Ingresos asegurados</div>
+      <div class="stat-card__value" style="color:var(--warn)">600€</div>
+      <div class="stat-card__sub">4 × 150€</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Objetivo total</div>
+      <div class="stat-card__value" style="color:var(--grn)">1.500€</div>
+      <div class="stat-card__sub">10 × 150€</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Falta por cerrar</div>
+      <div class="stat-card__value" style="color:var(--red)">900€</div>
+      <div class="stat-card__sub">6 plazas × 150€</div>
+    </div>
+  </div>
+
+  <!-- PROGRESO -->
+  <div class="section">
+    <div class="section-title">El precio no baja solo — aquí la palanca es la oferta, no el grupo</div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:16px">Los <b style="color:var(--t1)">150€ son por persona, fijos</b> — no bajan aunque se apunte más gente. Eso significa que no hay "efecto contagio" automático como en un reparto de coste: para llenar las 6 plazas que faltan hace falta empujar activamente, con una oferta concreta y una fecha límite.</p>
+    <div class="progress-outer"><div class="progress-fill" style="width:40%"><span>40%</span></div></div>
+    <div class="progress-lbl"><span>4 confirmados</span><span>Objetivo: 10</span></div>
+  </div>
+
+  <!-- INGRESOS ACUMULADOS -->
+  <div class="section">
+    <div class="section-title">Camino a los 1.500€</div>
+    <div class="day-chart" id="revChart"></div>
+    <div style="display:flex;gap:8px" id="revLabels"></div>
+    <p style="font-size:10px;color:var(--t3);margin-top:12px">Cada plaza nueva son 150€ seguros. No hace falta esperar a las 10 para que cuente: cada persona que se apunta ya suma.</p>
+  </div>
+
+  <!-- OFERTA TRAE UN AMIGO -->
+  <div class="section">
+    <div class="section-title">La oferta — Trae un Amigo</div>
+    <div class="strategy-grid" style="grid-template-columns:1fr">
+      <div class="strat-card priority">
+        <div class="strat-target">Incentivo individual · descuento real sobre tu plaza</div>
+        <div class="strat-title">Por cada amigo nuevo que traigas y pague, te descontamos 15€ (10%) de tu propia plaza</div>
+        <div class="strat-body">
+          Tope de <b>3 referidos</b>: trae 1 y pagas <b>135€</b>, trae 2 y pagas <b>120€</b>, trae 3 y pagas <b>105€</b> — no baja de ahí. El descuento sale del propio pago de la persona que traes (150€), así que nunca pone en riesgo el presupuesto del taller: cada referido deja de sobra para cubrir su plaza y el descuento de quien lo trajo.
+        </div>
+        <div class="strat-impact">1 amigo = 135€ · 2 amigos = 120€ · 3 amigos = 105€ (tope)</div>
+      </div>
+    </div>
+    <div class="notice info" style="margin-top:14px;margin-bottom:0">
+      El 15€/10% es orientativo — si sabéis cuánto margen real deja el taller sobre los 150€, podéis subir el descuento (por ejemplo a 20€) sin perder dinero. La regla de oro: el descuento por referido nunca debería superar lo que ese referido aporta de más.
+    </div>
+  </div>
+
+  <!-- BONO DE CIERRE -->
+  <div class="section">
+    <div class="section-title">Extra opcional — Bono de cierre de grupo</div>
+    <div class="strategy-grid" style="grid-template-columns:1fr">
+      <div class="strat-card">
+        <div class="strat-title">Si llegáis a las 10 plazas, se devuelven 10€ a cada uno de los 10</div>
+        <div class="strat-body">
+          No es imprescindible, pero ayuda a que los 4 primeros empujen tanto como los últimos en apuntarse: todos ganan por igual si el grupo se cierra. Se financia con el margen del taller, así que solo tiene sentido si ese margen lo permite — ajustad el importe (o quitadlo) según lo que realmente os quede de los 150€/persona.
+        </div>
+        <div class="strat-impact">Se activa solo si se llega a 10/10</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAN 3 SEMANAS -->
+  <div class="section">
+    <div class="section-title">Plan de 3 semanas para llegar a 10</div>
+    <div class="strategy-grid">
+      <div class="strat-card">
+        <div class="strat-num">S1</div>
+        <div class="strat-target">Días 1–7 · objetivo 4 → 7</div>
+        <div class="strat-title">Mensajes 1 a 1, no solo el grupo</div>
+        <div class="strat-body">Cada uno de los 4 confirmados escribe <b>en privado</b> a 2–3 personas concretas (compañeros, clientes de confianza, alumnos). Un mensaje personal convierte mucho más que un aviso genérico en el grupo. Se presenta ya la oferta Trae un Amigo como gancho.</div>
+        <div class="strat-impact">Objetivo: 7/10 confirmados</div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-num">S2</div>
+        <div class="strat-target">Días 8–14 · objetivo 7 → 9</div>
+        <div class="strat-title">Se abre el círculo — barbería + redes</div>
+        <div class="strat-body">Cartel en el mostrador, se comenta a los clientes que pasan por el sillón esa semana, story en Instagram con las plazas que faltan. Se recuerda el descuento por referido a los ya apuntados.</div>
+        <div class="strat-impact">Objetivo: 9/10 confirmados</div>
+      </div>
+      <div class="strat-card priority">
+        <div class="strat-num">S3</div>
+        <div class="strat-target">Días 15–21 · objetivo 9 → 10+</div>
+        <div class="strat-title">Cierre con fecha límite real</div>
+        <div class="strat-body">Se anuncia fecha tope para pagar y reservar plaza. Mensaje de "última plaza" en el grupo. Si se llega a 10, se activa el bono de cierre de grupo.</div>
+        <div class="strat-impact">Cierre del taller confirmado</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MENSAJES -->
+  <div class="section">
+    <div class="section-title">Mensajes listos para el grupo</div>
+
+    <div class="wa-box">
+      <div class="wa-head"><span class="wa-head-ttl">📣 Actualización de progreso</span><span class="wa-head-when">Cada vez que entra alguien nuevo</span></div>
+      <div class="wa-body">Update 🔥 Ya somos [X]/10 apuntados al taller.
+Precio: 150€/persona. Si traes a alguien nuevo, tu plaza baja a 135€ (y sigue bajando si traes más).
+¿A quién te llevas tú? 👀</div>
+    </div>
+
+    <div class="wa-box">
+      <div class="wa-head"><span class="wa-head-ttl">🤝 Trae un Amigo</span><span class="wa-head-when">Semana 1–2, para activar referidos</span></div>
+      <div class="wa-body">Recordatorio de la oferta: si traes a alguien nuevo que confirme y pague, te bajamos 15€ de tu plaza. Trae 3 y te quedas en 105€.
+Cuanta más gente metas, menos pagas tú.</div>
+    </div>
+
+    <div class="wa-box">
+      <div class="wa-head"><span class="wa-head-ttl">⏳ Última llamada</span><span class="wa-head-when">Semana 3, con fecha ya cerrada</span></div>
+      <div class="wa-body">Últimos días para cerrar el taller. Estamos en [X]/10.
+Fecha límite para confirmar y pagar: [FECHA].
+Si llegamos a 10, os devolvemos 10€ a cada uno.
+Quien quiera entrar, que avise ya 🙏</div>
+    </div>
+  </div>
+
+  <!-- CONTINGENCIA -->
+  <div class="section">
+    <div class="section-title">Si no se llega a 10 en 3 semanas</div>
+    <div class="notice warn" style="margin-bottom:0">
+      Al ser precio fijo por persona, no llegar a 10 no encarece a nadie — solo significa menos ingreso total. Opciones si se llega justos: (1) hacer el taller igualmente con los que haya (menos gente, mismo precio cada uno); (2) los 4 organizadores completan las plazas que falten para cerrar el grupo; (3) mover la fecha una semana más, manteniendo activa la oferta Trae un Amigo para presionar el cierre.
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Oferta del taller · Trae un Amigo</span>
+    <span>The Crew Barbershop</span>
+  </div>
+
+</main>
+</div>
+
+<script>
+const rev = [
+  {lbl:'4',  val:600,  color:'rgba(196,112,104,.75)'},
+  {lbl:'5',  val:750,  color:'rgba(212,168,80,.7)'},
+  {lbl:'6',  val:900,  color:'rgba(212,168,80,.75)'},
+  {lbl:'7',  val:1050, color:'rgba(201,168,76,.7)'},
+  {lbl:'8',  val:1200, color:'rgba(201,168,76,.8)'},
+  {lbl:'9',  val:1350, color:'rgba(127,174,122,.75)'},
+  {lbl:'10', val:1500, color:'rgba(127,174,122,.9)'},
+];
+const maxVal = Math.max(...rev.map(r=>r.val));
+const chartH = 140;
+
+const revChart = document.getElementById('revChart');
+const revLabels = document.getElementById('revLabels');
+
+rev.forEach(r => {
+  const col = document.createElement('div');
+  col.className = 'day-bar-wrap';
+  const h = Math.round((r.val/maxVal)*chartH);
+  const bar = document.createElement('div');
+  bar.className = 'day-bar';
+  bar.style.cssText = `height:${h}px;background:${r.color};width:100%;`;
+  col.appendChild(bar);
+  revChart.appendChild(col);
+
+  const lbl = document.createElement('div');
+  lbl.style.cssText = 'flex:1;text-align:center;';
+  lbl.innerHTML = `<div style="font-size:9px;color:var(--t3);font-weight:700;margin-top:6px">${r.lbl} pers.</div><div style="font-size:9px;color:var(--t2);margin-top:2px">${r.val}€</div>`;
+  revLabels.appendChild(lbl);
+});
+</script>
+
+</body>
+</html>
