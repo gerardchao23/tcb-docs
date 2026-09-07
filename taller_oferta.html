@@ -77,12 +77,18 @@ tr.highlight td{background:rgba(201,168,76,.05)}
 .notice.info{border-color:var(--blu);color:var(--t2)}
 .notice b{color:var(--t1);font-weight:700}
 
-/* PRICE BAR CHART */
+/* BAR CHART */
 .day-chart{display:flex;gap:8px;align-items:flex-end;height:140px;margin-bottom:8px}
 .day-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;height:100%;justify-content:flex-end}
 .day-bar{width:100%;border-radius:3px 3px 0 0}
 .day-lbl{font-size:9px;color:var(--t3);font-weight:700;margin-top:6px;text-align:center}
 .day-val{font-size:9px;color:var(--t2);margin-top:2px;text-align:center;font-variant-numeric:tabular-nums}
+
+/* PROGRESS BAR */
+.progress-outer{height:20px;background:rgba(240,237,230,.06);border-radius:10px;overflow:hidden;border:1px solid var(--ln)}
+.progress-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--warn),var(--gold));display:flex;align-items:center;justify-content:flex-end;padding-right:8px}
+.progress-fill span{font-size:9px;font-weight:800;color:#0d0d0d}
+.progress-lbl{display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:6px}
 
 /* STRATEGY CARDS */
 .strategy-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:0}
@@ -139,9 +145,9 @@ tr.highlight td{background:rgba(201,168,76,.05)}
   <span class="doc-tag">Grupo de WhatsApp · 4 confirmados</span>
   <h1 class="doc-title">Llenar el <em>taller</em></h1>
   <div class="doc-meta">
-    <div class="doc-meta-item">Coste del taller <span>150€ (fijo, a repartir)</span></div>
-    <div class="doc-meta-item">Plazas objetivo <span>10</span></div>
-    <div class="doc-meta-item">Confirmados hoy <span>4</span></div>
+    <div class="doc-meta-item">Precio por persona <span>150€ (fijo)</span></div>
+    <div class="doc-meta-item">Plazas objetivo <span>10 → 1.500€</span></div>
+    <div class="doc-meta-item">Confirmados hoy <span>4 → 600€</span></div>
     <div class="doc-meta-item">Plazo <span>2–3 semanas</span></div>
   </div>
 
@@ -150,109 +156,69 @@ tr.highlight td{background:rgba(201,168,76,.05)}
     <div class="stat-card">
       <div class="stat-card__label">Plazas confirmadas</div>
       <div class="stat-card__value" style="color:var(--warn)">4 / 10</div>
-      <div class="stat-card__sub">Faltan 6 para el mínimo</div>
+      <div class="stat-card__sub">Faltan 6 personas</div>
     </div>
     <div class="stat-card">
-      <div class="stat-card__label">Precio ahora mismo</div>
-      <div class="stat-card__value" style="color:var(--red)">37,50€</div>
-      <div class="stat-card__sub">150€ ÷ 4 personas</div>
+      <div class="stat-card__label">Ingresos asegurados</div>
+      <div class="stat-card__value" style="color:var(--warn)">600€</div>
+      <div class="stat-card__sub">4 × 150€</div>
     </div>
     <div class="stat-card">
-      <div class="stat-card__label">Precio con 10</div>
-      <div class="stat-card__value" style="color:var(--grn)">15,00€</div>
-      <div class="stat-card__sub">150€ ÷ 10 personas</div>
+      <div class="stat-card__label">Objetivo total</div>
+      <div class="stat-card__value" style="color:var(--grn)">1.500€</div>
+      <div class="stat-card__sub">10 × 150€</div>
     </div>
     <div class="stat-card">
-      <div class="stat-card__label">Ahorro si se llena</div>
-      <div class="stat-card__value" style="color:var(--gold)">-60%</div>
-      <div class="stat-card__sub">22,50€ menos por cabeza</div>
+      <div class="stat-card__label">Falta por cerrar</div>
+      <div class="stat-card__value" style="color:var(--red)">900€</div>
+      <div class="stat-card__sub">6 plazas × 150€</div>
     </div>
   </div>
 
-  <!-- PRECIO DINÁMICO -->
+  <!-- PROGRESO -->
   <div class="section">
-    <div class="section-title">El precio ya es la oferta — cuantos más seáis, menos paga cada uno</div>
-    <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:16px">El taller cuesta <b style="color:var(--t1)">150€ fijos</b>, se reparten entre los que confirméis. No hace falta inventar un descuento: basta con <b style="color:var(--t1)">enseñar la tabla en el grupo</b> cada vez que se apunte alguien nuevo. Es la palanca más simple y más honesta que tenéis.</p>
-    <div class="day-chart" id="priceChart"></div>
-    <div style="display:flex;gap:8px" id="priceLabels"></div>
+    <div class="section-title">El precio no baja solo — aquí la palanca es la oferta, no el grupo</div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:16px">Los <b style="color:var(--t1)">150€ son por persona, fijos</b> — no bajan aunque se apunte más gente. Eso significa que no hay "efecto contagio" automático como en un reparto de coste: para llenar las 6 plazas que faltan hace falta empujar activamente, con una oferta concreta y una fecha límite.</p>
+    <div class="progress-outer"><div class="progress-fill" style="width:40%"><span>40%</span></div></div>
+    <div class="progress-lbl"><span>4 confirmados</span><span>Objetivo: 10</span></div>
   </div>
 
-  <!-- TABLA DETALLE -->
+  <!-- INGRESOS ACUMULADOS -->
   <div class="section">
-    <div class="section-title">Tabla de precios por nº de asistentes</div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Asistentes</th>
-            <th class="right">Precio/persona</th>
-            <th class="right">vs. precio actual (4)</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="highlight">
-            <td><strong>4</strong></td>
-            <td class="right red">37,50€</td>
-            <td class="right dim">—</td>
-            <td><span class="badge red">HOY</span></td>
-          </tr>
-          <tr>
-            <td><strong>5</strong></td>
-            <td class="right warn">30,00€</td>
-            <td class="right green">−20%</td>
-            <td class="dim">Falta 1 para bajar aquí</td>
-          </tr>
-          <tr>
-            <td><strong>6</strong></td>
-            <td class="right warn">25,00€</td>
-            <td class="right green">−33%</td>
-            <td class="dim">—</td>
-          </tr>
-          <tr>
-            <td><strong>7</strong></td>
-            <td class="right gold">21,43€</td>
-            <td class="right green">−43%</td>
-            <td class="dim">—</td>
-          </tr>
-          <tr>
-            <td><strong>8</strong></td>
-            <td class="right gold">18,75€</td>
-            <td class="right green">−50%</td>
-            <td class="dim">—</td>
-          </tr>
-          <tr>
-            <td><strong>9</strong></td>
-            <td class="right gold">16,67€</td>
-            <td class="right green">−56%</td>
-            <td class="dim">—</td>
-          </tr>
-          <tr class="total-row">
-            <td>10 <span class="badge gold">OBJETIVO</span></td>
-            <td class="right" style="color:var(--grn);font-size:14px">15,00€</td>
-            <td class="right green">−60%</td>
-            <td style="font-weight:400;font-size:11px;color:var(--t2)">Precio se congela aquí — más gente no baja más</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="notice info" style="margin-top:14px;margin-bottom:0">
-      A partir de la plaza 10 el precio se queda fijo en <b>15€</b>. Lo que entre de más (plaza 11, 12…) ya no hace falta para cubrir el taller — se convierte en el <b>bote</b> que financia el Bono Padrino de abajo, sin que nadie tenga que poner dinero de más.
-    </div>
+    <div class="section-title">Camino a los 1.500€</div>
+    <div class="day-chart" id="revChart"></div>
+    <div style="display:flex;gap:8px" id="revLabels"></div>
+    <p style="font-size:10px;color:var(--t3);margin-top:12px">Cada plaza nueva son 150€ seguros. No hace falta esperar a las 10 para que cuente: cada persona que se apunta ya suma.</p>
   </div>
 
-  <!-- BONO PADRINO -->
+  <!-- OFERTA TRAE UN AMIGO -->
   <div class="section">
-    <div class="section-title">La oferta — Bono Padrino</div>
+    <div class="section-title">La oferta — Trae un Amigo</div>
     <div class="strategy-grid" style="grid-template-columns:1fr">
       <div class="strat-card priority">
-        <div class="strat-target">Incentivo individual · encima del precio de grupo</div>
-        <div class="strat-title">Por cada persona nueva que TÚ traigas y pague, te descontamos 5€ de tu propia plaza</div>
+        <div class="strat-target">Incentivo individual · descuento real sobre tu plaza</div>
+        <div class="strat-title">Por cada amigo nuevo que traigas y pague, te descontamos 15€ (10%) de tu propia plaza</div>
         <div class="strat-body">
-          Se suma al ahorro automático de la tabla de arriba. Ejemplo con el grupo ya en 10 (15€/persona): si has traído a 2 amigos, tu plaza pasa de <b>15€ a 5€</b>. Si traes 3, <b>tu plaza sale gratis</b> (tope: nunca pagas menos de 0€).<br><br>
-          Es seguro para el bolsillo del grupo: cada persona nueva aporta como mínimo 15€, muy por encima de los 5€ de descuento que genera — así el "bote" para pagar los 150€ nunca se queda corto, pase lo que pase.
+          Tope de <b>3 referidos</b>: trae 1 y pagas <b>135€</b>, trae 2 y pagas <b>120€</b>, trae 3 y pagas <b>105€</b> — no baja de ahí. El descuento sale del propio pago de la persona que traes (150€), así que nunca pone en riesgo el presupuesto del taller: cada referido deja de sobra para cubrir su plaza y el descuento de quien lo trajo.
         </div>
-        <div class="strat-impact">1 amigo = −5€ · 2 amigos = −10€ · 3+ = plaza gratis</div>
+        <div class="strat-impact">1 amigo = 135€ · 2 amigos = 120€ · 3 amigos = 105€ (tope)</div>
+      </div>
+    </div>
+    <div class="notice info" style="margin-top:14px;margin-bottom:0">
+      El 15€/10% es orientativo — si sabéis cuánto margen real deja el taller sobre los 150€, podéis subir el descuento (por ejemplo a 20€) sin perder dinero. La regla de oro: el descuento por referido nunca debería superar lo que ese referido aporta de más.
+    </div>
+  </div>
+
+  <!-- BONO DE CIERRE -->
+  <div class="section">
+    <div class="section-title">Extra opcional — Bono de cierre de grupo</div>
+    <div class="strategy-grid" style="grid-template-columns:1fr">
+      <div class="strat-card">
+        <div class="strat-title">Si llegáis a las 10 plazas, se devuelven 10€ a cada uno de los 10</div>
+        <div class="strat-body">
+          No es imprescindible, pero ayuda a que los 4 primeros empujen tanto como los últimos en apuntarse: todos ganan por igual si el grupo se cierra. Se financia con el margen del taller, así que solo tiene sentido si ese margen lo permite — ajustad el importe (o quitadlo) según lo que realmente os quede de los 150€/persona.
+        </div>
+        <div class="strat-impact">Se activa solo si se llega a 10/10</div>
       </div>
     </div>
   </div>
@@ -265,21 +231,21 @@ tr.highlight td{background:rgba(201,168,76,.05)}
         <div class="strat-num">S1</div>
         <div class="strat-target">Días 1–7 · objetivo 4 → 7</div>
         <div class="strat-title">Mensajes 1 a 1, no solo el grupo</div>
-        <div class="strat-body">Cada uno de los 4 confirmados escribe <b>en privado</b> a 2–3 personas concretas (compañeros, clientes de confianza, alumnos). Un mensaje personal convierte mucho más que un aviso genérico en el grupo. Se enseña la tabla de precios como gancho.</div>
+        <div class="strat-body">Cada uno de los 4 confirmados escribe <b>en privado</b> a 2–3 personas concretas (compañeros, clientes de confianza, alumnos). Un mensaje personal convierte mucho más que un aviso genérico en el grupo. Se presenta ya la oferta Trae un Amigo como gancho.</div>
         <div class="strat-impact">Objetivo: 7/10 confirmados</div>
       </div>
       <div class="strat-card">
         <div class="strat-num">S2</div>
         <div class="strat-target">Días 8–14 · objetivo 7 → 9</div>
         <div class="strat-title">Se abre el círculo — barbería + redes</div>
-        <div class="strat-body">Cartel en el mostrador, se comenta a los clientes que pasan por el sillón esa semana, story en Instagram con la plaza que falta. Se activa el Bono Padrino explícitamente: quien traiga gente esta semana se lleva el descuento completo.</div>
+        <div class="strat-body">Cartel en el mostrador, se comenta a los clientes que pasan por el sillón esa semana, story en Instagram con las plazas que faltan. Se recuerda el descuento por referido a los ya apuntados.</div>
         <div class="strat-impact">Objetivo: 9/10 confirmados</div>
       </div>
       <div class="strat-card priority">
         <div class="strat-num">S3</div>
         <div class="strat-target">Días 15–21 · objetivo 9 → 10+</div>
         <div class="strat-title">Cierre con fecha límite real</div>
-        <div class="strat-body">Se anuncia fecha tope para pagar y reservar plaza. Mensaje de "última plaza" en el grupo con la tabla actualizada. Si se supera el 10, el extra va directo al bote del Bono Padrino.</div>
+        <div class="strat-body">Se anuncia fecha tope para pagar y reservar plaza. Mensaje de "última plaza" en el grupo. Si se llega a 10, se activa el bono de cierre de grupo.</div>
         <div class="strat-impact">Cierre del taller confirmado</div>
       </div>
     </div>
@@ -290,24 +256,23 @@ tr.highlight td{background:rgba(201,168,76,.05)}
     <div class="section-title">Mensajes listos para el grupo</div>
 
     <div class="wa-box">
-      <div class="wa-head"><span class="wa-head-ttl">📣 Actualización de precio</span><span class="wa-head-when">Cada vez que entra alguien nuevo</span></div>
-      <div class="wa-body">Update 🔥 Ya somos [X] apuntados al taller.
-Precio actual: [Y]€/persona.
-Si llegamos a 10, se queda en 15€ para todos.
+      <div class="wa-head"><span class="wa-head-ttl">📣 Actualización de progreso</span><span class="wa-head-when">Cada vez que entra alguien nuevo</span></div>
+      <div class="wa-body">Update 🔥 Ya somos [X]/10 apuntados al taller.
+Precio: 150€/persona. Si traes a alguien nuevo, tu plaza baja a 135€ (y sigue bajando si traes más).
 ¿A quién te llevas tú? 👀</div>
     </div>
 
     <div class="wa-box">
-      <div class="wa-head"><span class="wa-head-ttl">🤝 Bono Padrino</span><span class="wa-head-when">Semana 1–2, para activar referidos</span></div>
-      <div class="wa-body">Recordatorio: si traes a alguien nuevo que confirme y pague, te bajamos 5€ de tu plaza. Trae 3 y tu plaza sale gratis.
-Cuantos más metamos, más barato para todos — literal.</div>
+      <div class="wa-head"><span class="wa-head-ttl">🤝 Trae un Amigo</span><span class="wa-head-when">Semana 1–2, para activar referidos</span></div>
+      <div class="wa-body">Recordatorio de la oferta: si traes a alguien nuevo que confirme y pague, te bajamos 15€ de tu plaza. Trae 3 y te quedas en 105€.
+Cuanta más gente metas, menos pagas tú.</div>
     </div>
 
     <div class="wa-box">
       <div class="wa-head"><span class="wa-head-ttl">⏳ Última llamada</span><span class="wa-head-when">Semana 3, con fecha ya cerrada</span></div>
       <div class="wa-body">Últimos días para cerrar el taller. Estamos en [X]/10.
 Fecha límite para confirmar y pagar: [FECHA].
-Si no llegamos a 10 antes de esa fecha, el precio no baja de [precio actual].
+Si llegamos a 10, os devolvemos 10€ a cada uno.
 Quien quiera entrar, que avise ya 🙏</div>
     </div>
   </div>
@@ -316,12 +281,12 @@ Quien quiera entrar, que avise ya 🙏</div>
   <div class="section">
     <div class="section-title">Si no se llega a 10 en 3 semanas</div>
     <div class="notice warn" style="margin-bottom:0">
-      No pasa nada grave — el taller sigue siendo barato incluso sin llegar al objetivo. Con <b>8 personas</b> sale a <b>18,75€/persona</b>, apenas 3,75€ más que el precio objetivo. Opciones si se llega justos: (1) hacer el taller igualmente con los que haya, repartiendo el coste real; (2) los 4 organizadores cubren la diferencia hasta 10 para no subir el precio a nadie; (3) mover la fecha una semana más manteniendo el precio de 10 como incentivo para cerrar cuanto antes.
+      Al ser precio fijo por persona, no llegar a 10 no encarece a nadie — solo significa menos ingreso total. Opciones si se llega justos: (1) hacer el taller igualmente con los que haya (menos gente, mismo precio cada uno); (2) los 4 organizadores completan las plazas que falten para cerrar el grupo; (3) mover la fecha una semana más, manteniendo activa la oferta Trae un Amigo para presionar el cierre.
     </div>
   </div>
 
   <div class="footer">
-    <span>Oferta del taller · Bono Padrino</span>
+    <span>Oferta del taller · Trae un Amigo</span>
     <span>The Crew Barbershop</span>
   </div>
 
@@ -329,35 +294,35 @@ Quien quiera entrar, que avise ya 🙏</div>
 </div>
 
 <script>
-const prices = [
-  {lbl:'4',  val:37.50, color:'rgba(196,112,104,.75)'},
-  {lbl:'5',  val:30.00, color:'rgba(212,168,80,.7)'},
-  {lbl:'6',  val:25.00, color:'rgba(212,168,80,.65)'},
-  {lbl:'7',  val:21.43, color:'rgba(201,168,76,.7)'},
-  {lbl:'8',  val:18.75, color:'rgba(201,168,76,.75)'},
-  {lbl:'9',  val:16.67, color:'rgba(127,174,122,.7)'},
-  {lbl:'10', val:15.00, color:'rgba(127,174,122,.9)'},
+const rev = [
+  {lbl:'4',  val:600,  color:'rgba(196,112,104,.75)'},
+  {lbl:'5',  val:750,  color:'rgba(212,168,80,.7)'},
+  {lbl:'6',  val:900,  color:'rgba(212,168,80,.75)'},
+  {lbl:'7',  val:1050, color:'rgba(201,168,76,.7)'},
+  {lbl:'8',  val:1200, color:'rgba(201,168,76,.8)'},
+  {lbl:'9',  val:1350, color:'rgba(127,174,122,.75)'},
+  {lbl:'10', val:1500, color:'rgba(127,174,122,.9)'},
 ];
-const maxVal = Math.max(...prices.map(p=>p.val));
+const maxVal = Math.max(...rev.map(r=>r.val));
 const chartH = 140;
 
-const priceChart = document.getElementById('priceChart');
-const priceLabels = document.getElementById('priceLabels');
+const revChart = document.getElementById('revChart');
+const revLabels = document.getElementById('revLabels');
 
-prices.forEach(p => {
+rev.forEach(r => {
   const col = document.createElement('div');
   col.className = 'day-bar-wrap';
-  const h = Math.round((p.val/maxVal)*chartH);
+  const h = Math.round((r.val/maxVal)*chartH);
   const bar = document.createElement('div');
   bar.className = 'day-bar';
-  bar.style.cssText = `height:${h}px;background:${p.color};width:100%;`;
+  bar.style.cssText = `height:${h}px;background:${r.color};width:100%;`;
   col.appendChild(bar);
-  priceChart.appendChild(col);
+  revChart.appendChild(col);
 
   const lbl = document.createElement('div');
   lbl.style.cssText = 'flex:1;text-align:center;';
-  lbl.innerHTML = `<div style="font-size:9px;color:var(--t3);font-weight:700;margin-top:6px">${p.lbl} pers.</div><div style="font-size:9px;color:var(--t2);margin-top:2px">${p.val.toFixed(2).replace('.',',')}€</div>`;
-  priceLabels.appendChild(lbl);
+  lbl.innerHTML = `<div style="font-size:9px;color:var(--t3);font-weight:700;margin-top:6px">${r.lbl} pers.</div><div style="font-size:9px;color:var(--t2);margin-top:2px">${r.val}€</div>`;
+  revLabels.appendChild(lbl);
 });
 </script>
 
