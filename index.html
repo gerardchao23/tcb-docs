@@ -851,6 +851,10 @@
     <span class="dock-label">Gastos &amp; P&amp;L</span>
     <span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg></span>
   </div>
+  <div class="dock-item" data-view="leads">
+    <span class="dock-label">Leads 1to1</span>
+    <span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4V5Z"/><path d="M8 9.5h8M8 12.5h5"/></svg></span>
+  </div>
   <div class="dock-item" onclick="openCmdk()">
     <span class="dock-label">Buscar (⌘K)</span>
     <span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8"/></svg></span>
@@ -1625,6 +1629,19 @@ const V = {
   <div class="card"><div class="card-ttl">Texto</div><div style="display:flex;align-items:center;gap:10px;margin-top:6px"><div style="width:26px;height:26px;border-radius:3px;background:#f0ede6;border:1px solid var(--ln)"></div><span style="font-size:11px;color:var(--t2)">#f0ede6 Warm white</span></div></div>
 </div>`;
     }
+  },
+
+  leads: { sec:'The Crew Academy', pg:'Leads 1to1',
+    html() {
+      return `
+<div class="pg-hd">
+  <span class="pg-tag">The Crew Academy · Convocatoria</span>
+  <h1 class="pg-title">Leads <em>1to1</em></h1>
+  <p class="pg-sub">Pop-up de /1to1 → Klaviyo (lista «Convocatoria 1to1») · se refresca cada 5 min</p>
+</div>
+<div id="leads-body"><div class="card"><p style="font-size:11px;color:var(--t2)">Cargando leads…</p></div></div>`;
+    },
+    after() { pintarLeads(); }
   },
 
   crewcard: { sec:'Proyectos', pg:'Crew Member Card',
@@ -2970,6 +2987,74 @@ async function fetchGastosCorreo() {
     console.warn('Gastos correo error:', e);
     return null;
   }
+}
+
+// ── LEADS 1TO1 (Klaviyo vía Google Apps Script) ───────────────────
+// Pega aquí la URL /exec de klaviyo-leads.gs. Vacía = la vista avisa "sin conectar".
+const LEADS_URL = '';
+
+const escL = s => String(s ?? '').replace(/[&<>"']/g, c =>
+  ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[c]);
+
+async function pintarLeads() {
+  const caja = document.getElementById('leads-body');
+  if (!caja) return;
+  if (!LEADS_URL) {
+    caja.innerHTML = `<div class="card"><div class="card-ttl">Sin conectar</div>
+      <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:6px">Falta desplegar <strong>klaviyo-leads.gs</strong> en Apps Script y pegar su URL en <code>LEADS_URL</code>.</p></div>`;
+    return;
+  }
+
+  let d;
+  try {
+    d = await (await fetch(LEADS_URL)).json();
+  } catch (e) {
+    d = { ok: false, error: e.message };
+  }
+  if (!caja.isConnected) return; // se cambió de vista mientras cargaba
+  if (!d.ok) {
+    caja.innerHTML = `<div class="card"><div class="card-ttl" style="color:var(--red)">No se pudo leer Klaviyo</div>
+      <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:6px">${escL(d.error || 'Sin respuesta')}</p></div>`;
+    return;
+  }
+
+  const max = Math.max(1, ...d.porDia.map(x => x.n));
+  const barras = d.porDia.map(x => `
+    <div class="bc">
+      <div class="bv">${x.n}</div>
+      <div class="br" style="height:${(x.n / max) * 100}%;background:var(--gold)"></div>
+      <div class="bl">${x.dia.slice(8)}</div>
+    </div>`).join('');
+
+  const filas = d.recientes.length
+    ? d.recientes.map(r => `<tr>
+        <td>${new Date(r.fecha).toLocaleString('es-ES', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}</td>
+        <td><strong>${escL(r.nombre) || '—'}</strong></td>
+        <td>${escL(r.email)}</td>
+        <td class="r">${r.whatsapp ? 'Sí' : '—'}</td>
+      </tr>`).join('')
+    : `<tr><td colspan="4" style="text-align:center;color:var(--t3);padding:20px">Todavía no ha entrado nadie por el pop-up</td></tr>`;
+
+  caja.innerHTML = `
+<div class="kpi-grid">
+  <div class="kpi"><div class="kpi-lbl">Leads totales</div><div class="kpi-val" data-count="${d.total}">${d.total}</div><div class="kpi-sub2">Lista «${escL(d.lista)}»</div></div>
+  <div class="kpi"><div class="kpi-lbl">Hoy</div><div class="kpi-val w" data-count="${d.hoy}">${d.hoy}</div><div class="kpi-sub2">Desde las 00:00</div></div>
+  <div class="kpi"><div class="kpi-lbl">Últimos 7 días</div><div class="kpi-val w" data-count="${d.ultimos7}">${d.ultimos7}</div><div class="kpi-sub2">Incluye hoy</div></div>
+  <div class="kpi"><div class="kpi-lbl">Con WhatsApp</div><div class="kpi-val w" data-count="${d.conWhatsapp}">${d.conWhatsapp}</div><div class="kpi-sub2">Dejaron teléfono</div></div>
+</div>
+<div class="sec">Últimos 14 días</div>
+<div class="card" style="margin-bottom:24px;padding-bottom:14px">
+  <div class="chart" style="height:140px;padding:0 8px">${barras}</div>
+</div>
+<div class="sec">Últimos leads</div>
+<div class="tw">
+  <table>
+    <thead><tr><th>Fecha</th><th>Nombre</th><th>Email</th><th class="r">WhatsApp</th></tr></thead>
+    <tbody>${filas}</tbody>
+  </table>
+</div>
+<p class="pg-sub">Emails enmascarados a propósito: el panel es público y los datos completos se quedan en Klaviyo. Actualizado a las ${new Date(d.actualizado).toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit' })}.</p>`;
+  runCounters(caja);
 }
 
 function isoWeek(date) {
