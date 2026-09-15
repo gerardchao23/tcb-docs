@@ -1660,6 +1660,7 @@ const V = {
   <a class="dl" href="https://www.thecrewacademy.es/pages/1to1" target="_blank"><div class="dl-ico">✂️</div><div><div class="dl-ttl">Landing 1to1</div><div class="dl-sub">thecrewacademy.es/pages/1to1</div></div><div class="dl-arr">↗</div></a>
   <a class="dl" href="https://www.thecrewacademy.es/pages/1to1?pop=1" target="_blank"><div class="dl-ico">💬</div><div><div class="dl-ttl">Ver el pop-up de la convocatoria</div><div class="dl-sub">Abre la landing con el pop-up ya abierto</div></div><div class="dl-arr">↗</div></a>
   <a class="dl" href="https://www.thecrewacademy.es/workshop" target="_blank"><div class="dl-ico">🎟️</div><div><div class="dl-ttl">Landing workshop</div><div class="dl-sub">thecrewacademy.es/workshop</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="https://docs.google.com/spreadsheets/d/1z1v0SJibXxdAClz88DC1FjWeRnDsiyEt_UOxeRxHu9A/edit" target="_blank"><div class="dl-ico">📋</div><div><div class="dl-ttl">Hoja «Leads convocatoria 1to1»</div><div class="dl-sub">Nombre, email y WhatsApp completos de cada lead (privada, solo tu cuenta)</div></div><div class="dl-arr">↗</div></a>
   <a class="dl" href="https://www.klaviyo.com/list/WMX7Dj" target="_blank"><div class="dl-ico">📨</div><div><div class="dl-ttl">Lista de Klaviyo «Convocatoria 1to1»</div><div class="dl-sub">Emails de los leads para campañas</div></div><div class="dl-arr">↗</div></a>
 </div>`;
     },
@@ -3013,7 +3014,7 @@ async function fetchGastosCorreo() {
 
 // ── LEADS 1TO1 (hoja de Google vía Apps Script) ───────────────────
 // URL /exec de leads-convocatoria.gs. Vacía = la vista avisa "sin conectar".
-const LEADS_URL = '';
+const LEADS_URL = 'https://script.google.com/macros/s/AKfycbxKYBaBMw9RDhdoIwZfKM9qGCu2oUBhdNeru4EbjU77iPNBb671lONpTresI3vtpzmA/exec';
 
 const escL = s => String(s ?? '').replace(/[&<>"']/g, c =>
   ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[c]);
