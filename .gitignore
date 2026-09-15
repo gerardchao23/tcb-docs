@@ -1,0 +1,5 @@
+# Páginas en claro: NUNCA se suben
+fuente/
+.DS_Store
+gmail-gastos.gs
+.claude/
