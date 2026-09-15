@@ -851,9 +851,9 @@
     <span class="dock-label">Gastos &amp; P&amp;L</span>
     <span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg></span>
   </div>
-  <div class="dock-item" data-view="leads">
-    <span class="dock-label">Leads 1to1</span>
-    <span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4V5Z"/><path d="M8 9.5h8M8 12.5h5"/></svg></span>
+  <div class="dock-item" data-view="formaciones">
+    <span class="dock-label">Formaciones</span>
+    <span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9 12 4.5 21.5 9 12 13.5 2.5 9Z"/><path d="M6.5 11v4.6c0 1.6 2.5 3.4 5.5 3.4s5.5-1.8 5.5-3.4V11"/><path d="M21.5 9v5"/></svg></span>
   </div>
   <div class="dock-item" onclick="openCmdk()">
     <span class="dock-label">Buscar (⌘K)</span>
@@ -1631,15 +1631,37 @@ const V = {
     }
   },
 
-  leads: { sec:'The Crew Academy', pg:'Leads 1to1',
+  formaciones: { sec:'The Crew Academy', pg:'Formaciones',
     html() {
       return `
 <div class="pg-hd">
-  <span class="pg-tag">The Crew Academy · Convocatoria</span>
-  <h1 class="pg-title">Leads <em>1to1</em></h1>
-  <p class="pg-sub">Pop-up de /1to1 → Klaviyo (lista «Convocatoria 1to1») · se refresca cada 5 min</p>
+  <span class="pg-tag">The Crew Academy · Formaciones</span>
+  <h1 class="pg-title">Forma<em>ciones</em></h1>
+  <p class="pg-sub">Convocatoria 1to1, workshop y los leads que entran por la web</p>
 </div>
-<div id="leads-body"><div class="card"><p style="font-size:11px;color:var(--t2)">Cargando leads…</p></div></div>`;
+
+<div class="sec">Convocatoria 1to1 · leads del pop-up</div>
+<div id="leads-body" style="margin-bottom:28px"><div class="card"><p style="font-size:11px;color:var(--t2)">Cargando leads…</p></div></div>
+
+<div class="sec">Formaciones activas</div>
+<div class="g2" style="margin-bottom:28px">
+  <div class="card" style="border-top:2px solid var(--gold)">
+    <div class="card-ttl" style="color:var(--gold)">1to1 · Convocatoria de 10 barberos</div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:6px">Formato de 3 días (540 €). Al terminar las 10 formaciones se elige a uno: recupera la inversión y tiene la oportunidad de entrar en el equipo. Las plazas se cambian en <code>conv_quedan</code> de la landing.</p>
+  </div>
+  <div class="card" style="border-top:2px solid var(--gold)">
+    <div class="card-ttl" style="color:var(--gold)">Workshop · 4 de octubre</div>
+    <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:6px">Con Oscar Perez en The Crew Studio. Grupo de 10, seña de 50 € y el resto el mismo día.</p>
+  </div>
+</div>
+
+<div class="sec">Accesos</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+  <a class="dl" href="https://www.thecrewacademy.es/pages/1to1" target="_blank"><div class="dl-ico">✂️</div><div><div class="dl-ttl">Landing 1to1</div><div class="dl-sub">thecrewacademy.es/pages/1to1</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="https://www.thecrewacademy.es/pages/1to1?pop=1" target="_blank"><div class="dl-ico">💬</div><div><div class="dl-ttl">Ver el pop-up de la convocatoria</div><div class="dl-sub">Abre la landing con el pop-up ya abierto</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="https://www.thecrewacademy.es/workshop" target="_blank"><div class="dl-ico">🎟️</div><div><div class="dl-ttl">Landing workshop</div><div class="dl-sub">thecrewacademy.es/workshop</div></div><div class="dl-arr">↗</div></a>
+  <a class="dl" href="https://www.klaviyo.com/list/WMX7Dj" target="_blank"><div class="dl-ico">📨</div><div><div class="dl-ttl">Lista de Klaviyo «Convocatoria 1to1»</div><div class="dl-sub">Emails de los leads para campañas</div></div><div class="dl-arr">↗</div></a>
+</div>`;
     },
     after() { pintarLeads(); }
   },
@@ -2989,8 +3011,8 @@ async function fetchGastosCorreo() {
   }
 }
 
-// ── LEADS 1TO1 (Klaviyo vía Google Apps Script) ───────────────────
-// Pega aquí la URL /exec de klaviyo-leads.gs. Vacía = la vista avisa "sin conectar".
+// ── LEADS 1TO1 (hoja de Google vía Apps Script) ───────────────────
+// URL /exec de leads-convocatoria.gs. Vacía = la vista avisa "sin conectar".
 const LEADS_URL = '';
 
 const escL = s => String(s ?? '').replace(/[&<>"']/g, c =>
@@ -3001,7 +3023,7 @@ async function pintarLeads() {
   if (!caja) return;
   if (!LEADS_URL) {
     caja.innerHTML = `<div class="card"><div class="card-ttl">Sin conectar</div>
-      <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:6px">Falta desplegar <strong>klaviyo-leads.gs</strong> en Apps Script y pegar su URL en <code>LEADS_URL</code>.</p></div>`;
+      <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:6px">Falta desplegar <strong>leads-convocatoria.gs</strong> en Apps Script y pegar su URL en <code>LEADS_URL</code>.</p></div>`;
     return;
   }
 
@@ -3013,7 +3035,7 @@ async function pintarLeads() {
   }
   if (!caja.isConnected) return; // se cambió de vista mientras cargaba
   if (!d.ok) {
-    caja.innerHTML = `<div class="card"><div class="card-ttl" style="color:var(--red)">No se pudo leer Klaviyo</div>
+    caja.innerHTML = `<div class="card"><div class="card-ttl" style="color:var(--red)">No se pudieron leer los leads</div>
       <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-top:6px">${escL(d.error || 'Sin respuesta')}</p></div>`;
     return;
   }
@@ -3037,7 +3059,7 @@ async function pintarLeads() {
 
   caja.innerHTML = `
 <div class="kpi-grid">
-  <div class="kpi"><div class="kpi-lbl">Leads totales</div><div class="kpi-val" data-count="${d.total}">${d.total}</div><div class="kpi-sub2">Lista «${escL(d.lista)}»</div></div>
+  <div class="kpi"><div class="kpi-lbl">Leads totales</div><div class="kpi-val" data-count="${d.total}">${d.total}</div><div class="kpi-sub2">Desde el pop-up de /1to1</div></div>
   <div class="kpi"><div class="kpi-lbl">Hoy</div><div class="kpi-val w" data-count="${d.hoy}">${d.hoy}</div><div class="kpi-sub2">Desde las 00:00</div></div>
   <div class="kpi"><div class="kpi-lbl">Últimos 7 días</div><div class="kpi-val w" data-count="${d.ultimos7}">${d.ultimos7}</div><div class="kpi-sub2">Incluye hoy</div></div>
   <div class="kpi"><div class="kpi-lbl">Con WhatsApp</div><div class="kpi-val w" data-count="${d.conWhatsapp}">${d.conWhatsapp}</div><div class="kpi-sub2">Dejaron teléfono</div></div>
@@ -3053,7 +3075,7 @@ async function pintarLeads() {
     <tbody>${filas}</tbody>
   </table>
 </div>
-<p class="pg-sub">Emails enmascarados a propósito: el panel es público y los datos completos se quedan en Klaviyo. Actualizado a las ${new Date(d.actualizado).toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit' })}.</p>`;
+<p class="pg-sub">Emails enmascarados a propósito: el panel es público. Los datos completos están en la hoja de Google y en Klaviyo. Actualizado a las ${new Date(d.actualizado).toLocaleTimeString('es-ES', { hour:'2-digit', minute:'2-digit' })}.</p>`;
   runCounters(caja);
 }
 
