@@ -93,10 +93,9 @@ function plantilla(candado, datos) {
 </style>
 </head>
 <body>
-<form id="acceso">
+<form id="acceso" onsubmit="return false">
   <h1>The Crew — Panel</h1>
   <p>Contenido cifrado · acceso privado</p>
-  <input type="text" name="username" value="panel.thecrewacademy.es" autocomplete="username" hidden>
   <input id="clave" type="password" autocomplete="current-password" placeholder="Contraseña" autofocus required>
   <button id="entrar">Entrar</button>
   <div class="err" id="aviso" role="alert"></div>
@@ -117,12 +116,21 @@ function plantilla(candado, datos) {
     return new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(CANDADO.iv) }, kek, b64(CANDADO.llave)));
   }
 
+  // Hasta que el navegador no termina de leer esta página, escribir encima la añade en vez de sustituirla
+  function cargado() {
+    return document.readyState === 'complete'
+      ? Promise.resolve()
+      : new Promise(function (listo) { window.addEventListener('load', listo, { once: true }); });
+  }
+
   async function abrir(llaveCruda) {
     var llave = await crypto.subtle.importKey('raw', llaveCruda, 'AES-GCM', false, ['decrypt']);
     var d = b64(DATOS);
     var html = new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: d.slice(0, 12) }, llave, d.slice(12)));
     sessionStorage.setItem(SESION, a64(llaveCruda));   // el resto de páginas del panel se abren sin volver a pedirla
     sessionStorage.setItem('tcb_auth', '1');           // salta el login antiguo que lleva dentro el panel
+    await cargado();
+    if (location.search) history.replaceState(null, '', location.pathname + location.hash);
     document.open(); document.write(html); document.close();
   }
 
